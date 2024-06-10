@@ -5,6 +5,19 @@
   width: 100%;
   height: auto;
 }
+.doctorName {
+  font-size: 20px;
+  margin-bottom: 50px;
+}
+.doctorAddress {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: flex;
+}
+.locationLogo {
+  width: 30px;
+  height: auto;
+}
 .imageBox {
   width: 250px;
   height: auto;
@@ -18,6 +31,7 @@
   display: flex;
   padding-left: 20%;
   padding-right: 20%;
+  height: 1000px;
 }
 .doctorInfo {
   padding: 16px;
@@ -36,9 +50,34 @@
 }
 
 /*search bar*/
-.searchbar {
+.searchArea {
   width: 30%;
+  height: 1000px;
+  margin-right: 80px;
+}
+.searchBar {
+  width: 100%;
   height: auto;
   border: 3px solid black;
   margin-right: 80px;
+  padding-bottom: 100px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+/*Tag*/
+.searchTagDiv {
+  margin-bottom: 100px;
+}
+.tag {
+  background-color: #f0f0f0; /* 회색 배경 */
+  border-radius: 20px; /* 둥근 모서리 */
+  padding: 8px 12px; /* 패딩 */
+  font-size: 14px;
+  color: #333; /* 텍스트 색상 */
+  display: inline-block; /* 인라인 블록 */
+  margin: 4px 2px; /* 약간의 마진 */
+}
+.tag.selected {
+  border: 2px solid red;
 }

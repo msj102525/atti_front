@@ -21,6 +21,7 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
+  "proxy": "http://locathost:8080/",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
