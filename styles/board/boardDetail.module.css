@@ -1,0 +1,48 @@
+/* NoticeDetail.css */
+
+.container {
+	font-family: arial;
+	font-size: 18px;
+	padding: 20px;
+	margin: 25px auto;
+	width: 800px;
+	outline: dashed 1px black;
+}
+
+.h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.container span {
+    color: #666;
+    margin-right: 99.4px;
+}
+
+.contentbox {
+    font-size: 18px; 
+    line-height: 1.5;
+    margin-bottom: 20px;
+    min-height: 400px;
+}
+
+.btnbox {
+    margin-top: 20px;
+}
+
+.btnbox button,
+.btnbox a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: rgb(250, 180, 49);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+}
+
+.btnbox button:hover,
+.btnbox a:hover {
+    background-color: orange;
+}

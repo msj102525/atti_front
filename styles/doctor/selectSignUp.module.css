@@ -1,0 +1,52 @@
+.title {
+  font-size: 40px;
+  text-align: center;
+}
+.signUpNormal {
+  width: 400px;
+  height: 400px;
+  border-radius: 15px;
+  padding: 30px;
+  background: #a9e89e;
+  background-image: url("/user.png");
+  background-size: 50%;
+  background-position: center;
+  margin: 40px;
+  background-repeat: no-repeat;
+}
+.signUpDoctor {
+  width: 400px;
+  height: 400px;
+  border-radius: 15px;
+  padding: 30px;
+  background: #d8b4e2;
+  background-image: url("/doctor.png");
+  background-size: 80%;
+  background-position: center;
+  margin: 40px;
+  background-repeat: no-repeat;
+}
+.signForm {
+  padding-left: 20%;
+  padding-right: 20%;
+  padding-top: 200px;
+  display: flex;
+  justify-content: center;
+}
+.normalUser {
+  left: 0%;
+  right: 0%;
+  top: 0%;
+  bottom: 0%;
+  background: #000000;
+}
+.text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 24px;
+  align-items: center;
+  text-align: center;
+  color: #000000;
+}

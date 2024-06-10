@@ -1,0 +1,38 @@
+/* App.css 파일 */
+
+.container {
+    display: flex; /* 수평으로 배치 */
+  }
+  
+  .leftsection {
+    width: 49%; /* 전체 너비의 절반 */
+    background-color: #f0f0f0; /* 배경색 */
+    padding: 50px;
+  }
+  
+  .rightsection {
+    width: 49%; /* 전체 너비의 절반 */
+    background-color: #ffffff; /* 배경색 */
+    padding: 50px; /* 선과 텍스트 간 여백 추가 */
+  }
+  
+  .title{
+    color: rgba(0, 0, 0, 0.342); /* 흰색의 50% 불투명도 */
+    font-size: 20px;
+  }
+  
+  .time {
+    font-size: 16px; /* 원하는 크기로 조정 */
+    padding: 8px 16px; /* 위아래 8px, 좌우 16px의 여백 설정 */
+    border-radius: 5px; /* 버튼의 둥근 모서리를 위한 설정 */
+    color: black; /* 글자색 */
+    cursor: pointer; /* 마우스 커서 모양 변경 */
+  }
+  
+  .verticalline {
+    left: 50%; /* 화면 가운데 정렬 */
+    top: 0; /* 위에서부터 시작 */
+    height: 95vh; /* 화면 전체 높이 */
+    width: 5px; /* 선의 두께 */
+    background-color: #000000; /* 선 색상 */
+  }

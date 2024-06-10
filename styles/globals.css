@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#wrap {
+    width: 100%;
+    height: auto;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+input {
+    outline: none;
+}
+
+html {
+    font-family: sans-serif;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 1380px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+
+@media screen and (max-width: 1000px) {
+    html {
+        font-size: 11px;
+    }
+}
+
+
+@media screen and (max-width: 900px) {
+    html {
+        font-size: 10px;
+    }
+}

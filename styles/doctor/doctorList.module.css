@@ -1,0 +1,44 @@
+.doctorCard {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid black;
+  width: 100%;
+  height: auto;
+}
+.imageBox {
+  width: 250px;
+  height: auto;
+  float: right;
+}
+.profileImage {
+  width: 100%;
+  height: auto;
+}
+.container {
+  display: flex;
+  padding-left: 20%;
+  padding-right: 20%;
+}
+.doctorInfo {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+}
+
+.moveDetail {
+  text-decoration: none;
+  color: black;
+  position: absolute;
+  font-size: large;
+  bottom: 20px;
+}
+
+/*search bar*/
+.searchbar {
+  width: 30%;
+  height: auto;
+  border: 3px solid black;
+  margin-right: 80px;
+}
