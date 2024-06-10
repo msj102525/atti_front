@@ -1,82 +1,86 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import Button from '../common/Button';
+import { postFeed } from '@/pages/api/feed';
 
-export default function FeedWriteForm({category}) {
+const CustomEditor = dynamic(() => {
+    return import('../../components/common/custom-editor');
+}, { ssr: false });
+
+let user = {
+    userId: "문승종"
+}
+
+export default function FeedWriteForm(props) {
+    const [currentDate, setCurrentDate] = useState("");
+    const [editorData, setEditorData] = useState("");
+
     const [formData, setFormData] = useState({
-        userId: '',
-        feedTitle: '',
-        category: category,
+        userId: user.userId,
+        feedContent: "",
+        category: "",
+        isPublic: "",
     });
-    console.log(`formWrite: ${category}`);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+    const handleEditorChange = (data) => {
+        setEditorData(data);
+    };
+    
+    useEffect(() => {
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString();
+        setCurrentDate(formattedDate);
+    }, []);
+
+    useEffect(() => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            feedContent: editorData,
+            category: props.category
+        }));
+    }, [editorData, props.category]);
+
+    useEffect(() => {
+        if (formData.isPublic === "Y" || formData.isPublic === "N") {
+            postFeed(formData);
+        }
+        
+    }, [formData]);
+
+    const publicHandleSubmit = (e) => {
+        e.preventDefault();
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            isPublic: "Y"
+        }));
     };
 
-    const handleSubmit = (e) => {
+    const privateHandleSubmit = (e) => {
         e.preventDefault();
-        // 여기에 폼 데이터를 제출하는 로직을 추가합니다.
-        console.log('Form Data Submitted:', formData);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            isPublic: "N"
+        }));
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-            <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-                <h1 className="text-2xl font-bold mb-6">Create New Feed</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label htmlFor="userId" className="block text-gray-700 mb-2">
-                            User ID
-                        </label>
-                        <input
-                            type="text"
-                            id="userId"
-                            name="userId"
-                            value={formData.userId}
-                            onChange={handleChange}
-                            required
-                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="feedTitle" className="block text-gray-700 mb-2">
-                            Feed Title
-                        </label>
-                        <input
-                            type="text"
-                            id="feedTitle"
-                            name="feedTitle"
-                            value={formData.feedTitle}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="category" className="block text-gray-700 mb-2">
-                            Category
-                        </label>
-                        <input
-                            type="text"
-                            id="category"
-                            name="category"
-                            value={category}
-                            onChange={handleChange}
-                            required
-                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        Submit
-                    </button>
-                </form>
+        <div className='w-4/5 p-4 shadow-xl'>
+            <div className='flex justify-between pb-4'>
+                <div className="border flex">
+                    <img className="" src="#" alt="profile-img" />
+                    <p>{user.userId}</p>
+                    <p className='pl-2 pr-2'>|</p>
+                    <p>{currentDate}</p>
+                </div>
+                <div className="flex gap-4">
+                    <Button text={"등록"} onClick={publicHandleSubmit} />
+                    <Button text={"비공개"} onClick={privateHandleSubmit} />
+                </div>
             </div>
+            <div className="pb-4">
+                <CustomEditor value={editorData} setData={setEditorData} onChange={handleEditorChange} />
+            </div>
+            <span className='p-1 border text-gray-500'>#{props.category}</span>
         </div>
     );
 }
-
-
-
-

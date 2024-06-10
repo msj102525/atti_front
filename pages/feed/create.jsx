@@ -10,6 +10,8 @@ export default function FeedWrite() {
         setData(childData);
     }
 
+    
+
     console.log(`FeedIndex : ${data}`);
 
     return (
@@ -21,7 +23,9 @@ export default function FeedWrite() {
                 </div>
                 <div className="border-solid border flex-1">
                     <FeedNav getData={getData} />
-                    <FeedWriteForm category={data} />
+                    <div className="flex w-full justify-center p-8">
+                        <FeedWriteForm category={data} />
+                    </div>
                 </div>
             </div>
         </div>
