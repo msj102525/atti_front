@@ -19,9 +19,11 @@
   .title{
     color: rgba(0, 0, 0, 0.342); /* 흰색의 50% 불투명도 */
     font-size: 20px;
+    margin-bottom: 20px;
   }
   
   .time {
+    border: 2px solid #000;
     font-size: 16px; /* 원하는 크기로 조정 */
     padding: 8px 16px; /* 위아래 8px, 좌우 16px의 여백 설정 */
     border-radius: 5px; /* 버튼의 둥근 모서리를 위한 설정 */

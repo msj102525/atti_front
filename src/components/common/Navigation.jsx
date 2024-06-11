@@ -44,12 +44,12 @@ export default function Navigation() {
             <li
               className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}
             >
-              <Link href="#contact">공지사항</Link>
+              <Link href="/board/boardList">공지사항</Link>
             </li>
             <li
               className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}
             >
-              <Link href="#contact">FAQ</Link>
+              <Link href="/faq/faqList">FAQ</Link>
             </li>
             <li
               className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}

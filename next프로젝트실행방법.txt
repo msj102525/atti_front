@@ -1,0 +1,5 @@
+1. visual studio code로 atti-front 프로젝트 열기
+2. vscode 터미널 열기 (ctrl + `(tab키 위 백틱))
+3. 터미널 command prompt로 변경 powershell x
+4. 터미널에서 npm install
+5. npm run dev 로 실행 -> http://localhost:3000 접속
