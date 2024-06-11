@@ -4,7 +4,7 @@ import Button from '../common/Button';
 import { postFeed } from '@/pages/api/feed/feed.js';
 
 const CustomEditor = dynamic(() => {
-    return import('../../components/common/custom-editor');
+    return import('@/components/common/custom-editor');
 }, { ssr: false });
 
 let user = {

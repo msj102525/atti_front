@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import { top5FeedContent } from '@/pages/api/feed/feed.js';
+import { top5FeedContent } from "@/pages/api/feed/feed";
 
 export default function FeedSideBar() {
     const [keyword, setKeyword] = useState("");
