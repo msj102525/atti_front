@@ -1,9 +1,9 @@
-import styles from "../../styles/doctor/doctorList.module.css";
+import styles from "@/styles/doctor/doctorList.module.css";
 import Link from "next/link";
-import Header from "../common/Header";
+import Header from "../common/header";
 import React, { useCallback, useEffect, useState } from "react";
-import { userAgent } from "next/server";
-import { showList } from "@/pages/api/doctor/doctor";
+import { showList, searchList } from "@/api/doctor/doctor";
+import Pagination from "@/components/common/page";
 
 let tagList = [
   [
@@ -37,21 +37,63 @@ export default function DoctorList() {
   const [maleValid, setMaleValid] = useState(false);
   const [femaleValid, setFemaleValid] = useState(false);
   const [doctorList, setDoctorList] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 번호를 상태로 추가
+  const [pageCount, setPageCount] = useState(0);
+  const [isSearching, setIsSearching] = useState(false); // 검색 중인지 여부를 나타내는 상태 추가
+  const [keywordSearch, setKeywordSearch] = useState("");
+
+  // 검색
   const [keyword, setKeyword] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await showList();
-        console.log(JSON.stringify(response.data, null, 2));
-        setDoctorList(response.data);
+        if (
+          selectedTags.length == 0 &&
+          keyword.length == 0 &&
+          gender.length == 0
+        ) {
+          const response = await showList(currentPage); // 현재 페이지 번호를 인자로 전달하여 데이터 가져오기
+          setPageCount(response.data.pages);
+          setDoctorList(response.data.doctors);
+        } else {
+          if (
+            selectedTags.length == 0 &&
+            keyword.trim().length == 0 &&
+            gender.length == 0
+          ) {
+            alert("검색어를 입력해주세요! ");
+            return;
+          }
+          const response = await searchList(
+            currentPage,
+            selectedTags,
+            keywordSearch,
+            gender
+          );
+          setPageCount(response.data.pages);
+          setDoctorList(response.data.doctors);
+        }
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchData(); // fetchData 함수를 호출하여 데이터를 가져옴
-  }, []); // 의존성 배열이 비어 있으므로 컴포넌트가 처음 렌더링될 때만 실행됨
+  }, [currentPage, selectedTags, gender, keywordSearch]);
 
+  const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage.selected); // 페이지 변경 시 현재 페이지 상태 업데이트
+  };
+  const handleSearchPageChange = (selectedPage) => {
+    setSearchCurrentPage(selectedPage.selected);
+  };
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      searchName();
+    }
+  };
   const changeGender = (e) => {
     if (e.target.value === "M") {
       setGender("M");
@@ -63,8 +105,7 @@ export default function DoctorList() {
       setFemaleValid(true);
     }
   };
-
-  const handleInputChange = (event) => {
+  const handleKeywordChange = (event) => {
     // 입력 필드의 새 값으로 상태를 업데이트합니다.
     setKeyword(event.target.value);
   };
@@ -83,12 +124,19 @@ export default function DoctorList() {
       );
     }
   };
+  const searchName = async () => {
+    setKeywordSearch(keyword);
+  };
   return (
     <div>
       <Header />
       <div className={`${styles.mainContainer} flex justify-center`}>
-        <div className="flex justify-center w-3/5 px-500">
-          <div className={`${styles.searchArea} flex-2`}>
+        <div className="flex justify-center w-3/5 px-2">
+          {" "}
+          {/* 여기서 px-4는 좌우 padding입니다 */}
+          <div className={`${styles.searchArea} w-1/6`}>
+            {" "}
+            {/* flex-1을 사용하여 동적으로 너비를 조정할 수 있습니다 */}
             <div className={styles.searchBar}>
               <div className={styles.searchTagDiv}>
                 <p className="my-10 text-4xl font-thin">나의 상황</p>
@@ -113,39 +161,39 @@ export default function DoctorList() {
                 ))}
               </div>
               <div className={styles.checkGender}>
-                <h3 class="my-10 text-4xl font-thin">성별</h3>
-                <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                  <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                    <div class="flex items-center ps-3">
+                <h3 className="my-10 text-4xl font-thin">성별</h3>
+                <ul className="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                  <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                    <div className="flex items-center ps-3">
                       <input
                         id="vue-checkbox-list"
                         type="checkbox"
                         value="M"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        onClick={changeGender}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                        onChange={changeGender}
                         checked={maleValid}
                       />
                       <label
-                        for="vue-checkbox-list"
-                        class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="vue-checkbox-list"
+                        className="w-full py-3 text-sm font-medium text-gray-900 ms-2 dark:text-gray-300"
                       >
                         남자
                       </label>
                     </div>
                   </li>
-                  <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                    <div class="flex items-center ps-3">
+                  <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                    <div className="flex items-center ps-3">
                       <input
                         id="react-checkbox-list"
                         type="checkbox"
                         value="F"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        onClick={changeGender}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                        onChange={changeGender}
                         checked={femaleValid}
                       />
                       <label
-                        for="react-checkbox-list"
-                        class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        htmlFor="react-checkbox-list"
+                        className="w-full py-3 text-sm font-medium text-gray-900 ms-2 dark:text-gray-300"
                       >
                         여자
                       </label>
@@ -154,33 +202,49 @@ export default function DoctorList() {
                 </ul>
               </div>
             </div>
-            <div className="flex flex-row p-1">
-              <div className="flex-auto w-8">
-                <img
-                  className="block w-full"
-                  src="data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTUuOTcgMTcuMDMxYy0xLjQ3OSAxLjIzOC0zLjM4NCAxLjk4NS01LjQ2MSAxLjk4NS00LjY5NyAwLTguNTA5LTMuODEyLTguNTA5LTguNTA4czMuODEyLTguNTA4IDguNTA5LTguNTA4YzQuNjk1IDAgOC41MDggMy44MTIgOC41MDggOC41MDggMCAyLjA3OC0uNzQ3IDMuOTg0LTEuOTg1IDUuNDYxbDQuNzQ5IDQuNzVjLjE0Ni4xNDYuMjE5LjMzOC4yMTkuNTMxIDAgLjU4Ny0uNTM3Ljc1LS43NS43NS0uMTkyIDAtLjM4NC0uMDczLS41MzEtLjIyem0tNS40NjEtMTMuNTNjLTMuODY4IDAtNy4wMDcgMy4xNC03LjAwNyA3LjAwN3MzLjEzOSA3LjAwNyA3LjAwNyA3LjAwN2MzLjg2NiAwIDcuMDA3LTMuMTQgNy4wMDctNy4wMDdzLTMuMTQxLTcuMDA3LTcuMDA3LTcuMDA3eiIgZmlsbC1ydWxlPSJub256ZXJvIi8+PC9zdmc+"
-                />
-              </div>
+            <div className="flex flex-row p-4">
               <div className="flex-auto ">
                 <input
-                  className="w-full border-2 border-solid"
+                  className="w-full h-full border-2 border-gray-300rounded-lg"
                   type="text"
                   value={keyword}
-                  onChange={handleInputChange}
+                  placeholder="찾으시는 의사이름을 입력해주세요"
+                  onChange={handleKeywordChange}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+              <div className="flex-auto w-4" onClick={searchName}>
+                <img
+                  className="block w-10 ml-10"
+                  src="data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTUuOTcgMTcuMDMxYy0xLjQ3OSAxLjIzOC0zLjM4NCAxLjk4NS01LjQ2MSAxLjk4NS00LjY5NyAwLTguNTA5LTMuODEyLTguNTA5LTguNTA4czMuODEyLTguNTA4IDguNTA5LTguNTA4YzQuNjk1IDAgOC41MDggMy44MTIgOC41MDggOC41MDggMCAyLjA3OC0uNzQ3IDMuOTg0LTEuOTg1IDUuNDYxbDQuNzQ5IDQuNzVjLjE0Ni4xNDYuMjE5LjMzOC4yMTkuNTMxIDAgLjU4Ny0uNTM3Ljc1LS43NS43NS0uMTkyIDAtLjM4NC0uMDczLS41MzEtLjIyem0tNS40NjEtMTMuNTNjLTMuODY4IDAtNy4wMDcgMy4xNC03LjAwNyA3LjAwN3MzLjEzOSA3LjAwNyA3LjAwNyA3LjAwN2MzLjg2NiAwIDcuMDA3LTMuMTQgNy4wMDctNy4wMDdzLTMuMTQxLTcuMDA3LTcuMDA3LTcuMDA3eiIgZmlsbC1ydWxlPSJub256ZXJvIi8+PC9zdmc+"
                 />
               </div>
             </div>
           </div>
-          <div className={`${styles.docorCardView} flex-1`}>
-            {doctorList.map((doctor) => (
-              <DoctorCard
-                id={doctor.userId}
-                name={doctor.userName}
-                comment={doctor.introduce}
-                address={doctor.hospitalName}
-                profileUrl="/doctor.png"
-              />
-            ))}
+          <div className={`${styles.docorCardView} w-3/5`}>
+            {" "}
+            {/* flex-2를 사용하여 동적으로 너비를 조정할 수 있습니다 */}
+            {doctorList &&
+              doctorList.length > 0 &&
+              doctorList.map((doctor) => (
+                <DoctorCard
+                  key={doctor.userId} // 각 의사의 고유한 key 추가
+                  id={doctor.userId}
+                  name={doctor.userName}
+                  comment={doctor.introduce}
+                  address={doctor.hospitalName}
+                  profileUrl="/doctor.png"
+                />
+              ))}
+            <div className={styles.pageDiv}>
+              {pageCount > 0 && !isSearching && (
+                <Pagination
+                  pageCount={pageCount} // 페이지 수를 전달
+                  onPageChange={handlePageChange} // 페이지 변경 핸들러 전달
+                  currentPage={currentPage} // 현재 페이지 번호 전달
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
