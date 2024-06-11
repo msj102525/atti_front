@@ -130,7 +130,7 @@ export default function DoctorList() {
   return (
     <div>
       <Header />
-      <div className={`${styles.mainContainer} flex justify-center`}>
+      <div className={`${styles.mainContainer} flex justify-center mt-5`}>
         <div className="flex justify-center w-3/5 px-2">
           {" "}
           {/* 여기서 px-4는 좌우 padding입니다 */}
