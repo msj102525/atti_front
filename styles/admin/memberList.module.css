@@ -73,3 +73,24 @@
 .table tbody tr:hover {
     background-color: #e9ecef;
   }
+
+.table td button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #14e71e;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  margin-right: 5px;
+  padding: 5px;
+}
+
+.button:last-child {
+  margin-right: 0;
+}

@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider
 import MemberCard from "/components/admin/MemberCard"; // MemberCard 컴포넌트 가져오기
 import styles from "@/styles/admin/memberList.module.css";
 import { getMemberList, deleteMember } from "/pages/api/admin/memberList"; // 회원 관련 API 함수 가져오기
-//import { handleAxiosError } from "../../api/errorAxiosHandle"; // 오류 처리 함수 가져오기
+import { handleAxiosError } from "../../api/errorAxiosHandle"; // 오류 처리 함수 가져오기
 
 
 // QueryClient 생성
@@ -18,6 +18,9 @@ const MemberListComponent = observer(() => {
     const [size, setSize] = useState(10); // 페이지 크기 상태
     const queryClient = useQueryClient(); // React Query 클라이언트
     const [isAdmin, setIsAdmin] = useState(false); // 관리자 여부 상태
+
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
+    const [selectedUser, setSelectedUser] = useState(null); // 선택된 회원 정보
 
     // 임시 목 데이터
     // const adminData = {
@@ -50,23 +53,29 @@ const MemberListComponent = observer(() => {
     //   });
 
     const { data, isLoading, error } = useQuery(
-        '/admin/memberList',
+        'memberList',
         () => getMemberList({  }),
         {
             keepPreviousData: true, // 이전 데이터를 유지
         }
     );
 
-
+   
    
 
     // 회원 삭제 뮤테이션
-    // const deleteMemberMutation = useMutation(deleteMember, {
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries('memberList'); // 회원 리스트 쿼리 무효화
-    //     },
-    //     onError: handleAxiosError, // 오류 처리
-    // });
+    const deleteMemberMutation = useMutation(deleteMember, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('memberList'); // 회원 리스트 쿼리 무효화
+        },
+        onError: handleAxiosError, // 오류 처리
+        
+        
+    });
+
+    
+
+    
 
     // 검색 입력 변경 핸들러
     const handleSearchChange = (e) => setSearchInput(e.target.value);
@@ -90,9 +99,51 @@ const MemberListComponent = observer(() => {
     }, []);
 
     // 회원 삭제 핸들러
-    // const handleDelete = (memberId) => {
-    //     deleteMemberMutation.mutate(memberId);
+    const handleDelete = (userId) => {
+        console.log(`Delete member with ID: ${userId}`);
+        deleteMemberMutation.mutate(userId);
+    };
+
+    //수정모달 작업중 ***************************
+
+    const openEditModal = (userData) => {
+        setSelectedUser(userData); // 선택된 회원 정보 설정
+        setIsModalOpen(true); // 모달 열기
+    };
+
+    const closeEditModal = () => {
+        setIsModalOpen(false); // 모달 닫기
+    };
+    
+    //******************************* 
+
+
+    // 회원 수정 핸들러
+    // const handleEdit = async () => {  //(userId) => {
+    //     if (!selectedUser) return;
+
+    //     try {
+    //         // 선택된 회원 정보 업데이트 요청
+    //         await updateMember(selectedUser.userId, {
+    //             name: selectedUser.userName,
+    //             nickname: selectedUser.nickName,
+    //             email: selectedUser.email
+    //         });
+    //         queryClient.invalidateQueries('memberList');
+    //         closeEditModal(); // 모달 닫기
+    //     } catch (error) {
+    //         console.error("Error updating member:", error);
+    //     }
+    //     console.log(`Edit member with ID: ${userId}`);
+    //     // 수정 로직 처리
     // };
+
+    // 회원 정지 핸들러
+    const handleSuspend = (userId) => {
+        console.log(`Suspend member with ID: ${userId}`);
+        // 정지 로직 처리
+    };
+
 
     // const handleDelete = (memberId) => {
     //     console.log(`Delete member with ID: ${memberId}`);
@@ -124,12 +175,23 @@ const MemberListComponent = observer(() => {
                         <th style={{ textAlign: "center" }}>회원이름</th>
                         <th style={{ width: "10vw", textAlign: "center" }}>닉네임</th>
                         <th style={{ width: "7vw", textAlign: "center" }}>이메일</th>
+                        <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
                     
                     </tr>
                 </thead>
                 <tbody>
-                    {data.members.map(member => (
-                        <MemberCard key={member.id} user={member}  />
+                {/* {data.members.map(member => (  */}
+                    
+                {/* {data && data.members && Array.isArray(data.members) && data.members.map(user => ( */}
+                    {data.map(user => (
+                    
+                        <MemberCard
+                        key={user.userId}
+                        user={user}  
+                        handleEdit={openEditModal}  //수정모달 열기 핸들러 전달 
+                        handleSuspend={handleSuspend}
+                        handleDelete={handleDelete}
+                        />
                         //onDelete={handleDelete} 위에 구문에 원래 있던 것
                     ))}
                 </tbody>

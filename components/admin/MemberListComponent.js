@@ -80,6 +80,8 @@ const MemberListComponent = observer(() => {
                         <th style={{ width: "10vw", textAlign: "center" }}>이메일</th>
                         <th style={{ width: "7vw", textAlign: "center" }}>가입일자</th>
                         <th style={{ width: "4vw", textAlign: "center" }}>관리</th>
+                        
+                        
                     </tr>
                 </thead>
                 <tbody>
