@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from "../../styles/chat/chat.module.css"; // 스타일 파일을 임포트
-
+import Header from '../common/header';
+import Footer from '../common/footer';
 
 const Chat = () => {
     const [selectedRating, setSelectedRating] = useState(0);
@@ -52,6 +53,8 @@ const Chat = () => {
     };
 
     return (
+    <div>
+        <Header />
         <div className={styles.container}>
             
             {/* 왼쪽 영역 */}
@@ -142,6 +145,8 @@ const Chat = () => {
                 </div>
             </div>{/* 오른쪽 영역 끝*/}
         </div>
+        <Footer/>
+    </div>
     );
 };
 

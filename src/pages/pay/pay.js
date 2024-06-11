@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import styles from "../../styles/pay/pay.module.css"; // 스타일 파일을 임포트
 import { termsContent1, termsContent2, termsContent3 } from './payContent';
-
+import Header from '../common/header';
+import Footer from '../common/Footer';
 
 function App() {
   const [selectedTime, setSelectedTime] = useState("60분"); // 기본값을 60분으로 설정
@@ -18,6 +19,8 @@ function App() {
   }, []); // 빈 배열을 전달하여 이 효과가 한 번만 실행되도록 함
 
   return (
+    <div>
+        <Header/>
       <div className={styles.container}>
           {/* 왼쪽 영역 */}
           <div className={styles.leftsection}>
@@ -80,6 +83,8 @@ function App() {
       </div>    {/* 오른쪽 영역 끝 */}
 
       
+    </div>
+    <Footer/>
     </div>
   );
 }

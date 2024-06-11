@@ -122,11 +122,11 @@ input:-moz-input-placeholder {
 	font-size: 16px;
 }
 
-/* button {
+.button {
 	width: 100px;
 	height: 40px;
 	border: none;
 	background: rgb(250, 180, 49);
 	color: #ffffff;
 	font-size: 16px;
-} */
+} 

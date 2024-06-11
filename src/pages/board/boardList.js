@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from "../../styles/board/boardList.module.css"; // 스타일 파일을 임포트
+import Header from '../common/header';
 
 function SearchForm() {
   const [selectedValue, setSelectedValue] = useState('');
@@ -12,7 +13,7 @@ function SearchForm() {
   };
 
   return (
-    <div className="searchdiv">
+    <div className={styles.searchdiv}>
       <form action="nsearch.do" method="get">
         <select name="action" id="searchselect" onChange={handleSelectChange}>
           <option value="title">제목</option>
@@ -27,7 +28,7 @@ function SearchForm() {
         ) : (
           <input type="text" id="searchtext" name="keyword" placeholder="검색어 입력" />
         )}
-        <input type="submit" className="searchbtn" value="검색" />
+        <input type="submit" className={styles.searchbtn} value="검색" />
       </form>
       <button className="writerB" onClick={() => console.log('글쓰기 버튼 클릭')}>글쓰기</button>
     </div>
@@ -37,6 +38,7 @@ function SearchForm() {
 export default function List() {
   return (
     <div>
+      <Header />
       <h1>공지사항</h1>
       
       <table className={styles.table}>

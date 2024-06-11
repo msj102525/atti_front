@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from "../../styles/board/boardDetail.module.css"; // 스타일 파일을 임포트
 import { useRouter } from "next/router";
+import Header from '../common/header';
 
 function NoticeDetail({ notice, currentPage }) {
 
@@ -11,9 +12,11 @@ function NoticeDetail({ notice, currentPage }) {
   };
   
   return (
-    <div className={styles.container}>
-      <div className="container">
-        <h3 className={styles.h3}>공지사항 제목</h3>
+    
+    <div >
+      <Header/>
+      <div className={styles.container}>
+        <h3 className={styles.h3}>공지사항 제목글</h3>
         <span>공지사항 작성자</span> 
         <span>조회수 15</span> 
         <span>중요도:15</span> 

@@ -1,22 +1,24 @@
 /* NoticeDetail.css */
 
 .container {
+    
 	font-family: arial;
 	font-size: 18px;
 	padding: 20px;
-	margin: 25px auto;
+	margin: 50px auto;
 	width: 800px;
-	outline: dashed 1px black;
+	
 }
 
 .h3 {
     color: #333;
     margin-bottom: 10px;
+    font-size: 30px;
 }
 
 .container span {
     color: #666;
-    margin-right: 99.4px;
+    margin-right: 50px;
 }
 
 .contentbox {
