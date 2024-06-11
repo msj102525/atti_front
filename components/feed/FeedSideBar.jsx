@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
+// import { top5FeedContent } from '@/pages/api/feed/feed.js';
 
 export default function FeedSideBar() {
     const [keyword, setKeyword] = useState("");
+    const [top5FeedContent, setTop5FeedContent] = useState("");
+
     const onChange = (event) => setKeyword(event.target.value);
 
     const searchFeed = (event) => {
@@ -12,6 +15,10 @@ export default function FeedSideBar() {
     // useEffect(() => {
     //     console.log(`effect : ${keyword}`);
     // }, [keyword]);
+
+    useEffect(() => {
+        // top5FeedContent();
+    }, []);
 
     return (
         <div className="flex flex-col border-solid border-2 max-w-64 p-2 flex-auto pt-4">

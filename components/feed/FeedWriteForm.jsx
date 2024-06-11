@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Button from '../common/Button';
-import { postFeed } from '@/pages/api/feed';
+import { postFeed } from '@/pages/api/feed/feed.js';
 
 const CustomEditor = dynamic(() => {
     return import('../../components/common/custom-editor');
@@ -12,6 +12,7 @@ let user = {
 }
 
 export default function FeedWriteForm(props) {
+
     const [currentDate, setCurrentDate] = useState("");
     const [editorData, setEditorData] = useState("");
 

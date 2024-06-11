@@ -21,16 +21,13 @@ const SUBCATEGORIES = [
 
 export default function FeedNav({ getData }) {
     const path = usePathname();
-    let show = true;
-    if (path === "/feed/create") {
-        show = false;
-    }
+    const [category, setCategory] = useState("모든 사연");
+    const show = path !== "/feed/create";
 
     const handleCategoryClick = (event) => {
         const clickedCategory = event.target.textContent;
         setCategory(clickedCategory);
     };
-    const [category, setCategory] = useState("모든 사연");
 
     console.log(`FeedNav.jsx: ${category}`);
 
@@ -48,18 +45,26 @@ export default function FeedNav({ getData }) {
                 <div className="container mx-auto flex-row items-center pl-60">
                     <div className="space-x-7 p-4">
                         <ul className="flex space-x-10">
-                            {CATEGORIES.map((category) => (
-                                <li key={category} onClick={handleCategoryClick} className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1 text-center">
-                                    {category}
+                            {CATEGORIES.map((categoryItem) => (
+                                <li
+                                    key={categoryItem}
+                                    onClick={handleCategoryClick}
+                                    className={`cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1 text-center ${path === "/feed/create" && categoryItem === "모든 사연" ? "hidden" : ""}`}
+                                >
+                                    {categoryItem}
                                 </li>
                             ))}
                         </ul>
                     </div>
                     <div className="p-4" style={{ display: show ? "block" : "none" }}>
                         <ul className="flex space-x-10">
-                            {SUBCATEGORIES.map((category) => (
-                                <li key={category} onClick={handleCategoryClick} className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1">
-                                    {category}
+                            {SUBCATEGORIES.map((categoryItem) => (
+                                <li
+                                    key={categoryItem}
+                                    onClick={handleCategoryClick}
+                                    className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1"
+                                >
+                                    {categoryItem}
                                 </li>
                             ))}
                             <li className="pl-96 cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1">

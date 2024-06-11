@@ -10,10 +10,8 @@ export default function FeedWrite() {
         setData(childData);
     }
 
-    
-
     console.log(`FeedIndex : ${data}`);
-
+    
     return (
         <div>
             <Header />
@@ -24,7 +22,7 @@ export default function FeedWrite() {
                 <div className="border-solid border flex-1">
                     <FeedNav getData={getData} />
                     <div className="flex w-full justify-center p-8">
-                        <FeedWriteForm category={data} />
+                        <FeedWriteForm category={data === "모든 사연" ? "일반 고민" : data} />
                     </div>
                 </div>
             </div>
