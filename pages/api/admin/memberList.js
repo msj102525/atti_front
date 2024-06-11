@@ -24,7 +24,18 @@ export const getMemberList = async ({  }) => {
 
 };
 
-export const deleteMember = async (memberId) => {
-    const response = await axios.delete(`/api/members/${memberId}`);
+export const deleteMember = async (userId) => {
+    const response = await axios.delete(`/admin/api/deletemembers/${userId}`);
     return response.data;
 };
+
+export const updateMember = async (userId, userData) => {
+    try {
+        const response = await axios.put(`/admin/api/updatemembers/${userId}`, userData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating member:', error);
+        throw error;
+    }
+};
+
