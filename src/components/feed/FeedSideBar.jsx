@@ -1,28 +1,41 @@
 import { useState, useEffect } from "react";
-import { top5FeedContent } from "@/pages/api/feed/feed";
+import { top5FeedContent } from "@/api/feed/feed";
 
 export default function FeedSideBar() {
-    const [keyword, setKeyword] = useState("");
-    const [top5FeedContent, setTop5FeedContent] = useState("");
+    // const [keyword, setKeyword] = useState("");
+    const [top5FeedContentResult, setTop5FeedContentResult] = useState([]);
+    console.log(`top5FeedContent ${top5FeedContentResult}`);
 
-    const onChange = (event) => setKeyword(event.target.value);
+    const TOP5FEEDCONTENT = [];
 
-    const searchFeed = (event) => {
-        console.log(event.target);
-        console.log(keyword);
+    for (let feedContent of top5FeedContentResult) {
+        TOP5FEEDCONTENT.push(feedContent.feedContent);
     }
 
-    // useEffect(() => {
-    //     console.log(`effect : ${keyword}`);
-    // }, [keyword]);
+    // console.log(TOP5FEEDCONTENT);
+
+    // const onChange = (event) => setKeyword(event.target.value);
+
+    const searchFeed = (event) => {
+        console.log(event.target.value);
+    }
+
 
     useEffect(() => {
-        // top5FeedContent();
+        top5FeedContent()
+            .then((res) => {
+                console.log("Top 5 feeds:", res);
+                setTop5FeedContentResult(res);
+            })
+            .catch((err) => {
+                console.error("Error fetching top 5 feeds:", err);
+            });
     }, []);
 
+
     return (
-        <div className="flex flex-col border-solid border-2 max-w-64 p-2 flex-auto pt-4">
-            <div className="searchBox p-1 text-center">
+        <div className="flex flex-col border-solid border-2 w-64 p-2 flex-auto pt-4">
+            <div className="searchBox p-1 text-center text-xl">
                 <p>커뮤니티 사연보기</p>
             </div>
             <div className="flex flex-row p-1">
@@ -31,17 +44,20 @@ export default function FeedSideBar() {
                         src="data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTUuOTcgMTcuMDMxYy0xLjQ3OSAxLjIzOC0zLjM4NCAxLjk4NS01LjQ2MSAxLjk4NS00LjY5NyAwLTguNTA5LTMuODEyLTguNTA5LTguNTA4czMuODEyLTguNTA4IDguNTA5LTguNTA4YzQuNjk1IDAgOC41MDggMy44MTIgOC41MDggOC41MDggMCAyLjA3OC0uNzQ3IDMuOTg0LTEuOTg1IDUuNDYxbDQuNzQ5IDQuNzVjLjE0Ni4xNDYuMjE5LjMzOC4yMTkuNTMxIDAgLjU4Ny0uNTM3Ljc1LS43NS43NS0uMTkyIDAtLjM4NC0uMDczLS41MzEtLjIyem0tNS40NjEtMTMuNTNjLTMuODY4IDAtNy4wMDcgMy4xNC03LjAwNyA3LjAwN3MzLjEzOSA3LjAwNyA3LjAwNyA3LjAwN2MzLjg2NiAwIDcuMDA3LTMuMTQgNy4wMDctNy4wMDdzLTMuMTQxLTcuMDA3LTcuMDA3LTcuMDA3eiIgZmlsbC1ydWxlPSJub256ZXJvIi8+PC9zdmc+" />
                 </div>
                 <div className="flex-auto ">
-                    <input className="border-solid border-2 w-full" type="text" value={keyword} onChange={onChange} />
+                    <input className="border-solid border-2 w-full" type="text" />
                 </div>
             </div>
-            <div className="text-center pt-5">
-                <p>지금 주목 받는 사연</p>
+            <div className="text-xl text-center pt-2">
+                <p className="py-2">지금 주목 받는 사연</p>
                 <ul>
-                    {/* {SUBCATEGORIES.map((top5) => (
-                        <li key={category} onClick={handleCategoryClick} className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1">
-                            {category}
+                    {TOP5FEEDCONTENT.map((feedContent, idx) => (
+                        <li
+                            key={feedContent}
+                            className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-start font-semibold p-1 pl-6 truncate text-slate-500 text-lg"
+                        >
+                            {idx + 1}. {feedContent}
                         </li>
-                    ))} */}
+                    ))}
                 </ul>
             </div>
         </div>

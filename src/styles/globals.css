@@ -27,6 +27,10 @@ input {
     outline: none;
 }
 
+p {
+    cursor: default;
+}
+
 html {
     font-family: sans-serif;
     font-weight: 600;

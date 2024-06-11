@@ -1,7 +1,7 @@
 import Head from 'next/head';
-import Header from './common/Header';
-import Container from './common/Container';
-import Footer from './common/Footer';
+import Header from '@/pages/common/Header';
+import Container from '@/pages/common/Container';
+import Footer from '@/pages/common/Footer';
 export default function Home() {
   return (
     <>
