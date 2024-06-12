@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from "../../styles/faq/faqList.module.css"; // 스타일 파일을 임포트
+import Header from '../common/Header';
 
 function SearchForm() {
     const [selectedValue, setSelectedValue] = useState('');
@@ -37,6 +38,7 @@ function SearchForm() {
 function QnA() {
   return (
     <div>
+      <Header/>
     <ul className={`${styles.qna}`}>
         <h1>FAQ</h1>
       <li>
