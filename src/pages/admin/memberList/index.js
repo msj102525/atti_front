@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from 'react-query';
-import MemberCard from "/components/admin/MemberCard"; // MemberCard 컴포넌트 가져오기
+import MemberCard from "@/components/admin/MemberCard"; // MemberCard 컴포넌트 가져오기
 import styles from "@/styles/admin/memberList.module.css";
-import { getMemberList, deleteMember } from "/pages/api/admin/memberList"; // 회원 관련 API 함수 가져오기
+import { getMemberList, deleteMember } from "@/api/admin/memberList"; // 회원 관련 API 함수 가져오기
 import { handleAxiosError } from "../../api/errorAxiosHandle"; // 오류 처리 함수 가져오기
 
 
@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 
 
 const MemberListComponent = observer(() => {
-    const [searchField, setSearchField] = useState(""); // 검색 필드 상태
+    //const [searchField, setSearchField] = useState("id"); // 검색 필드 상태
     const [searchInput, setSearchInput] = useState(""); // 검색 입력 상태
     const [page, setPage] = useState(1); // 현재 페이지 상태
     const [size, setSize] = useState(10); // 페이지 크기 상태
@@ -21,6 +21,10 @@ const MemberListComponent = observer(() => {
 
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
     const [selectedUser, setSelectedUser] = useState(null); // 선택된 회원 정보
+
+    const [searchType, setSearchType] = useState('id'); // 'id' 또는 'name' 값을 가질 수 있는 상태
+    
+    
 
     // 임시 목 데이터
     // const adminData = {
@@ -53,10 +57,11 @@ const MemberListComponent = observer(() => {
     //   });
 
     const { data, isLoading, error } = useQuery(
-        'memberList',
-        () => getMemberList({  }),
+        ['memberList', { searchField: searchType === 'id' ? 'userId' : 'userName', searchInput , page, size }],
+        () => getMemberList({  searchField: searchType === 'id' ? 'userId' : 'userName', searchInput , page: page - 1, size }),
         {
             keepPreviousData: true, // 이전 데이터를 유지
+           
         }
     );
 
@@ -74,29 +79,163 @@ const MemberListComponent = observer(() => {
     });
 
     
+    //검색관련
 
     
 
-    // 검색 입력 변경 핸들러
-    const handleSearchChange = (e) => setSearchInput(e.target.value);
+
+    
+    
+    // const executeSearch = () => {
+    //     if (searchType === 'id') {
+    //         // 아이디 검색 로직
+    //         console.log('아이디로 검색:', searchInput);
+            
+    //     } else if (searchType === 'name') {
+    //         // 회원 이름 검색 로직
+    //         console.log('회원 이름으로 검색:', searchInput);
+            
+    //     }
+    // };
+
+    // const executeSearch = () => {
+    //     setPage(1); // 검색 시 페이지를 1로 초기화
+    //     queryClient.invalidateQueries(['memberList', { searchType, searchInput, page: 0, size }]);
+    // };
 
     // 검색 실행
-    const executeSearch = () => setSearchField(searchInput);
+    // const executeSearch = () => {
+    //     setPage(1); // 검색 시 페이지를 1로 초기화
+    //     refetch();
+    // };
 
-    // Enter 키 눌렀을 때 검색 실행
-     const handleKeyPress = (e) => {
-         if (e.key === 'Enter') {
-             executeSearch();
-         }
-     };
+//     const executeSearch = () => {
+//         if (!searchField || !searchInput) {
+//             console.log('검색 필드와 검색어를 입력하세요.');
+//             return;
+//         }
 
-    // 페이지 크기 변경 핸들러
-    const handleSizeChange = (e) => setSize(e.target.value);
+//         // 검색 필드가 아이디인 경우 'id', 이름인 경우 'name'으로 설정
+//         const searchFieldKey = searchType === 'id' ? 'userId' : 'userName';
+        
+//         console.log('검색 필드:', searchFieldKey);
+//         console.log('검색어:', searchInput);
+//         console.log('페이지:', page);
+//         console.log('페이지 크기:', size);
+    
+//         // 검색 필드와 검색어를 쿼리로 전달하여 데이터를 불러옴
+//          getMemberList({ searchField: searchFieldKey, searchInput, page: page - 1, size })
+//         .then(data => {
+//             console.log('검색 결과:', data);
+//             // 처리할 내용 추가
+//         })
+//         .catch(error => {
+//             console.error('검색 오류:', error);
+//             // 오류 처리 추가
+//         });
+// };
+// 검색 실행
+// 검색 실행
+
+
+
+// 검색 실행
+const executeSearch = () => {
+    if (!searchInput) {
+        console.log('검색어를 입력하세요.');
+        return;
+    }
+
+    // 검색 필드가 아이디인 경우 'userId', 이름인 경우 'userName'으로 설정
+    const searchField = searchType === 'id' ? 'userId' : 'userName';
+
+    console.log('검색 필드:', searchField);
+    console.log('검색어:', searchInput);
+    console.log('페이지:', page);
+    console.log('페이지 크기:', size);
+
+    // 검색 필드와 검색어를 쿼리로 전달하여 데이터를 불러옴
+    getMemberList({ searchField, searchInput, page: page - 1, size })
+        .then(data => {
+            console.log('검색 결과:', data);
+            // 처리할 내용 추가
+            
+        })
+        .catch(error => {
+            console.error('검색 오류:', error);
+            // 오류 처리 추가
+            
+        });
+};
+
+// 검색 버튼 클릭 시 검색 실행
+const handleSearchButtonClick = () => {
+    executeSearch();
+};
+
+// Enter 키 눌렀을 때 검색 실행
+
+const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+        executeSearch();
+    }
+};
+
+// 페이지 크기 변경 핸들러
+const handleSizeChange = (event) => setSize(event.target.value);
+
+// 검색 필드 변경 핸들러
+const handleSearchTypeChange = (event) => {
+    setSearchType(event.target.value);
+};
+
+// 검색 입력 변경 핸들러
+const handleSearchChange = (event) => setSearchInput(event.target.value);
+
+
+// 검색 필드 유형에 따른 검색 조건 설정
+// useEffect(() => {
+//     queryClient.invalidateQueries('memberList'); // 검색 필드가 변경될 때마다 쿼리 무효화
+// }, [searchType]);
+
+
+// useEffect(() => {
+//     // 입력값이 변경될 때마다 쿼리를 활성화
+//     if (searchInput) {
+//         queryClient.invalidateQueries('memberList'); // 검색 필드가 변경될 때마다 쿼리 무효화
+//     }
+// }, [searchInput]);
+
+// 검색 입력이 변경될 때마다 검색 실행
+// useEffect(() => {
+//     // 입력값이 변경될 때마다 검색 실행
+//     if (searchInput && searchInput.trim() !== '') {
+//         executeSearch();
+//     }
+// }, [searchInput]);
+
+    // 검색 실행
+    // const executeSearch = () => {
+    //     const searchField = searchType === 'id' ? 'userId' : 'userName';
+    //     setPage(1); // 검색 시 페이지를 1로 초기화
+    //     queryClient.invalidateQueries('memberList');
+    // };
+    
+    
+    
+
+    // 검색 실행
+    //const executeSearch = () => setSearchField(searchInput);
+
+    
+    
 
     // 관리자 여부 설정
-    useEffect(() => {
+    //useEffect(() => {
         //setIsAdmin(localStorage.getItem("isAdmin") === "true");
-    }, []);
+    //}, []);
+
+    
 
     // 회원 삭제 핸들러
     const handleDelete = (userId) => {
@@ -159,14 +298,19 @@ const MemberListComponent = observer(() => {
         <div className={styles.container}>
             <h2>회원 리스트</h2>
             <div style={{ height: "2vw", justifyContent: "center", textAlign: "right" }}>
-                <select value={size} onChange={handleSizeChange} style={{ height: "88%" }}>
+                {/* <select value={size} onChange={handleSizeChange} style={{ height: "88%" }}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
+                </select> */}
+                <select value={searchType} onChange={handleSearchTypeChange}>
+                <option value="id">아이디</option>
+                <option value="name">회원이름</option>
                 </select>
-                <input type="text" placeholder="아이디 검색..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
-                <button onClick={executeSearch}>검색</button>
+                {/* <input type="text" placeholder="검색..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} /> */}
+                <input type="text" placeholder="검색..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
+                <button onClick={handleSearchButtonClick}>검색</button>
             </div>
             <table className={styles.table}>
                 <thead>
@@ -198,6 +342,8 @@ const MemberListComponent = observer(() => {
             </table>
             <div>
                 {/* 페이지네이션 구현 (현재 페이지: {page}) */}
+                <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
+                <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button>
                 {/* 페이지네이션 로직 추가 */}
             </div>
         </div>
