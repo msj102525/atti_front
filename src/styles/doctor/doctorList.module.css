@@ -52,7 +52,7 @@
 /*search bar*/
 .searchArea {
   width: 30%;
-  height: 1000px;
+  min-height: 1000px;
   margin-right: 80px;
 }
 .searchBar {
@@ -60,7 +60,6 @@
   height: auto;
   border: 3px solid black;
   margin-right: 80px;
-  padding-bottom: 100px;
   padding-left: 50px;
   padding-right: 50px;
 }
