@@ -5,11 +5,15 @@ export default function FeedList({ category }) {
             profileUrl: "/common/header/attiLogo.png",
             category: "일반 고민",
             feedNum: 1,
-            feedContent: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+            feedContent: "긴글 확인용 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
             feedDate: "2024-06-21",
             replyCount: 2,
             inPublic: "Y",
-            loginUserIsLiked: false
+            loginUserIsLiked: false,
+            isDocterComment: true,
+            docterImgUrl: "/common/header/attiLogo.png",
+            docterName: "김의사",
+            docterComment: "의사전문 답변 의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변"
         },
         {
             userId: "김철수",
@@ -20,7 +24,12 @@ export default function FeedList({ category }) {
             feedDate: "2024-06-20",
             replyCount: 3,
             inPublic: "N",
-            loginUserIsLiked: true
+            loginUserIsLiked: true,
+            isDocterComment: false,
+            docterImgUrl: "/common/header/attiLogo.png",
+            docterName: "김의사",
+            docterComment: "의사전문 답변 의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변"
+       
         },
         {
             userId: "이영희",
@@ -31,7 +40,12 @@ export default function FeedList({ category }) {
             feedDate: "2024-06-19",
             replyCount: 1,
             inPublic: "Y",
-            loginUserIsLiked: false
+            loginUserIsLiked: false,
+            isDocterComment: true,
+            docterImgUrl: "/common/header/attiLogo.png",
+            docterName: "김의사",
+            docterComment: "의사전문 답변 의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변"
+       
         },
         {
             userId: "박민수",
@@ -42,7 +56,12 @@ export default function FeedList({ category }) {
             feedDate: "2024-06-18",
             replyCount: 5,
             inPublic: "Y",
-            loginUserIsLiked: true
+            loginUserIsLiked: true,
+            isDocterComment: false,
+            docterImgUrl: "/common/header/attiLogo.png",
+            docterName: "김의사",
+            docterComment: "의사전문 답변 의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변"
+       
         },
         {
             userId: "장수진1",
@@ -53,7 +72,12 @@ export default function FeedList({ category }) {
             feedDate: "2024-06-17",
             replyCount: 4,
             inPublic: "N",
-            loginUserIsLiked: false
+            loginUserIsLiked: false,
+            isDocterComment: false,
+            docterImgUrl: "/common/header/attiLogo.png",
+            docterName: "김의사",
+            docterComment: "의사전문 답변 의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변"
+       
         },
         {
             userId: "장수진2",
@@ -64,18 +88,41 @@ export default function FeedList({ category }) {
             feedDate: "2024-06-17",
             replyCount: 4,
             inPublic: "N",
-            loginUserIsLiked: false
+            loginUserIsLiked: false,
+            isDocterComment: false,
+            docterImgUrl: "/common/header/attiLogo.png",
+            docterName: "김의사",
+            docterComment: "의사전문 답변 의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변"
+       
+        }
+        ,
+        {
+            userId: "장수진3",
+            profileUrl: "/common/header/attiLogo.png",
+            category: "건강 고민",
+            feedNum: 5,
+            feedContent: "건강에 대한 걱정과 고민을 나눕니다. Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+            feedDate: "2024-06-17",
+            replyCount: 4,
+            inPublic: "N",
+            loginUserIsLiked: false,
+            isDocterComment: false,
+            docterImgUrl: "/common/header/attiLogo.png",
+            docterName: "김의사",
+            docterComment: "의사전문 답변 의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변의사전문 답변"
+       
         }
         
+
     ];
 
     return (
         <div className="p-10">
-            <div className="border flex justify-center">
+            <div className="flex justify-center">
                 <div className="gap-8 columns-2">
                     {feedData.map((feed, idx) => (
                         <div key={idx} className="flex flex-col border w-full p-4 rounded-[40px] mb-4">
-                            <div className="flex gap-2 text-m items-center text-gray-500">
+                            <div className="flex gap-2 text-m items-center text-gray-500 pb-2">
                                 <p>{feed.category}</p>
                                 <p>|</p>
                                 <div className="border w-10 h-10 rounded-full overflow-hidden">
@@ -84,12 +131,24 @@ export default function FeedList({ category }) {
                                 <p>{feed.inPublic === "Y" ? feed.userId : "비공개"}</p>
                                 <p>{feed.feedDate}</p>
                             </div>
-                            <div className="text-lg border max-h-60 overflow-hidden line-clamp-[8]">
+                            <div className="text-lg max-h-60 overflow-hidden line-clamp-[8] mb-4">
                                 {feed.feedContent}
                             </div>
-                            <div className="flex gap-2">
-                                <button>하트</button>
-                                <button>댓글모양</button>
+                            <div className="flex gap-1">
+                                <img src={feed.loginUserIsLiked ? "/feed/fillHeart.png" : "/feed/emptyHeart.png"} alt="" />
+                                <img src={"/feed/comment.png"} alt="댓글" />
+                                {feed.replyCount}
+                            </div>
+                            <div className={`${feed.isDocterComment ? "block" : "hidden"} border p-1 rounded-[20px] bg-cyan-100`}>
+                                <div className="flex items-center">
+                                    <div className="border w-10 h-10 rounded-full overflow-hidden">
+                                        <img className="block w-full bg-white" src={feed.docterImgUrl} alt="userImg" />
+                                    </div>
+                                    <p>{feed.docterName}님의 전문답변</p>
+                                </div>
+                                <div className="text-lg max-h-60 overflow-hidden line-clamp-[3] mb-4">
+                                    {feed.docterComment}
+                                </div>
                             </div>
                         </div>
                     ))}
