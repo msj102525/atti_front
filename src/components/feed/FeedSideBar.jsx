@@ -2,19 +2,13 @@ import { useState, useEffect } from "react";
 import { top5FeedContent } from "@/api/feed/feed";
 
 export default function FeedSideBar() {
-    // const [keyword, setKeyword] = useState("");
     const [top5FeedContentResult, setTop5FeedContentResult] = useState([]);
-    console.log(`top5FeedContent ${top5FeedContentResult}`);
 
     const TOP5FEEDCONTENT = [];
 
     for (let feedContent of top5FeedContentResult) {
         TOP5FEEDCONTENT.push(feedContent.feedContent);
     }
-
-    // console.log(TOP5FEEDCONTENT);
-
-    // const onChange = (event) => setKeyword(event.target.value);
 
     const searchFeed = (event) => {
         console.log(event.target.value);
@@ -24,7 +18,7 @@ export default function FeedSideBar() {
     useEffect(() => {
         top5FeedContent()
             .then((res) => {
-                console.log("Top 5 feeds:", res);
+                // console.log("Top 5 feeds:", res);
                 setTop5FeedContentResult(res);
             })
             .catch((err) => {
@@ -34,7 +28,7 @@ export default function FeedSideBar() {
 
 
     return (
-        <div className="flex flex-col border-solid border-2 w-64 p-2 flex-auto pt-4">
+        <div className="flex flex-col border-solid border-2 w-64 p-2 flex-auto pt-4 sticky top-36">
             <div className="searchBox p-1 text-center text-xl">
                 <p>커뮤니티 사연보기</p>
             </div>
