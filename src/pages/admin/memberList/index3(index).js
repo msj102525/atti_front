@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from 'react-query';
 import MemberCard from "/components/admin/MemberCard"; // MemberCard 컴포넌트 가져오기
-
+ 
 //import { getMemberList, deleteMember } from "../../api/member"; // 회원 관련 API 함수 가져오기
 //import { handleAxiosError } from "../../api/errorAxiosHandle"; // 오류 처리 함수 가져오기
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/admin/EditModal.module.css'; // 모달 스타일 파일
 import { updateMember } from '@/api/admin/memberList'; // 회원 정보 수정 API 함수
-
+ 
 const EditModal = ({ isOpen, onClose, user, onUpdate }) => {
 //   const [name, setName] = useState(user.userName); // 이름 입력 상태
 //   const [nickname, setNickname] = useState(user.nickName); // 닉네임 입력 상태

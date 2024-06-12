@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from "mobx-react";
 import MemberCard from "../../components/admin/MemberCard"; // MemberCard 컴포넌트 가져오기
-
+ 
 const MemberListPage = observer(() => {
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);

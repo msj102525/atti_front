@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import { observer } from "mobx-react";
 import styles from "@/styles/admin/memberList.module.css";
 import EditModal from './EditModal';
-
-
+ 
+ 
 const MemberCard = observer(({ user, handleEdit, handleSuspend, handleDelete }) => {
     
     

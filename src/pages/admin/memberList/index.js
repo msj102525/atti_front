@@ -5,7 +5,7 @@ import MemberCard from "@/components/admin/MemberCard"; // MemberCard 컴포넌�
 import styles from "@/styles/admin/memberList.module.css";
 import { getMemberList, deleteMember } from "@/api/admin/memberList"; // 회원 관련 API 함수 가져오기
 import { handleAxiosError } from "../../api/errorAxiosHandle"; // 오류 처리 함수 가져오기
-
+ 
 
 // QueryClient 생성
 const queryClient = new QueryClient();
