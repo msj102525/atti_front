@@ -1,4 +1,4 @@
-import axios from '@/api/admin/axiosApi';
+import axios from '@/api/axiosApi';
  
 // export const getMemberList = async ({ searchField, page, size }) => {
    
