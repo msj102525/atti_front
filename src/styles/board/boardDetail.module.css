@@ -12,7 +12,7 @@
 
 .h3 {
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     font-size: 30px;
 }
 
@@ -22,6 +22,7 @@
 }
 
 .contentbox {
+    margin-top: 30px;
     font-size: 18px; 
     line-height: 1.5;
     margin-bottom: 20px;
@@ -42,6 +43,8 @@
     text-decoration: none;
     border-radius: 5px;
     border: none;
+    height: 40px;
+    width: 80px;
 }
 
 .btnbox button:hover,
