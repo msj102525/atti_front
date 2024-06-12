@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from "../../styles/pay/pay.module.css"; // 스타일 파일을 임포트
 import { termsContent1, termsContent2, termsContent3 } from './payContent';
-import Header from '../common/header';
+import Header from '../common/Header';
 import Footer from '../common/Footer';
 
 function App() {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from "../../styles/chat/chat.module.css"; // 스타일 파일을 임포트
-import Header from '../common/header';
+import Header from '../common/Header';
 import Footer from '../common/footer';
 
 const Chat = () => {

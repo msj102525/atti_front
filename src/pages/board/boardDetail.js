@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from "../../styles/board/boardDetail.module.css"; // 스타일 파일을 임포트
 import { useRouter } from "next/router";
-import Header from '../common/header';
+import Header from '../common/Header';
 
 function NoticeDetail({ notice, currentPage }) {
 

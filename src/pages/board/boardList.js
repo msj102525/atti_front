@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from "../../styles/board/boardList.module.css"; // 스타일 파일을 임포트
-import Header from '../common/header';
+import Header from '../common/Header';
 
 function SearchForm() {
   const [selectedValue, setSelectedValue] = useState('');

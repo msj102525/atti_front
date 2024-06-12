@@ -1,6 +1,6 @@
 import styles from "@/styles/doctor/doctorList.module.css";
 import Link from "next/link";
-import Header from "../common/header";
+import Header from "../common/Header";
 import React, { useCallback, useEffect, useState } from "react";
 import { showList, searchList } from "@/api/doctor/doctor";
 import Pagination from "@/components/common/page";
