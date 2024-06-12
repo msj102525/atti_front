@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
-import { login } from "@/pages/api/user";
+import { login } from "@/api/user/user"; 
+//import kakao_login from "../../../public/kakao_login.png";
 // import styles from "@/styles/login/normalLogin.module.css";
 // import styles from "@/styles/login/normalLogin.module.css";
 
-export default function NormalLogin() {
+export default function LoginFrom() {
     const [formData, setFormData] = useState({
         userId: '',
         password: '',
@@ -36,8 +37,12 @@ export default function NormalLogin() {
         loginMutation.mutate(formData);
     };
 
-    return (
+    return ( 
+        <div>
+        <img src="/common/header/attiLogo.png"/> 
+        
         <div className="login-box">
+           
             <form className="from" onSubmit={handleSubmit}>
                 <div className="formGroup">
                     <label htmlFor="userId">아이디:</label>
@@ -63,7 +68,7 @@ export default function NormalLogin() {
                 </div>
                 <button type="submit">로그인</button>
                 <div className="social-login">
-                    <button className="kakao-login">카카오 로그인</button>
+                    <button className="kakao-login" >카카오 로그인</button>
                     <button className="naver-login">네이버 로그인</button>
                 </div>
                 <div className="find-info">
@@ -71,6 +76,7 @@ export default function NormalLogin() {
                     <a href="#">아이디 찾기</a>
                 </div>
             </form>
+        </div>
         </div>
     );
 }

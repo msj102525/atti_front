@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from '../../../styles/signUp/doctorSignUp.module.css';
-import { singUp } from '../../api/user';
+import { signup } from '@/api/user/user.js';
+import KakaoSignup from "@/components/user/kakaoSignup";
 
 export default function NormalSignUp() {
   const [formData, setFormData] = useState({
@@ -51,7 +52,7 @@ export default function NormalSignUp() {
     };
 
     try {
-      await singUp(signUpData);
+      await signup(signUpData);
       // await axios.post('/signup', signUpData);
       setSuccessMessage('회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동해주세요.');
       setFormData({
@@ -193,6 +194,7 @@ export default function NormalSignUp() {
           <div className={styles.buttonDiv}>
             <button type="submit" className={styles.bottomButton}>회원가입</button>
           </div>
+          <KakaoSignup/>
         </form>
         {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
         {errorMessage && <p className={styles.errorMessageWrap}>{errorMessage}</p>}
