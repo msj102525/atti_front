@@ -10,7 +10,7 @@ const KakaoSignup = () => {
     };
 
     return (
-        <div className="button-container">
+        <div className="kakao-SignUp">
             <button onClick={handleSignup}>카카오 회원가입</button>
         </div>
     );

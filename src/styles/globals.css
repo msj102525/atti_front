@@ -131,3 +131,17 @@ html {
 .find-info a:hover {
     text-decoration: underline;
 }
+.kakao-SignUp {
+    background-color: #F7E600;
+    color: black;
+    width: 100%;
+    height: 48px;
+    border: none;
+    font-weight: bold;
+    border-radius: 64px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center; /* 텍스트를 가운데로 정렬합니다. */
+    line-height: 48px;
+}
