@@ -1,9 +1,11 @@
 import styles from "@/styles/doctor/doctorList.module.css";
 import Link from "next/link";
-import Header from "../common/header";
+import Header from "@/pages/common/Header";
+import Footer from "@/pages/common/Footer";
 import React, { useCallback, useEffect, useState } from "react";
 import { showList, searchList } from "@/api/doctor/doctor";
 import Pagination from "@/components/common/page";
+import MintButton from "@/components/common/MintButton";
 
 let tagList = [
   [
@@ -82,7 +84,14 @@ export default function DoctorList() {
 
     fetchData(); // fetchData 함수를 호출하여 데이터를 가져옴
   }, [currentPage, selectedTags, gender, keywordSearch]);
-
+  const resetSearchCondition = () => {
+    setKeyword("");
+    setKeywordSearch("");
+    setGender("");
+    setMaleValid(false);
+    setFemaleValid(false);
+    setSelectedTags([]);
+  };
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected); // 페이지 변경 시 현재 페이지 상태 업데이트
   };
@@ -130,124 +139,147 @@ export default function DoctorList() {
   return (
     <div>
       <Header />
-      <div className={`${styles.mainContainer} flex justify-center mt-5`}>
-        <div className="flex justify-center w-3/5 px-2">
-          {" "}
-          {/* 여기서 px-4는 좌우 padding입니다 */}
-          <div className={`${styles.searchArea} w-1/6`}>
+      <div className="mx-auto w-[1586px]">
+        <div className={`${styles.mainContainer} flex justify-center mt-5`}>
+          <div className="flex justify-center px-2">
             {" "}
-            {/* flex-1을 사용하여 동적으로 너비를 조정할 수 있습니다 */}
-            <div className={styles.searchBar}>
-              <div className={styles.searchTagDiv}>
-                <p className="my-10 text-4xl font-thin">나의 상황</p>
-                {tagList[0].map((tag, index) => (
-                  <SearchSituationTag
-                    key={index}
-                    name={tag}
-                    handleClick={() => handleTagClick(tag)} // 상황 태그 클릭 핸들러
-                    isSelected={selectedTags.includes(tag)} // 선택 여부를 판단하여 스타일을 적용할 수 있도록 함
-                  />
-                ))}
+            {/* 여기서 px-4는 좌우 padding입니다 */}
+            <div className={`${styles.searchArea} w-1/6`}>
+              {" "}
+              {/* flex-1을 사용하여 동적으로 너비를 조정할 수 있습니다 */}
+              <div className={styles.searchBar}>
+                <div className={styles.searchTagDiv}>
+                  <p className="my-10 text-4xl font-thin">나의 상황</p>
+                  {tagList[0].map((tag, index) => (
+                    <SearchSituationTag
+                      key={index}
+                      name={tag}
+                      handleClick={() => handleTagClick(tag)} // 상황 태그 클릭 핸들러
+                      isSelected={selectedTags.includes(tag)} // 선택 여부를 판단하여 스타일을 적용할 수 있도록 함
+                    />
+                  ))}
+                </div>
+                <div className={styles.searchTagDiv}>
+                  <p className="my-10 text-4xl font-thin">나의 증상</p>
+                  {tagList[1].map((tag, index) => (
+                    <SearchSymptomTag
+                      key={index}
+                      name={tag}
+                      handleClick={() => handleTagClick(tag)} // 증상 태그 클릭 핸들러
+                      isSelected={selectedTags.includes(tag)} // 선택 여부를 판단하여 스타일을 적용할 수 있도록 함
+                    />
+                  ))}
+                </div>
+                <div className={styles.checkGender}>
+                  <h3 className="my-10 text-4xl font-thin">성별</h3>
+                  <ul className="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                      <div className="flex items-center ps-3">
+                        <input
+                          id="vue-checkbox-list"
+                          type="checkbox"
+                          value="M"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                          onChange={changeGender}
+                          checked={maleValid}
+                        />
+                        <label
+                          htmlFor="vue-checkbox-list"
+                          className="w-full py-3 text-sm font-medium text-gray-900 ms-2 dark:text-gray-300"
+                        >
+                          남자
+                        </label>
+                      </div>
+                    </li>
+                    <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                      <div className="flex items-center ps-3">
+                        <input
+                          id="react-checkbox-list"
+                          type="checkbox"
+                          value="F"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                          onChange={changeGender}
+                          checked={femaleValid}
+                        />
+                        <label
+                          htmlFor="react-checkbox-list"
+                          className="w-full py-3 text-sm font-medium text-gray-900 ms-2 dark:text-gray-300"
+                        >
+                          여자
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="flex items-center justify-center h-48 mt-8">
+                  <div>
+                    <MintButton
+                      onClick={resetSearchCondition}
+                      text="검색조건 초기화"
+                      sizeW="w-96"
+                      sizeH="h-24"
+                      fontSize="text-2xl"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className={styles.searchTagDiv}>
-                <p className="my-10 text-4xl font-thin">나의 증상</p>
-                {tagList[1].map((tag, index) => (
-                  <SearchSymptomTag
-                    key={index}
-                    name={tag}
-                    handleClick={() => handleTagClick(tag)} // 증상 태그 클릭 핸들러
-                    isSelected={selectedTags.includes(tag)} // 선택 여부를 판단하여 스타일을 적용할 수 있도록 함
+              <div className="flex flex-row p-4">
+                <div className="flex-auto ">
+                  <input
+                    className="w-full h-full border-2 border-gray-300rounded-lg"
+                    type="text"
+                    value={keyword}
+                    placeholder="찾으시는 의사이름을 입력해주세요"
+                    onChange={handleKeywordChange}
+                    onKeyDown={handleKeyDown}
                   />
-                ))}
-              </div>
-              <div className={styles.checkGender}>
-                <h3 className="my-10 text-4xl font-thin">성별</h3>
-                <ul className="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                  <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                    <div className="flex items-center ps-3">
-                      <input
-                        id="vue-checkbox-list"
-                        type="checkbox"
-                        value="M"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        onChange={changeGender}
-                        checked={maleValid}
-                      />
-                      <label
-                        htmlFor="vue-checkbox-list"
-                        className="w-full py-3 text-sm font-medium text-gray-900 ms-2 dark:text-gray-300"
-                      >
-                        남자
-                      </label>
-                    </div>
-                  </li>
-                  <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-                    <div className="flex items-center ps-3">
-                      <input
-                        id="react-checkbox-list"
-                        type="checkbox"
-                        value="F"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        onChange={changeGender}
-                        checked={femaleValid}
-                      />
-                      <label
-                        htmlFor="react-checkbox-list"
-                        className="w-full py-3 text-sm font-medium text-gray-900 ms-2 dark:text-gray-300"
-                      >
-                        여자
-                      </label>
-                    </div>
-                  </li>
-                </ul>
+                </div>
+                <div className="flex-auto w-4" onClick={searchName}>
+                  <img
+                    className="block w-10 ml-10"
+                    src="data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTUuOTcgMTcuMDMxYy0xLjQ3OSAxLjIzOC0zLjM4NCAxLjk4NS01LjQ2MSAxLjk4NS00LjY5NyAwLTguNTA5LTMuODEyLTguNTA5LTguNTA4czMuODEyLTguNTA4IDguNTA5LTguNTA4YzQuNjk1IDAgOC41MDggMy44MTIgOC41MDggOC41MDggMCAyLjA3OC0uNzQ3IDMuOTg0LTEuOTg1IDUuNDYxbDQuNzQ5IDQuNzVjLjE0Ni4xNDYuMjE5LjMzOC4yMTkuNTMxIDAgLjU4Ny0uNTM3Ljc1LS43NS43NS0uMTkyIDAtLjM4NC0uMDczLS41MzEtLjIyem0tNS40NjEtMTMuNTNjLTMuODY4IDAtNy4wMDcgMy4xNC03LjAwNyA3LjAwN3MzLjEzOSA3LjAwNyA3LjAwNyA3LjAwN2MzLjg2NiAwIDcuMDA3LTMuMTQgNy4wMDctNy4wMDdzLTMuMTQxLTcuMDA3LTcuMDA3LTcuMDA3eiIgZmlsbC1ydWxlPSJub256ZXJvIi8+PC9zdmc+"
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex flex-row p-4">
-              <div className="flex-auto ">
-                <input
-                  className="w-full h-full border-2 border-gray-300rounded-lg"
-                  type="text"
-                  value={keyword}
-                  placeholder="찾으시는 의사이름을 입력해주세요"
-                  onChange={handleKeywordChange}
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-              <div className="flex-auto w-4" onClick={searchName}>
-                <img
-                  className="block w-10 ml-10"
-                  src="data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMTUuOTcgMTcuMDMxYy0xLjQ3OSAxLjIzOC0zLjM4NCAxLjk4NS01LjQ2MSAxLjk4NS00LjY5NyAwLTguNTA5LTMuODEyLTguNTA5LTguNTA4czMuODEyLTguNTA4IDguNTA5LTguNTA4YzQuNjk1IDAgOC41MDggMy44MTIgOC41MDggOC41MDggMCAyLjA3OC0uNzQ3IDMuOTg0LTEuOTg1IDUuNDYxbDQuNzQ5IDQuNzVjLjE0Ni4xNDYuMjE5LjMzOC4yMTkuNTMxIDAgLjU4Ny0uNTM3Ljc1LS43NS43NS0uMTkyIDAtLjM4NC0uMDczLS41MzEtLjIyem0tNS40NjEtMTMuNTNjLTMuODY4IDAtNy4wMDcgMy4xNC03LjAwNyA3LjAwN3MzLjEzOSA3LjAwNyA3LjAwNyA3LjAwN2MzLjg2NiAwIDcuMDA3LTMuMTQgNy4wMDctNy4wMDdzLTMuMTQxLTcuMDA3LTcuMDA3LTcuMDA3eiIgZmlsbC1ydWxlPSJub256ZXJvIi8+PC9zdmc+"
-                />
-              </div>
-            </div>
-          </div>
-          <div className={`${styles.docorCardView} w-3/5`}>
-            {" "}
-            {/* flex-2를 사용하여 동적으로 너비를 조정할 수 있습니다 */}
-            {doctorList &&
-              doctorList.length > 0 &&
-              doctorList.map((doctor) => (
-                <DoctorCard
-                  key={doctor.userId} // 각 의사의 고유한 key 추가
-                  id={doctor.userId}
-                  name={doctor.userName}
-                  comment={doctor.introduce}
-                  address={doctor.hospitalName}
-                  profileUrl="/doctor.png"
-                />
-              ))}
-            <div className={styles.pageDiv}>
-              {pageCount > 0 && !isSearching && (
-                <Pagination
-                  pageCount={pageCount} // 페이지 수를 전달
-                  onPageChange={handlePageChange} // 페이지 변경 핸들러 전달
-                  currentPage={currentPage} // 현재 페이지 번호 전달
-                />
+            <div className={`${styles.docorCardView} w-3/5`}>
+              {doctorList && doctorList.length > 0 ? (
+                doctorList.map((doctor) => (
+                  <DoctorCard
+                    key={doctor.userId} // 각 의사의 고유한 key 추가
+                    id={doctor.userId}
+                    name={doctor.userName}
+                    comment={doctor.introduce}
+                    address={doctor.hospitalName}
+                    profileUrl="/doctor.png"
+                  />
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center pt-20">
+                  <img
+                    src="/standingDoctor.png"
+                    alt="No doctors found"
+                    className="w-3/5"
+                  />
+                  <p className="mt-20 text-3xl">
+                    조건을 만족하는 의사가 없어요 ㅠㅠ
+                  </p>
+                </div>
               )}
+              <div className={styles.pageDiv}>
+                {pageCount > 0 && !isSearching && (
+                  <Pagination
+                    pageCount={pageCount} // 페이지 수를 전달
+                    onPageChange={handlePageChange} // 페이지 변경 핸들러 전달
+                    currentPage={currentPage} // 현재 페이지 번호 전달
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -14,3 +14,7 @@ export const searchList = (
   const searchUrl = `/doctor/search?currentPage=${currentPage}&selectedTags=${selectedTags}&keyword=${keywordSearch}&gender=${gender}`;
   return axios.get(searchUrl).then((res) => res);
 };
+
+export const showDetail = (id) => {
+  return axios.get(baseUrl + "/" + id).then((res) => res);
+};
