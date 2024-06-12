@@ -1,41 +1,44 @@
-import React, { useState } from 'react';
-import styles from "../../styles/board/boardList.module.css"; // 스타일 파일을 임포트
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
+import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
+import styles from "../../styles/board/boardList.module.css";
 import Header from '../common/Header';
 
-function SearchForm() {
-  const [selectedValue, setSelectedValue] = useState('');
-  const [showDateInputs, setShowDateInputs] = useState(false);
+const List = () => {
+  const [boards, setBoards] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const router = useRouter();
 
-  const handleSelectChange = (event) => {
-    const value = event.target.value;
-    setSelectedValue(value);
-    setShowDateInputs(value === 'date');
+  useEffect(() => {
+    const fetchData = async (page = 0) => {
+      try {
+        const response = await axios.get("http://localhost:8080/board/boardList", {
+          params: {
+            page: page,
+            size: 10,
+          },
+        });
+        console.log('API 응답 데이터:', response.data);
+        setBoards(response.data.content);
+        setPageCount(response.data.totalPages);
+      } catch (error) {
+        console.error("There was an error fetching the board list!", error);
+      }
+    };
+
+    fetchData(currentPage);
+  }, [currentPage]);
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
   };
 
-  return (
-    <div className={styles.searchdiv}>
-      <form action="nsearch.do" method="get">
-        <select name="action" id="searchselect" onChange={handleSelectChange}>
-          <option value="title">제목</option>
-          <option value="writer">작성자</option>
-          <option id="date" value="date">날짜</option>
-        </select>
-        {showDateInputs ? (
-          <>
-            <input type="date" name="begin" /> 
-            <input type="date" name="end" /> 
-          </>
-        ) : (
-          <input type="text" id="searchtext" name="keyword" placeholder="검색어 입력" />
-        )}
-        <input type="submit" className={styles.searchbtn} value="검색" />
-      </form>
-      <button className="writerB" onClick={() => console.log('글쓰기 버튼 클릭')}>글쓰기</button>
-    </div>
-  );
-}
+  const handleRowClick = (boardNum) => {
+    router.push(`/board/boardDetail?boardNum=${boardNum}`);
+  };
 
-export default function List() {
   return (
     <div>
       <Header />
@@ -52,16 +55,20 @@ export default function List() {
           </tr>
         </thead>
         <tbody className={styles.tbody}>
-          <tr>
-            <td className={styles.td}>1</td>
-            <td className={styles.td}>제목 예시</td>
-            <td className={styles.td}>작성자 예시</td>
-            <td className={styles.td}>날짜 예시</td>
-            <td className={styles.td}>조회수 예시</td>
-          </tr>
+          {boards.map((board) => (
+            <tr key={board.boardNum} onClick={() => handleRowClick(board.boardNum)} className={styles.row}>
+              <td className={styles.td}>{board.boardNum}</td>
+              <td className={styles.td}>{board.importance === 2 ? `⭐ ${board.boardTitle}` : board.boardTitle}</td>
+              <td className={styles.td}>{board.boardWriter}</td>
+              <td className={styles.td}>{board.boardDate.split(" ")[0]}</td>
+              <td className={styles.td}>{board.readCount}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <SearchForm />
+      <Pagination pageCount={pageCount} onPageChange={handlePageChange} currentPage={currentPage} />
     </div>
   );
-}
+};
+
+export default List;
