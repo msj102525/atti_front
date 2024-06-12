@@ -10,18 +10,20 @@ export default function Feed() {
         setData(childData);
     }
 
-    console.log(`FeedIndex : ${data}`);
-
     return (
         <div>
-            <Header />
-            <div className="border-solid border flex justify-between">
-                <div className="border-solid border flex-2">
-                    <FeedSideBar />
-                </div>
-                <div className="border-solid border flex-1">
-                    <FeedNav getData={getData} />
-                    <FeedList category={data} />
+            <div className="sticky top-0">
+                <Header />
+            </div>
+            <div className="flex justify-center">
+                <div className="border-solid border flex justify-between max-w-screen-2xl gap-x-20">
+                    <div className="border-solid border flex-2 p-2">
+                        <FeedSideBar />
+                    </div>
+                    <div className="border-solid border flex-1">
+                        <FeedNav getData={getData} />
+                        <FeedList category={data} />
+                    </div>
                 </div>
             </div>
         </div>
