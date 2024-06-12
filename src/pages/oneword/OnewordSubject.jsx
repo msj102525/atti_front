@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import OnewordSubjectListForm from "../../components/oneword/OnewordSubjectListForm";
+import OnewordSubjectListComponent from "../../components/oneword/OnewordSubjectListComponent";
 import { handleAxiosError } from "../../api/admin/errorAxiosHandle";
 import {getOnewordSubjectList, writePost} from "../../api/oneword/OnewordSubject";
 

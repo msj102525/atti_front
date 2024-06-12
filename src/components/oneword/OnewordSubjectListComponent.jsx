@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
-const OnewordSubjectListForm = observer(({ onewordsubject, isPinned = false, onNoticeClick  }) => {
+const OnewordSubjectListComponent = observer(({ onewordsubject, isPinned = false, onNoticeClick  }) => {
     const relativeTime = (isoDate) => formatDistanceToNow(parseISO(isoDate), { addSuffix: true, locale: ko });
 
     return (
@@ -17,4 +17,4 @@ const OnewordSubjectListForm = observer(({ onewordsubject, isPinned = false, onN
     );
 });
 
-export default OnewordSubjectListForm;
+export default OnewordSubjectListComponent;
