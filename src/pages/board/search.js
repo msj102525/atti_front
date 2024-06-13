@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from "../../styles/board/search.module.css";
+import MintButton from "@/components/common/MintButton"; 
 
 const SearchForm = ({ onSubmit }) => {
   const [action, setAction] = useState('title');
@@ -60,7 +61,13 @@ const SearchForm = ({ onSubmit }) => {
             className={styles.searchText}
           />
         )}
-        <input type="submit" className={styles.searchbtn} value="검색" />
+        <MintButton
+          onClick={handleSubmit}
+          text="검색"
+          sizeW="w-24"
+          sizeH="h-12"
+          fontSize="text-lg"
+        />
       </form>
     </div>
   );

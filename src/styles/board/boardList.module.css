@@ -28,7 +28,7 @@
 
 /* 테이블 올렸을 때 */
 .tbody tr:not(.titlerow):hover {
-	background-color: rgb(255, 221, 102);
+	background-color: #1fe2d8;
 	opacity: 0.9;
 	cursor: pointer;
 }

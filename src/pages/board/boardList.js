@@ -5,6 +5,8 @@ import Pagination from "@/components/common/page";  // Pagination 컴포넌트 �
 import styles from "../../styles/board/boardList.module.css";
 import Header from '../common/Header';
 import SearchForm from "./search";
+import Mintbutton from "@/components/common/MintButton"; 
+
 
 const List = () => {
   const [boards, setBoards] = useState([]);
@@ -86,6 +88,7 @@ const List = () => {
     <div>
       <Header />
       <h1 className={styles.h1}>공지사항</h1>
+      <Mintbutton />
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr>
