@@ -15,11 +15,10 @@ export const getOnewordSubjectList = ({ page, size }) => {
         });
 }
 
-export const writePost = (postData) =>{
+export const insertOnewordSubject = (postData) =>{
     console.log("postData : ", postData);
-    return axios.post("/notice", postData).then(res =>{
+    return axios.post("/onewordsubject", postData).then(res =>{
         console.log("res :", res);
         return res;
     })
 }
-

@@ -78,9 +78,11 @@ export default function NormalSignUp() {
         birthDate: "",
         gender: "",
         userType: "",
+        
       });
       setErrorMessage("");
       setGenderErrorMessage("");
+      window.location.href = '/login';
     } catch (error) {
       setErrorMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
     }
