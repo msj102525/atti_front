@@ -5,6 +5,9 @@ export default function Navigation() {
   const params = usePathname();
   console.log(`Navigation.jsx Path : ${params}`);
 
+  const onChenge=()=>{
+    
+  }
   return (
     <div className={`p-2`}>
       <div className="container flex items-center justify-between mx-auto">
@@ -62,7 +65,11 @@ export default function Navigation() {
           <li
             className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold`}
           >
-            <Link href={"signup/"}>로그인</Link>
+            <Link href={"login/"}>로그인</Link>
+          </li>
+          <li className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold`}
+          >
+          <Link href={"signup/"}>회원가입</Link>
           </li>
         </div>
       </div>

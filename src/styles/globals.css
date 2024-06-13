@@ -95,7 +95,7 @@ html {
 .social-login {
     display: flex;
     justify-content: space-around;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .social-login button {
@@ -108,8 +108,16 @@ html {
 }
 
 .kakao-login {
-    background-color: #F7E600;
-    color: black;
+    display: flex;
+    justify-content: flex;
+    padding: 20px; 
+}
+
+.kakao-login button {
+    background-color: transparent;
+    border: none;
+    padding: 50;
+    
 }
 
 .naver-login {
@@ -142,6 +150,6 @@ html {
     margin-bottom: 16px;
     cursor: pointer;
     font-size: 14px;
-    text-align: center; /* 텍스트를 가운데로 정렬합니다. */
+    text-align: center;
     line-height: 48px;
 }
