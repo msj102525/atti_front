@@ -1,22 +1,23 @@
-import { useState } from 'react';
-import styles from '../../../styles/signUp/doctorSignUp.module.css';
-import { signup } from '@/api/user/user.js';
+import { useState } from "react";
+import styles from "../../../styles/signUp/doctorSignUp.module.css";
+import { signup } from "@/api/user/user.js";
 import KakaoSignup from "@/components/user/kakaoSignup";
 
 export default function NormalSignUp() {
   const [formData, setFormData] = useState({
-    userId: '',
-    password: '',
-    confirmPassword: '',
-    userName: '',
-    email: '',
-    birthDate: '',
-    gender: '',
+    userId: "",
+    password: "",
+    confirmPassword: "",
+    userName: "",
+    email: "",
+    birthDate: "",
+    gender: "",
+    userType: "",
   });
 
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [genderErrorMessage, setGenderErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [genderErrorMessage, setGenderErrorMessage] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,18 +29,27 @@ export default function NormalSignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { userId, userName, email, password, confirmPassword, birthDate, gender } = formData;
+    const {
+      userId,
+      userName,
+      email,
+      password,
+      confirmPassword,
+      birthDate,
+      gender,
+      userType,
+    } = formData;
 
     if (password !== confirmPassword) {
-      setErrorMessage('비밀번호가 일치하지 않습니다.');
+      setErrorMessage("비밀번호가 일치하지 않습니다.");
       return;
     }
 
     if (!gender) {
-      setGenderErrorMessage('성별을 선택해주세요.');
+      setGenderErrorMessage("성별을 선택해주세요.");
       return;
     } else {
-      setGenderErrorMessage('');
+      setGenderErrorMessage("");
     }
 
     const signUpData = {
@@ -49,26 +59,30 @@ export default function NormalSignUp() {
       email,
       birthDate,
       gender,
+      userType,
     };
 
     try {
+      signUpData.userType = "U";
       await signup(signUpData);
       // await axios.post('/signup', signUpData);
-      setSuccessMessage('회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동해주세요.');
+      setSuccessMessage(
+        "회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동해주세요."
+      );
       setFormData({
-        userId: '',
-        password: '',
-        confirmPassword: '',
-        userName: '',
-        email: '',
-        birthDate: '',
-        gender: '',
+        userId: "",
+        password: "",
+        confirmPassword: "",
+        userName: "",
+        email: "",
+        birthDate: "",
+        gender: "",
+        userType: "",
       });
-      setErrorMessage('');
-      setGenderErrorMessage('');
-      window.location.href = '/login';
+      setErrorMessage("");
+      setGenderErrorMessage("");
     } catch (error) {
-      setErrorMessage('회원가입에 실패했습니다. 다시 시도해주세요.');
+      setErrorMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -80,7 +94,9 @@ export default function NormalSignUp() {
       <div className={styles.contentWrap}>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="userId" className={styles.inputTitle}>아이디:</label>
+            <label htmlFor="userId" className={styles.inputTitle}>
+              아이디:
+            </label>
             <div className={styles.inputWrap}>
               <input
                 type="text"
@@ -94,7 +110,9 @@ export default function NormalSignUp() {
             </div>
           </div>
           <div>
-            <label htmlFor="password" className={styles.inputTitle}>비밀번호:</label>
+            <label htmlFor="password" className={styles.inputTitle}>
+              비밀번호:
+            </label>
             <div className={styles.inputWrap}>
               <input
                 type="password"
@@ -108,7 +126,9 @@ export default function NormalSignUp() {
             </div>
           </div>
           <div>
-            <label htmlFor="confirmPassword" className={styles.inputTitle}>비밀번호 확인:</label>
+            <label htmlFor="confirmPassword" className={styles.inputTitle}>
+              비밀번호 확인:
+            </label>
             <div className={styles.inputWrap}>
               <input
                 type="password"
@@ -122,7 +142,9 @@ export default function NormalSignUp() {
             </div>
           </div>
           <div>
-            <label htmlFor="userName" className={styles.inputTitle}>이름:</label>
+            <label htmlFor="userName" className={styles.inputTitle}>
+              이름:
+            </label>
             <div className={styles.inputWrap}>
               <input
                 type="text"
@@ -136,7 +158,9 @@ export default function NormalSignUp() {
             </div>
           </div>
           <div>
-            <label htmlFor="email" className={styles.inputTitle}>이메일:</label>
+            <label htmlFor="email" className={styles.inputTitle}>
+              이메일:
+            </label>
             <div className={styles.inputWrap}>
               <input
                 type="email"
@@ -159,7 +183,7 @@ export default function NormalSignUp() {
                   name="gender"
                   value="M"
                   className={styles.radio}
-                  checked={formData.gender === 'M'}
+                  checked={formData.gender === "M"}
                   onChange={handleInputChange}
                 />
                 남성
@@ -171,16 +195,20 @@ export default function NormalSignUp() {
                   name="gender"
                   value="F"
                   className={styles.radio}
-                  checked={formData.gender === 'F'}
+                  checked={formData.gender === "F"}
                   onChange={handleInputChange}
                 />
                 여성
               </label>
             </div>
-            {genderErrorMessage && <p className={styles.errorMessageWrap}>{genderErrorMessage}</p>}
+            {genderErrorMessage && (
+              <p className={styles.errorMessageWrap}>{genderErrorMessage}</p>
+            )}
           </div>
           <div>
-            <label htmlFor="birthDate" className={styles.inputTitle}>생년월일:</label>
+            <label htmlFor="birthDate" className={styles.inputTitle}>
+              생년월일:
+            </label>
             <div className={styles.inputWrap}>
               <input
                 type="date"
@@ -193,12 +221,16 @@ export default function NormalSignUp() {
             </div>
           </div>
           <div className={styles.buttonDiv}>
-            <button type="submit" className={styles.bottomButton}>회원가입</button>
+            <button type="submit" className={styles.bottomButton}>
+              회원가입
+            </button>
           </div>
-          <KakaoSignup/>
+          <KakaoSignup />
         </form>
-        {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-        {errorMessage && <p className={styles.errorMessageWrap}>{errorMessage}</p>}
+        {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+        {errorMessage && (
+          <p className={styles.errorMessageWrap}>{errorMessage}</p>
+        )}
       </div>
     </div>
   );

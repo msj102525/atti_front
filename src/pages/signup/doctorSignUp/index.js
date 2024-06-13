@@ -1,11 +1,7 @@
 import styles from "@/styles/signUp/doctorSignUp.module.css";
 import React, { useEffect, useState } from "react";
-import { singUp } from "../../api/user";
-const User = {
-  email: "test@example.com",
-  pw: "test2323@@@",
-};
-
+import { signup } from "@/api/user/user.js";
+import { sendCodeToEmail } from "@/api/doctor/doctor.js";
 export default function doctorSignUp() {
   console.log("hello" + process.env.AUTH_PASS);
   const [id, setId] = useState("");
@@ -48,16 +44,16 @@ export default function doctorSignUp() {
     const verificationCode = Math.floor(100000 + Math.random() * 900000);
     setCode(verificationCode);
     // 랜덤 코드 전송
-    await sendMail({ to: { email }, name: { name }, subject: { code } });
+    await sendCodeToEmail(email, verificationCode, name);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
-    const singUpData = {
+    const signUpData = {
       email: email,
       password: password,
     };
-    singUp(singUpData)
+    signup(signUpData)
       .then((res) => {
         console.log("성공!");
       })
@@ -110,12 +106,13 @@ export default function doctorSignUp() {
   const handleEmail = (e) => {
     const emailValue = e.target.value;
     setEmail(emailValue);
-    if (emailValue.includes("@kma.org")) {
-      setEmailValid(true);
-      setEmailButtonColor("mediumaquamarine");
-    } else {
-      setEmailValid(false);
-    }
+    setEmailValid(true);
+    // if (emailValue.includes("@kma.org")) {
+    //   setEmailValid(true);
+    //   setEmailButtonColor("mediumaquamarine");
+    // } else {
+    //   setEmailValid(false);
+    // }
   };
   const handleBirthDate = (e) => {
     const birthDateValue = e.target.value;

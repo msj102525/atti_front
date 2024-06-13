@@ -1,8 +1,9 @@
+import Header from "../common/Header";
 import React, {useEffect} from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import OnewordSubjectListComponent from "../../components/oneword/OnewordSubjectListComponent";
-import { handleAxiosError } from "../../api/admin/errorAxiosHandle";
+// import { handleAxiosError } from "../../api/errorAxiosHandle";
 import {getOnewordSubjectList, writePost} from "../../api/oneword/OnewordSubject";
 
 const OnewordSubjectComponent = observer(() => {
@@ -15,10 +16,7 @@ const OnewordSubjectComponent = observer(() => {
     const queryClient = useQueryClient();
     const [isAdmin, setIsAdmin] = React.useState(false);
 
-    const { data, isLoading } = useQuery(['onewordSubjectList', { page, size, searchTitle }], () => getOnewordSubjectList({
-        // category: "notice",
-        // status: "activated",
-        // title: searchTitle,
+    const { data, isLoading } = useQuery(['onewordSubjectList', { page, size }], () => getOnewordSubjectList({
         page: page - 1,
         size: size,
     }), {
@@ -53,8 +51,8 @@ const OnewordSubjectComponent = observer(() => {
         setIsAdmin(localStorage.getItem("isAdmin") === "true");
     },[])
 
-    const [selectedPost, setSelectedPost] = React.useState(null);
-    const [isDetailModalOpen, setIsDetailModalOpen] = React.useState(false);
+    //const [selectedPost, setSelectedPost] = React.useState(null);
+    //const [isDetailModalOpen, setIsDetailModalOpen] = React.useState(false);
 
     // const readCountMutation = useMutation(postReadCountUp, {
     //     onSuccess: () => {
@@ -97,56 +95,65 @@ const OnewordSubjectComponent = observer(() => {
     // };
 
 
-    // if (isLoading) return <div>Loading...</div>;
-    // if (!data) return <div>No data</div>;
+    if (isLoading) return <div>Loading...</div>;
+    if (!data) return <div>No data</div>;
 
     return (
-        <div className="container mt-5">
-            <h2>오늘 한 줄 주제</h2>
-            <div style={{height:"2vw",justifyContent:"center",textAlign:"right"}}>
-                <select value={size} onChange={handleSizeChange} style={{height:"88%"}}>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                </select>
-                <input type="text" placeholder="Search by title..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
-                <button onClick={executeSearch}>검색</button>
+        <div>
+            <div>
+                <Header />
             </div>
-            <table className="table">
-                <thead>
-                <tr>
-                    <th style={{width:"5vw", textAlign:"center"}}>말머리</th>
-                    <th style={{textAlign:"center"}}>제목</th>
-                    <th style={{width:"10vw", textAlign:"center"}}>글쓴이</th>
-                    <th style={{width:"7vw", textAlign:"center"}}>작성일</th>
-                    <th style={{width:"4vw", textAlign:"center"}}>조회</th>
-                    <th style={{width:"4vw", textAlign:"center"}}>추천</th>
-                </tr>
-                </thead>
-                <tbody>
-                {/* {data.pinnedNotices.map(notice => (
-                    <OnewordSubjectListForm key={notice.id} notice={notice} isPinned onNoticeClick={() => openDetailModal(notice)} />
-                ))}
-                {data.regularNotices.map(notice => (
-                    <OnewordSubjectListForm key={notice.id} notice={notice} onNoticeClick={() => openDetailModal(notice)} />
-                ))} */}
-                </tbody>
-            </table>
-            {/* {isAdmin && (
-                <div>
-                    <button onClick={openModal}>글쓰기</button>
+            <div className="container mt-5">
+                <h2>오늘 한 줄 주제</h2>
+                <div style={{height:"2vw",justifyContent:"center",textAlign:"right"}}>
+                    <select value={size} onChange={handleSizeChange} style={{height:"88%"}}>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                    <input type="text" placeholder="Search by title..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
+                    <button onClick={executeSearch}>검색</button>
                 </div>
-            )} */}
-            {/* <WritePostModal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
-            <DetailPostModal
-                isOpen={isDetailModalOpen}
-                onClose={closeDetailModal}
-                post={selectedPost}
-                onLike={handleLike}
-                onEdit={handleEdit}
-                isAdmin={isAdmin}
-            /> */}
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th style={{width:"5vw", textAlign:"center"}}>말머리</th>
+                        <th style={{textAlign:"center"}}>제목</th>
+                        <th style={{width:"10vw", textAlign:"center"}}>글쓴이</th>
+                        <th style={{width:"7vw", textAlign:"center"}}>작성일</th>
+                        <th style={{width:"4vw", textAlign:"center"}}>조회</th>
+                        <th style={{width:"4vw", textAlign:"center"}}>추천</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {data.map(onewordsubject => (
+                        <OnewordSubjectListComponent key={onewordsubject.owsjNum} onewordsubject={onewordsubject} isPinned onNoticeClick={() => openDetailModal(onewordsubject)} />
+                        ))
+                    }
+                    {/* {data.pinnedNotices.map(notice => (
+                        <OnewordSubjectListForm key={notice.id} notice={notice} isPinned onNoticeClick={() => openDetailModal(notice)} />
+                    ))}
+                    {data.regularNotices.map(notice => (
+                        <OnewordSubjectListForm key={notice.id} notice={notice} onNoticeClick={() => openDetailModal(notice)} />
+                    ))} */}
+                    </tbody>
+                </table>
+                {/* {isAdmin && (
+                    <div>
+                        <button onClick={openModal}>글쓰기</button>
+                    </div>
+                )} */}
+                {/* <WritePostModal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
+                <DetailPostModal
+                    isOpen={isDetailModalOpen}
+                    onClose={closeDetailModal}
+                    post={selectedPost}
+                    onLike={handleLike}
+                    onEdit={handleEdit}
+                    isAdmin={isAdmin}
+                /> */}
+            </div>
         </div>
     );
 });
