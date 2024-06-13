@@ -31,6 +31,8 @@
 
 .btnbox {
     margin-top: 20px;
+    display: flex;
+    gap: 10px;
 }
 
 .btnbox button,
@@ -49,5 +51,55 @@
 
 .btnbox button:hover,
 .btnbox a:hover {
+    background-color: orange;
+}
+
+.btnbox .list {
+    margin-right: 450px; /* 첫 번째 버튼(목록 버튼)과 나머지 버튼들 사이에 20px 여백 추가 */
+  }
+
+  /* 기존 CSS */
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 999;
+}
+
+.modalButtons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.modalButtons button {
+    padding: 10px 20px;
+    background-color: rgb(250, 180, 49);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modalButtons button:hover {
     background-color: orange;
 }

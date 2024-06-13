@@ -51,82 +51,13 @@
 	border-right: none;
 }
 /*목록*/
-.listdiv {
-	height: 40px;
-	width: 1300px;
-	margin: 20px auto;
-	display: flex;
-	/* padding-left:400px; */
-	justify-content: center;
-	position: relative;
+
+
+.h1{
+	font-size: 30px;
+    font-weight: bold;
+	color: #000;
+	text-align: center;
+	margin-bottom: 30px;
 }
 
-.listbtn {
-	position: absolute;
-	right: 0;
-}
-/*검색창 CSS*/
-/* input:-ms-input-placeholder {
-	color: #a8a8a8;
-}
-
-input:-webkit-input-placeholder {
-	color: #a8a8a8;
-}
-
-input:-moz-input-placeholder {
-	color: #a8a8a8;
-} */
-
-.searchdiv {
-	height: 80px;
-	width: 1600px;
-	margin: 20px auto;
-	display: flex;
-	/* padding-left:400px; */
-	justify-content: center;
-	position: relative;
-}
-
-/* input[type='date'] {
-	height: 30px;
-} */
-
-.searchdiv > .writerB {
-	position: absolute;
-	right: 150px;
-}
-
-.searchdiv > form {
-	width: 600px;
-	height: 40px;
-}
-
-.searchdiv > #searchtext {
-	font-size: 16px;
-	width: 325px;
-	padding: 0px;
-	border: 1px solid rgb(250, 180, 49);
-	outline: none;
-	float: left;
-	height: 40px;
-	margin-right: 2px;
-}
-
-.searchbtn {
-	width: 100px;
-	height: 40px;
-	border: none;
-	background: rgb(250, 180, 49);
-	color: #ffffff;
-	font-size: 16px;
-}
-
-.button {
-	width: 100px;
-	height: 40px;
-	border: none;
-	background: rgb(250, 180, 49);
-	color: #ffffff;
-	font-size: 16px;
-} 
