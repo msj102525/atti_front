@@ -1,0 +1,95 @@
+.container {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    padding: 20px;
+    margin: 25px auto;
+    width: 800px;
+    outline: dashed 1px black;
+}
+
+.h3 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.contentbox {
+    font-size: 18px; 
+    line-height: 1.5;
+    margin-bottom: 20px;
+    min-height: 400px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btnbox {
+    margin-top: 20px;
+}
+
+.btnbox button,
+.btnbox a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: rgb(250, 180, 49);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btnbox button:hover,
+.btnbox a:hover {
+    background-color: orange;
+}
+
+.mv {
+    display: inline-block;
+    padding: 10px 15px; /* 수정된 부분: 패딩값을 줄임 */
+    margin-top: 20px;
+    background-color: rgb(250, 180, 49);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.mv:hover {
+    background-color: orange;
+}
+
+.titleInput {
+    font-size: 24px;
+    font-weight: bold;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.modifyButton {
+    font-size: 12px;
+    display: inline-block;
+    padding: 15px 25px;
+    margin-top: 20px;
+    background-color: rgb(250, 180, 49);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.modifyButton:hover {
+    background-color: orange;
+}
+
+/* 체크박스 스타일 */
+.checkbox {
+    vertical-align: middle;
+}
