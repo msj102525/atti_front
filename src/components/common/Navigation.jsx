@@ -34,7 +34,7 @@ export default function Navigation() {
             <li
               className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}
             >
-              <Link href="#services">오늘 한 줄</Link>
+              <Link href="/oneword/OnewordSubject">오늘 한 줄</Link>
             </li>
             <li
               className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}
