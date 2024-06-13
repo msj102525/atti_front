@@ -18,3 +18,21 @@ export const searchList = (
 export const showDetail = (id) => {
   return axios.get(baseUrl + "/" + id).then((res) => res);
 };
+
+// 메일 전송 함수
+export const sendCodeToEmail = async (email, code, name) => {
+  try {
+    const response = await axios.post(baseUrl + "/mail", {
+      email: email,
+      code: code,
+      doctorName: name,
+    });
+    if (response.status === 200) {
+      console.log("Email sent successfully:", response.data);
+    } else {
+      console.error("Failed to send email:", response.data);
+    }
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
+};
