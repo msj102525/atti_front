@@ -2,6 +2,8 @@ import styles from "@/styles/signUp/doctorSignUp.module.css";
 import React, { useEffect, useState } from "react";
 import { signup } from "@/api/user/user.js";
 import { sendCodeToEmail } from "@/api/doctor/doctor.js";
+import Modal from "@/components/common/modal";
+import Modal2 from "@/components/common/Modal2";
 export default function doctorSignUp() {
   console.log("hello" + process.env.AUTH_PASS);
   const [id, setId] = useState("");
@@ -10,6 +12,7 @@ export default function doctorSignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [birthDate, setBirthDate] = useState("");
+  const [gender, setGender] = useState("");
   const [code, setCode] = useState("");
   const [emailReadOnly, setEmailReadOnly] = useState(false);
   const [codeReadOnly, setCodeReadOnly] = useState(false);
@@ -20,6 +23,10 @@ export default function doctorSignUp() {
   const [nameValid, setNameValid] = useState(true);
   const [emailValid, setEmailValid] = useState(false);
   const [birthDateValid, setBirthDateValid] = useState(true);
+  const [genderValid, setGenderValid] = useState(false);
+  const [maleValid, setMaleValid] = useState(false);
+  const [femaleValid, setFemaleValid] = useState(false);
+
   const [codeInput, setCodeInptut] = useState(false);
 
   const [emailButtonColor, setEmailButtonColor] = useState("grey");
@@ -27,11 +34,6 @@ export default function doctorSignUp() {
   //이메일 인증관련
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerified, setIsVerified] = useState(true);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    isAdmin: "Y",
-  });
   // useEffect(() => {
   //   if (emailValid && pwValid) {
   //     setNotAllow(false);
@@ -39,6 +41,18 @@ export default function doctorSignUp() {
   //   }
   //   setNotAllow(true);
   // }, [emailValid, pwValid]);
+  //모달창-----------------------------------------------------------------------------------------
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  //------------------------------------------------------------------------------------------------------
+
   const handleEmailVerification = async () => {
     // 랜덤 코드 생성
     const verificationCode = Math.floor(100000 + Math.random() * 900000);
@@ -46,20 +60,27 @@ export default function doctorSignUp() {
     // 랜덤 코드 전송
     await sendCodeToEmail(email, verificationCode, name);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password } = formData;
     const signUpData = {
+      userId: id,
+      userName: name,
       email: email,
-      password: password,
+      password: pw,
+      birthDate: birthDate,
+      gender: gender,
+      userType: "D",
     };
-    signup(signUpData)
-      .then((res) => {
-        console.log("성공!");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // signup(signUpData)
+    //   .then((res) => {
+    //     console.log("성공!");
+    //   })
+    //   .catch((err) => {
+    //     console.log(email);
+    //     console.log(err);
+    //   });
+    openModal();
   };
   const sendCode = (e) => {
     setCodeInptut(true);
@@ -107,12 +128,15 @@ export default function doctorSignUp() {
     const emailValue = e.target.value;
     setEmail(emailValue);
     setEmailValid(true);
-    // if (emailValue.includes("@kma.org")) {
-    //   setEmailValid(true);
-    //   setEmailButtonColor("mediumaquamarine");
-    // } else {
-    //   setEmailValid(false);
-    // }
+    if (
+      emailValue.includes("@kma.org") ||
+      emailValue.includes("smkr96@naver.com")
+    ) {
+      setEmailValid(true);
+      setEmailButtonColor("mediumaquamarine");
+    } else {
+      setEmailValid(false);
+    }
   };
   const handleBirthDate = (e) => {
     const birthDateValue = e.target.value;
@@ -123,6 +147,21 @@ export default function doctorSignUp() {
       setBirthDateValid(true);
     } else {
       setBirthDateValid(false);
+    }
+  };
+
+  const handleGenderChange = (event) => {
+    const value = event.target.value;
+    if (value === "M") {
+      setGender("M");
+      setGenderValid(true);
+      setMaleValid(true);
+      setFemaleValid(false);
+    } else if (value === "F") {
+      setGender("F");
+      setGenderValid(true);
+      setFemaleValid(true);
+      setMaleValid(false);
     }
   };
   const handleVerificationCode = (e) => {
@@ -271,6 +310,36 @@ export default function doctorSignUp() {
         <div className={styles.errorMessageWrap}>
           {!birthDateValid && <div>올바른 생일을 입력해주세요!</div>}
         </div>
+        <div>
+          <label className={styles.inputTitle}>성별:</label>
+          <div className={styles.inputWrap}>
+            <label>
+              <input
+                type="radio"
+                id="male"
+                value="M"
+                className={styles.radio}
+                onChange={handleGenderChange}
+                checked={maleValid}
+              />
+              남성
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="female"
+                value="F"
+                className={styles.radio}
+                onChange={handleGenderChange}
+                checked={femaleValid}
+              />
+              여성
+            </label>
+          </div>
+          {!genderValid && (
+            <p className={styles.errorMessageWrap}>성별을 선택해주세요!</p>
+          )}
+        </div>
       </div>
 
       <div>
@@ -278,6 +347,14 @@ export default function doctorSignUp() {
           회원가입
         </button>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={closeModal}
+        title="테스트실행"
+        content="테스트 내용"
+        imgUrl="signUp"
+      ></Modal>
     </div>
   );
 }
