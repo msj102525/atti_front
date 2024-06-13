@@ -1,4 +1,4 @@
-// pages/login-success.js
+// pages/login/success.js
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { authStore } from '@/pages/stores/authStore';

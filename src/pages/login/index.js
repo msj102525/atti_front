@@ -2,9 +2,7 @@ import { useState } from "react";
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { login } from "@/api/user/user"; 
-//import kakao_login from "../../../public/kakao_login.png";
-// import styles from "@/styles/login/normalLogin.module.css";
-// import styles from "@/styles/login/normalLogin.module.css";
+import KakaoLogin from "@/components/user/kakaoLogin";
 
 export default function LoginFrom() {
     const [formData, setFormData] = useState({
@@ -68,8 +66,8 @@ export default function LoginFrom() {
                 </div>
                 <button type="submit">로그인</button>
                 <div className="social-login">
-                    <button className="kakao-login" >카카오 로그인</button>
-                    <button className="naver-login">네이버 로그인</button>
+                   <KakaoLogin/>
+                    <button type="social-submit" className="naver-login">네이버 로그인</button>
                 </div>
                 <div className="find-info">
                     <a href="#">비밀번호 찾기</a>
