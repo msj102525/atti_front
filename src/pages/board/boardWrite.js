@@ -10,7 +10,7 @@ const BoardWrite = () => {
   const router = useRouter();
   const [boardTitle, setBoardTitle] = useState('');
   const [boardContent, setBoardContent] = useState('');
-  const [important, setImportant] = useState(1);
+  const [importance, setImportance] = useState(1);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +19,7 @@ const BoardWrite = () => {
     const formData = {
       boardTitle,
       boardContent,
-      important,
+      importance,
     };
 
     // 여기서 formData를 서버로 전송하는 코드를 추가합니다.
@@ -36,8 +36,8 @@ const BoardWrite = () => {
     router.push('/board/boardList');
   };
 
-  const handleImportantChange = (event) => {
-    setImportant(event.target.checked ? 2 : 1);
+  const handleImportanceChange = (event) => {
+    setImportance(event.target.checked ? 2 : 1);
   };
 
   return (
@@ -70,13 +70,13 @@ const BoardWrite = () => {
           />
           <hr />
           <div className="flex items-center space-x-2">
-            <label htmlFor="important" className="font-medium">중요도</label>
+            <label htmlFor="importance" className="font-medium">중요도</label>
             <input
-              id="important"
+              id="importance"
               type="checkbox"
-              name="important"
-              checked={important === 2}
-              onChange={handleImportantChange}
+              name="importance"
+              checked={importance === 2}
+              onChange={handleImportanceChange}
               className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
             />
           </div>
