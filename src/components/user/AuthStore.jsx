@@ -12,22 +12,21 @@ const AuthStatus = observer(() => {
   }, []);
 
   const handleLoginClick = async () => {
-    if (!authStore.loggedIn && !authStore.socialLoggedIn) {
-      router.push('/login'); // 로그인 페이지로 이동
-    } else {
-      try {
-        if (authStore.socialLoggedIn) {
-          await logoutSocial(); // 소셜 로그아웃 처리
-          authStore.setSocialLoggedIn(false); // 소셜 로그아웃 상태로 변경
-        } else {
-          await logout(); // 일반 로그아웃 처리
-          await logoutkakao();
-          authStore.setLoggedIn(false); // 로그아웃 상태로 변경
-        }
+    try {
+      if (!authStore.loggedIn && !authStore.socialLoggedIn) {
+        router.push('/login'); // 로그인 페이지로 이동
+      } else if (authStore.socialLoggedIn) {
+        await logoutSocial();
+        authStore.setSocialLoggedIn(false); // 소셜 로그아웃 처리
         router.push('/'); 
-      } catch (error) {
-        console.error('로그아웃 실패:', error);
+      } else {
+        await logout();
+        await logoutkakao();
+        authStore.setLoggedIn(false); // 일반 로그아웃 처리
+        router.push('/'); 
       }
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
     }
   };
 
@@ -39,7 +38,8 @@ const AuthStatus = observer(() => {
     <div>
       <button onClick={handleLoginClick}>
         {authStore.loggedIn || authStore.socialLoggedIn ? '로그아웃' : '로그인'}
-      </button><br/>
+      </button>
+      <br/>
       {(authStore.loggedIn || authStore.socialLoggedIn) && (
         <button onClick={handleMyPageClick}>
           MyPage

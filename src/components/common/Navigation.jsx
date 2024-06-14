@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import AuthStatus from "../user/AuthStore";
 
 export default function Navigation() {
   const params = usePathname();
   console.log(`Navigation.jsx Path : ${params}`);
 
-  const onChenge=()=>{
-    
-  }
   return (
     <div className={`p-2`}>
       <div className="container flex items-center justify-between mx-auto">
@@ -65,7 +63,7 @@ export default function Navigation() {
           <li
             className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold`}
           >
-            <Link href={"login/"}>로그인</Link>
+           <AuthStatus />
           </li>
           <li className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold`}
           >
