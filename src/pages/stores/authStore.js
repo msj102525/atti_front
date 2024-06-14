@@ -3,6 +3,7 @@ import { makeAutoObservable } from "mobx";
 class AuthStore {
   loggedIn = false;
   isAdmin = false;
+  socialLoggedIn = false;
   constructor() {
     makeAutoObservable(this);
   }
@@ -18,6 +19,9 @@ class AuthStore {
 
   setIsAdmin(status) {
     this.isAdmin = status;
+  }
+  setsocialLoggedIn(status){
+    socialLoggedIn = status;
   }
 }
 
