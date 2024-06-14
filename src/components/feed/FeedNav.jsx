@@ -21,7 +21,7 @@ const SUBCATEGORIES = [
 
 export default function FeedNav({ getData }) {
     const path = usePathname();
-    const [category, setCategory] = useState("모든 사연");
+    const [category, setCategory] = useState("");
     const show = path !== "/feed/create";
 
     const handleCategoryClick = (event) => {

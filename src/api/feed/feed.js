@@ -14,28 +14,32 @@ export const postFeed = (postData) => {
 
 export const top5FeedContent = () => {
     return axios.get("/feed/top5")
-    .then(res => {
-        // console.log(res);
-        return res.data;
-    })
-    .catch(err => {
-        console.error(err);
-    });
-}
-
-export const getListByCategory = (category, page, size) => {
-    if(category === "모든 사연") category = "";
-    
-    console.log("axios start", category, page, size);
-    return axios.get(`/feed?category=${category}&page=${page}&size=${size}`)
         .then(res => {
-            console.log(res.data);
+            // console.log(res);
             return res.data;
         })
         .catch(err => {
             console.error(err);
-            throw err;
         });
 }
+
+export const getListByCategory = async (category, page, size) => {
+    try {
+        if (category === "모든 사연") category = "";
+
+        console.log("axios start", category, page, size);
+        console.log("page : ", page)
+        
+        const response = await axios.get(`/feed?category=${category}&page=${page}&size=${size}`);
+        
+        console.log(response.data);
+        
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 
 
