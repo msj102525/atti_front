@@ -1,0 +1,76 @@
+/* SuspendModal.module.css */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.content {
+    margin-bottom: 20px;
+}
+
+.content label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.content input,
+.content textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ******select 부분******* */
+.select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #c9cfda;
+    text-align: center; /* Ensure text within the select is centered */
+}
+
+
+
+/* ****************** */
+
+.actions button {
+    padding: 8px 20px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+}
+
+.actions button:first-child {
+    background-color: #4caf50;
+    color: white;
+}
+
+.actions button:last-child {
+    background-color: #f44336;
+    color: white;
+}

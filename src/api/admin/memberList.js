@@ -63,3 +63,12 @@ export const updateMember = async (userId, userData) => {
     }
 };
 
+export const suspendMember = async (suspensionData) => {
+    try {
+      const response = await axios.post(`/admin/api/suspendmembers`, suspensionData);
+      return response.data;
+    } catch (error) {
+      console.error('Error suspending member:', error);
+      throw error;
+    }
+  };

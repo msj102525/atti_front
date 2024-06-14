@@ -6,16 +6,18 @@ import { ko } from 'date-fns/locale';
 const OnewordSubjectListComponent = observer(({ onewordsubject, isPinned = false, onNoticeClick  }) => {
     const relativeTime = (isoDate) => formatDistanceToNow(parseISO(isoDate), { addSuffix: true, locale: ko });
 
-    const date = new Date(onewordsubject.owsjWriteDate);
+    const date = onewordsubject.owsjWriteDate ? new Date(onewordsubject.owsjWriteDate) : null;
 
-    // 원하는 형식에 따라 날짜를 format
-    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-
+    // date 값이 있는 경우에만 포맷 처리하고, 없는 경우에는 공백 반환
+    const formattedDate = date ? `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}` : '';
+    
     return (
         <tr onClick={onNoticeClick} style={{ background: isPinned ? "skyblue" : "none" }}>
             {/* <td style={{ width: "5vw", textAlign: "center" }}>{isPinned ? "공지" : "일반"}</td> */}
+            <td style={{ width: "5vw", textAlign: "center" }}>{onewordsubject.owsjNum}</td>
             <td style={{ textAlign: "left" }}>{onewordsubject.owsjSubject}</td>
             <td style={{ width: "10vw", textAlign: "center" }}>{onewordsubject.owsjWriter}</td>
+            {/* <td style={{ width: "10vw", textAlign: "center" }}>{formattedDate}</td> */}
             <td style={{ width: "10vw", textAlign: "center" }}>{formattedDate}</td>
             {/* <td style={{ width: "7vw", textAlign: "center" }}>{relativeTime(onewordsubject.owsjWriteDate)}</td> */}
         </tr>

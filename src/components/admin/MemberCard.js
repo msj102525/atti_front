@@ -2,12 +2,15 @@ import React, {useState} from 'react';
 import { observer } from "mobx-react";
 import styles from "@/styles/admin/memberList.module.css";
 import EditModal from './EditModal';
+import SuspendModal from './SuspendModal';
  
  
 const MemberCard = observer(({ user, handleEdit, handleSuspend, handleDelete }) => {
     
     
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
+    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false); // 정지 모달 상태
+
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
     const handleSubmit = (postData) => openEditModal(postData);
@@ -18,6 +21,9 @@ const MemberCard = observer(({ user, handleEdit, handleSuspend, handleDelete }) 
     const closeEditModal = () => {
         setIsModalOpen(false);
     };
+
+    const openSuspendModal = () => setIsSuspendModalOpen(true);
+    const closeSuspendModal = () => setIsSuspendModalOpen(false);
 
     // 회원 정보 업데이트 처리 함수
     // const handleUpdate = async() => {
@@ -54,7 +60,8 @@ const MemberCard = observer(({ user, handleEdit, handleSuspend, handleDelete }) 
                     <button className={styles.button} onClick={openEditModal}>수정</button>
                     <EditModal isOpen={isModalOpen} onClose={closeEditModal} user={user} />
                     {/* <EditModal isOpen={isModalOpen} onClose={closeEditModal} user={user} onUpdate={handleUpdate}/> */}
-                    <button className={styles.button} onClick={() => handleSuspend(user.userId)}>정지</button>
+                    <button className={styles.button} onClick={openSuspendModal}>정지</button>
+                    <SuspendModal isOpen={isSuspendModalOpen} onClose={closeSuspendModal} user={user} />
                     <button className={styles.button} onClick={() => handleDelete(user.userId)}>삭제</button>
             </td>
             

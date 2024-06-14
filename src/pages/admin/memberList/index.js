@@ -4,7 +4,9 @@ import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider
 import MemberCard from "@/components/admin/MemberCard"; // MemberCard 컴포넌트 가져오기
 import styles from "@/styles/admin/memberList.module.css";
 import { getMemberList, deleteMember } from "@/api/admin/memberList"; // 회원 관련 API 함수 가져오기
-import { handleAxiosError } from "../../api/errorAxiosHandle"; // 오류 처리 함수 가져오기
+import { handleAxiosError } from "@/api/errorAxiosHandle"; // 오류 처리 함수 가져오기
+
+import SuspendModal from '@/components/admin/SuspendModal'; // SuspendModal 컴포넌트 가져오기
  
 
 // QueryClient 생성
@@ -22,8 +24,15 @@ const MemberListComponent = observer(() => {
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
     const [selectedUser, setSelectedUser] = useState(null); // 선택된 회원 정보
 
+    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false); // 정지 모달 열림 상태
+
     const [searchType, setSearchType] = useState('id'); // 'id' 또는 'name' 값을 가질 수 있는 상태
+   
+    const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
+
+    const searchField = searchType === 'id' ? 'userId' : 'userName';
     
+
     
 
     // 임시 목 데이터
@@ -56,15 +65,26 @@ const MemberListComponent = observer(() => {
     //       keepPreviousData: true, // 이전 데이터를 유지
     //   });
 
-    const { data, isLoading, error } = useQuery(
-        ['memberList', { searchField: searchType === 'id' ? 'userId' : 'userName', searchInput , page, size }],
-        () => getMemberList({  searchField: searchType === 'id' ? 'userId' : 'userName', searchInput , page: page - 1, size }),
-        {
-            keepPreviousData: true, // 이전 데이터를 유지
+    // const { data, isLoading, error, refetch } = useQuery(
+    //     ['memberList', { searchField: searchType === 'id' ? 'userId' : 'userName', searchInput , page, size }],
+    //     () => getMemberList({  searchField: searchType === 'id' ? 'userId' : 'userName', searchInput , page: page - 1, size }),
+    //     {
+    //         keepPreviousData: true, // 이전 데이터를 유지
            
+    //     }
+    // );
+
+    const { data, isLoading, error, refetch } = useQuery(
+        ['memberList', { searchField: searchParams.searchField, searchInput: searchParams.searchInput, page, size }],
+        () => getMemberList({ searchField: searchParams.searchField, searchInput: searchParams.searchInput, page: page - 1, size }),
+        {
+            keepPreviousData: true,
         }
     );
 
+    useEffect(() => {
+        refetch();
+    }, [page, size, refetch]);
    
    
 
@@ -81,11 +101,6 @@ const MemberListComponent = observer(() => {
     
     //검색관련
 
-    
-
-
-    
-    
     // const executeSearch = () => {
     //     if (searchType === 'id') {
     //         // 아이디 검색 로직
@@ -140,49 +155,56 @@ const MemberListComponent = observer(() => {
 
 
 // 검색 실행
+// const executeSearch = () => {
+//     if (!searchInput) {
+//         console.log('검색어를 입력하세요.');
+//         return;
+//     }
+
+//     // 검색 필드가 아이디인 경우 'userId', 이름인 경우 'userName'으로 설정
+//     const searchField = searchType === 'id' ? 'userId' : 'userName';
+    
+//     console.log('검색 필드:', searchField);
+//     console.log('검색어:', searchInput);
+//     console.log('페이지:', page);
+//     console.log('페이지 크기:', size);
+
+//     // 검색 필드와 검색어를 쿼리로 전달하여 데이터를 불러옴
+//      getMemberList({ searchField, searchInput, page: page - 1, size })
+//          .then(data => {
+//              console.log('검색 결과:', data);
+//              // 처리할 내용 추가
+            
+//         })
+//         .catch(error => {
+//             console.error('검색 오류:', error);
+//             // 오류 처리 추가
+            
+//         });
+
+    
+// };
+
+// 검색 실행
 const executeSearch = () => {
-    if (!searchInput) {
-        console.log('검색어를 입력하세요.');
-        return;
-    }
-
-    // 검색 필드가 아이디인 경우 'userId', 이름인 경우 'userName'으로 설정
-    const searchField = searchType === 'id' ? 'userId' : 'userName';
-
-    console.log('검색 필드:', searchField);
-    console.log('검색어:', searchInput);
-    console.log('페이지:', page);
-    console.log('페이지 크기:', size);
-
-    // 검색 필드와 검색어를 쿼리로 전달하여 데이터를 불러옴
-    getMemberList({ searchField, searchInput, page: page - 1, size })
-        .then(data => {
-            console.log('검색 결과:', data);
-            // 처리할 내용 추가
-            
-        })
-        .catch(error => {
-            console.error('검색 오류:', error);
-            // 오류 처리 추가
-            
-        });
+    setPage(1); // 검색 시 페이지를 1로 초기화
+    setSearchParams({ searchField, searchInput });
+    refetch();
 };
 
-// 검색 버튼 클릭 시 검색 실행
-const handleSearchButtonClick = () => {
-    executeSearch();
-};
 
 // Enter 키 눌렀을 때 검색 실행
 
 const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
+       
         executeSearch();
+        
     }
 };
 
 // 페이지 크기 변경 핸들러
-const handleSizeChange = (event) => setSize(event.target.value);
+//const handleSizeChange = (event) => setSize(event.target.value);
 
 // 검색 필드 변경 핸들러
 const handleSearchTypeChange = (event) => {
@@ -277,11 +299,18 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
     //     // 수정 로직 처리
     // };
 
+    //정지 기능 구현 ***********************************
     // 회원 정지 핸들러
-    const handleSuspend = (userId) => {
-        console.log(`Suspend member with ID: ${userId}`);
-        // 정지 로직 처리
-    };
+    // const handleSuspend = (user) => {
+    //     //console.log(`Suspend member with ID: ${userId}`);
+    //     setSelectedUser(user);
+    //     setIsSuspendModalOpen(true);
+    // };
+
+    // const closeSuspendModal = () => {
+    //     setIsSuspendModalOpen(false);
+    //     setSelectedUser(null);
+    // };
 
 
     // const handleDelete = (memberId) => {
@@ -293,11 +322,13 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
     //밑에 한 줄 추가
     if (error) return <div>Error loading data: {error.message}</div>;
     if (!data) return <div>No data</div>; // 데이터가 없을 때 표시
+    
 
     return (
         <div className={styles.container}>
             <h2>회원 리스트</h2>
-            <div style={{ height: "2vw", justifyContent: "center", textAlign: "right" }}>
+            {/* <div style={{ height: "2vw", justifyContent: "center", textAlign: "right" }}> */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                 {/* <select value={size} onChange={handleSizeChange} style={{ height: "88%" }}>
                     <option value="5">5</option>
                     <option value="10">10</option>
@@ -310,7 +341,7 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
                 </select>
                 {/* <input type="text" placeholder="검색..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} /> */}
                 <input type="text" placeholder="검색..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
-                <button onClick={handleSearchButtonClick}>검색</button>
+                <button onClick={executeSearch}>검색</button>
             </div>
             <table className={styles.table}>
                 <thead>
@@ -320,7 +351,6 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
                         <th style={{ width: "10vw", textAlign: "center" }}>닉네임</th>
                         <th style={{ width: "7vw", textAlign: "center" }}>이메일</th>
                         <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
-                    
                     </tr>
                 </thead>
                 <tbody>
@@ -332,15 +362,15 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
                         <MemberCard
                         key={user.userId}
                         user={user}  
-                        handleEdit={openEditModal}  //수정모달 열기 핸들러 전달 
-                        handleSuspend={handleSuspend}
+                        //handleEdit={openEditModal}  //수정모달 열기 핸들러 전달 
+                        //handleSuspend={handleSuspend}
                         handleDelete={handleDelete}
                         />
                         //onDelete={handleDelete} 위에 구문에 원래 있던 것
                     ))}
                 </tbody>
             </table>
-            <div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                 {/* 페이지네이션 구현 (현재 페이지: {page}) */}
                 <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
                 <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button>
@@ -349,6 +379,7 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
         </div>
     );
 });
+
 
 // QueryClientProvider로 감싸기
 const MemberListPage = () => {
