@@ -13,6 +13,7 @@ class AuthStore {
 
   checkLoggedIn() {
     this.loggedIn = !!localStorage.getItem("token");
+    
   }
 
   setIsAdmin(status) {
