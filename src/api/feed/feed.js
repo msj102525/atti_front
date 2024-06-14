@@ -15,12 +15,27 @@ export const postFeed = (postData) => {
 export const top5FeedContent = () => {
     return axios.get("/feed/top5")
     .then(res => {
-        console.log(res);
+        // console.log(res);
         return res.data;
     })
     .catch(err => {
         console.error(err);
     });
+}
+
+export const getListByCategory = (category, page, size) => {
+    if(category === "모든 사연") category = "";
+    
+    console.log("axios start", category, page, size);
+    return axios.get(`/feed?category=${category}&page=${page}&size=${size}`)
+        .then(res => {
+            console.log(res.data);
+            return res.data;
+        })
+        .catch(err => {
+            console.error(err);
+            throw err;
+        });
 }
 
 
