@@ -11,7 +11,7 @@ const OnewordSubjectWriteModalComponent = ({ isOpen, onClose, onSubmit }) => {
             });
             onClose();
         } catch (error) {
-            console.error("Error uploading files:", error);
+            console.error("Error insert :", error);
         }
     };
 

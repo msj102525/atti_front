@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import styles from "../../styles/board/search.module.css";
 import MintButton from "@/components/common/MintButton"; 
+import { useRouter } from 'next/router';
+
 
 const SearchForm = ({ onSubmit }) => {
   const [action, setAction] = useState('title');
   const [beginDate, setBeginDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [keyword, setKeyword] = useState('');
+  const router = useRouter();
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,6 +22,12 @@ const SearchForm = ({ onSubmit }) => {
     };
     onSubmit(formData);
   };
+
+  const moveWrite = () => {
+    router.push('/board/boardWrite');  // 버튼 클릭 시 이동할 페이지 경로를 지정합니다.
+  };
+
+
 
   return (
     <div className={styles.searchdiv}>
@@ -69,6 +79,15 @@ const SearchForm = ({ onSubmit }) => {
           fontSize="text-lg"
         />
       </form>
+      <div>
+      <MintButton
+          onClick={moveWrite}
+          text="작성"
+          sizeW="w-24"
+          sizeH="h-12"
+          fontSize="text-lg"
+        />
+      </div>
     </div>
   );
 };

@@ -6,8 +6,8 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 import OnewordSubjectListComponent from "../../components/oneword/OnewordSubjectListComponent";
 import OnewordSubjectWriteModalComponent from "../../components/oneword/OnewordSubjectWriteModalComponent";
 import { handleAxiosError } from "../../api/errorAxiosHandle";
-import { getOnewordSubjectList, insertOnewordSubject } from "../../api/oneword/OnewordSubject";
-
+import { getOnewordSubjectList, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject} from "../../api/oneword/OnewordSubject";
+import DetailPostModal from "../../components/oneword/DetailPostModal";
 
 const OnewordSubjectComponent = observer(() => {
     const [searchTitle, setSearchTitle] = React.useState("");
@@ -26,7 +26,24 @@ const OnewordSubjectComponent = observer(() => {
         keepPreviousData: true,
     });
 
+    // 등록
     const insertOnewordSubjectMutation = useMutation(insertOnewordSubject, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('onewordSubjectList').then();
+        },
+        onError: handleAxiosError,
+    });
+
+    // 수정
+    const updateOnewordSubjectMutation = useMutation(updateOnewordSubject, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('onewordSubjectList').then();
+        },
+        onError: handleAxiosError,
+    });
+
+    // 삭제
+    const deleteOnewordSubjectMutation = useMutation(deleteOnewordSubject, {
         onSuccess: () => {
             queryClient.invalidateQueries('onewordSubjectList').then();
         },
@@ -44,7 +61,7 @@ const OnewordSubjectComponent = observer(() => {
     };
 
     const handlePageChange = (pageNumber) => {
-        //// 페이지가 음수가 되지 않도록 처리
+        // 페이지가 음수가 되지 않도록 처리
         if (pageNumber < 1) {
             setPage(1);
         } else {
@@ -54,38 +71,46 @@ const OnewordSubjectComponent = observer(() => {
 
     const handleSizeChange = (e) => setSize(e.target.value);
 
-
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    const handleSubmit = (postData) => insertOnewordSubjectMutation.mutate(postData);
+    // 등록
+    const handleSubmit = (onewordSubjectData) => insertOnewordSubjectMutation.mutate(onewordSubjectData);
+
+    //const handleUpdateSubmit = (onewordSubjectData) => updateOnewordSubjectMutation.mutate(onewordSubjectData);
+
+    // 수정
+    const handleEdit = (onewordSubjectData) => {
+        //console.log('Edit post:', selectedPost.id);
+        updateOnewordSubjectMutation.mutate(onewordSubjectData.owsjNum, onewordSubjectData);
+        // 포스트 수정 페이지로 이동하거나 수정 모달을 열 수 있음
+    };
 
     useEffect(() => {
         setIsAdmin(localStorage.getItem("isAdmin") === "true");
     }, [])
 
-    //const [selectedPost, setSelectedPost] = React.useState(null);
-    //const [isDetailModalOpen, setIsDetailModalOpen] = React.useState(false);
+    const [selectedOnewordSubject, setSelectedOnewordSubject] = React.useState(null);
+    const [isDetailModalOpen, setIsDetailModalOpen] = React.useState(false);
 
-    // const readCountMutation = useMutation(postReadCountUp, {
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries('onewordSubjectList').then();
-    //     },
-    //     onError: handleAxiosError,
-    // });
+    // 상세 조회
+    const readSubjectDetailMutation = useMutation(getOnewordSubjectDetail, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('onewordSubjectList').then();
+        },
+        onError: handleAxiosError,
+    });
 
-    // const openDetailModal = (post) => {
-    //     readCountMutation.mutate(post.id);
-    //     setSelectedPost(post);
-    //     setIsDetailModalOpen(true);
-    // };
+    const openDetailModal = (onewordSubject) => {
+        readSubjectDetailMutation.mutate(onewordSubject.owsjNum);
+        setSelectedOnewordSubject(onewordSubject);
+        setIsDetailModalOpen(true);
+    };
 
-
-    // const closeDetailModal = () => {
-    //     setSelectedPost(null);
-    //     setIsDetailModalOpen(false);
-    // };
-
+    const closeDetailModal = () => {
+        setSelectedOnewordSubject(null);
+        setIsDetailModalOpen(false);
+    };
 
     // const likeMutation = useMutation(noticeLikeUp, {
     //     onSuccess: () => {
@@ -101,11 +126,6 @@ const OnewordSubjectComponent = observer(() => {
     //     likeMutation.mutate(requestData);
     // };
 
-
-    // const handleEdit = () => {
-    //     console.log('Edit post:', selectedPost.id);
-    //     // 포스트 수정 페이지로 이동하거나 수정 모달을 열 수 있음
-    // };
 
 
     if (isLoading) return <div>Loading...</div>;
@@ -180,14 +200,14 @@ const OnewordSubjectComponent = observer(() => {
                 </div>
 
                 <OnewordSubjectWriteModalComponent isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
-                {/* <DetailPostModal
+                <DetailPostModal
                     isOpen={isDetailModalOpen}
                     onClose={closeDetailModal}
-                    post={selectedPost}
-                    onLike={handleLike}
+                    post={selectedOnewordSubject}
+                    // onLike={handleLike}
                     onEdit={handleEdit}
                     isAdmin={isAdmin}
-                /> */}
+                />
 
                 {/* Pagination */}
                 <div>
