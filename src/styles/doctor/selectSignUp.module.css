@@ -1,6 +1,8 @@
 .title {
   font-size: 40px;
   text-align: center;
+  margin-top: 100px;
+  margin-bottom: 100px;
 }
 .signUpNormal {
   width: 400px;
@@ -13,6 +15,7 @@
   background-position: center;
   margin: 40px;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 .signUpDoctor {
   width: 400px;
@@ -25,11 +28,11 @@
   background-position: center;
   margin: 40px;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 .signForm {
   padding-left: 20%;
   padding-right: 20%;
-  padding-top: 200px;
   display: flex;
   justify-content: center;
 }

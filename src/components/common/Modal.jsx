@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import MintButton from "./MintButton";
 import LottieAnimation from "./animation/LottieAnimation";
 
-const Modal = ({ isOpen, onClose, title, content, imgUrl }) => {
+const Modal = ({ isOpen, onClose, title, content, content2, imgUrl }) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
@@ -26,6 +26,7 @@ const Modal = ({ isOpen, onClose, title, content, imgUrl }) => {
         </h2>
         <div className="mb-6 text-center text-gray-600">
           <p>{content}</p>
+          <p>{content2}</p>
         </div>
         <div className="flex justify-center">
           <MintButton
