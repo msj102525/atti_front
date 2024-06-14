@@ -1,6 +1,7 @@
 import axios from "../axiosApi";
 import { authStore } from "@/pages/stores/authStore";
 
+
 const baseUrl = "/users";
 export const signup = (singUpData) => {
   return axios.post(baseUrl + "/signup", singUpData).then((res) => {
@@ -24,8 +25,15 @@ export const login = (loginData) => {
     });
 };
 
+
 export const logout = () => {
   return axios.post("/logout").then((res) => {
+       return res;
+  });
+};
+
+export const logoutkakao = () =>{
+  return axios.post("/kakao/logout").then((res) =>{
     return res;
   });
 };
