@@ -4,6 +4,8 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import styles from "../../styles/board/boardDetail.module.css"; // 스타일 파일을 임포트
 import Header from '../common/Header';
+import Mintbutton from "@/components/common/MintButton"; 
+
 
 Modal.setAppElement('#__next');
 
@@ -72,9 +74,33 @@ function NoticeDetail() {
                 <div className={styles.contentbox}>{board.boardContent}</div>
                 <hr />
                 <div className={styles.btnbox}>
-                    <button className={styles.list} onClick={handleBoardListClick}>목록</button>
-                    <button onClick={handleBoardUpdateClick}>수정</button>
-                    <button onClick={handleDeleteClick}>삭제</button>
+                    <Mintbutton
+                        onClick={handleBoardListClick}
+                        text="목록"
+                        sizeW="w-24"
+                        sizeH="h-12"
+                        fontSize="text-lg"
+                    />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Mintbutton
+                        onClick={handleBoardUpdateClick}
+                        text="수정"
+                        sizeW="w-24"
+                        sizeH="h-12"
+                        fontSize="text-lg"
+                    />
+                    <Mintbutton
+                        onClick={handleDeleteClick}
+                        text="삭제"
+                        sizeW="w-24"
+                        sizeH="h-12"
+                        fontSize="text-lg"
+                    />
                 </div>
             </div>
             <Modal
@@ -86,8 +112,21 @@ function NoticeDetail() {
             >
                 <h2>삭제하시겠습니까?</h2>
                 <div className={styles.modalButtons}>
-                    <button onClick={confirmDelete}>확인</button>
-                    <button onClick={closeModal}>취소</button>
+                    <Mintbutton
+                    onClick={confirmDelete}
+                    text="확인"
+                    sizeW="w-24"
+                    sizeH="h-12"
+                    fontSize="text-lg"
+                    />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Mintbutton
+                    onClick={closeModal}
+                    text="취소"
+                    sizeW="w-24"
+                    sizeH="h-12"
+                    fontSize="text-lg"
+                    />
                 </div>
             </Modal>
         </div>

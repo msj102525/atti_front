@@ -40,7 +40,7 @@
     display: inline-block;
     padding: 10px 20px;
     margin-right: 10px;
-    background-color: rgb(250, 180, 49);
+    
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -93,13 +93,11 @@
 
 .modalButtons button {
     padding: 10px 20px;
-    background-color: rgb(250, 180, 49);
+    
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
-.modalButtons button:hover {
-    background-color: orange;
-}
+
