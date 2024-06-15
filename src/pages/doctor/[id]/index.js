@@ -19,7 +19,8 @@ const ratingCounts = {
   1: 0,
 };
 
-let reviews = [
+
+let reviewList = [
   {
     content:
       "짧은 시간 안에 상황을 파악하고 감정적인 지원, 실질적인 조언을 해 주십니다.",
@@ -37,28 +38,27 @@ let reviews = [
     starPoint: 5,
     nickName: "MBTIT",
   },
-  {
-    content: "전반적으로 좋았습니다.",
-    starPoint: 3,
-    nickName: "밝은햇살",
-  },
-  {
-    content: "긍정적인 에너지를 주셔서 감사합니다.",
-    starPoint: 4,
-    nickName: "행복한날",
-  },
-  {
-    content: "실용적인 조언을 주셔서 많은 도움이 되었습니다.",
-    starPoint: 4,
-    nickName: "성실한조언자",
-  },
-  {
-    content: "사용자7의 리뷰입니다.",
-    starPoint: 3,
-    nickName: "사용자7",
-  },
 ];
-
+// {
+//   content: "전반적으로 좋았습니다.",
+//   starPoint: 3,
+//   nickName: "밝은햇살",
+// },
+// {
+//   content: "긍정적인 에너지를 주셔서 감사합니다.",
+//   starPoint: 4,
+//   nickName: "행복한날",
+// },
+// {
+//   content: "실용적인 조언을 주셔서 많은 도움이 되었습니다.",
+//   starPoint: 4,
+//   nickName: "성실한조언자",
+// },
+// {
+//   content: "사용자7의 리뷰입니다.",
+//   starPoint: 3,
+//   nickName: "사용자7",
+// },
 export default function DoctorDetail() {
   const router = useRouter();
   const { id } = router.query;
@@ -68,11 +68,22 @@ export default function DoctorDetail() {
   const [profileUrl, setProfileUrl] = useState("");
   const [tagList, setTagList] = useState([]);
   const [doctorComment, setDoctorComment] = useState("");
-
+  const [reviews, setReviews] = useState(reviewList);
+  const [reviewValid, setReviewValid] = useState(false);
   const handleConsult = () => {
     console.log("hello");
   };
-
+  const moreReview = () =>{
+    //엑시오스 요청을 통해 4개의 후기를 추가로 불러옴 만약 더이상 없다면 valid를 false로 바꾸고 버튼이 사라짐
+    let originalReviews = [...reviews];
+    //엑시오스 요청부분
+    originalReviews.push({content: "전반적으로 좋았습니다.",
+         starPoint: 3,
+         nickName: "밝은햇살",})
+    setReviews(originalReviews);  
+  
+  }
+  
   useEffect(() => {
     if (id) {
       showDetail(id)
@@ -97,13 +108,16 @@ export default function DoctorDetail() {
         .catch((error) => {
           console.error("정보불러오기 실패", error);
         });
+      // showReviews(id).then((res)=>{
+      // 처음 에는 3개만 로드
+      // })
     }
-  }, [id]);
+  }, []);
 
   return (
     <div>
       <Header />
-      <div className="mx-auto w-[1586px]">
+      <div className="mx-auto w-[1300px]">
         <div className="flex">
           <div className="w-1/2 m-10">
             <p className="text-3xl">{doctorComment}</p>
@@ -141,8 +155,8 @@ export default function DoctorDetail() {
           </div>
         </div>
         <hr className="border-gray-800 border-3" />
-        <h3 className="text-2xl font-extrabold">{userName} 상담사님 후기</h3>
         <div className="container px-4 py-8 mx-auto">
+        <h3 className="text-2xl font-extrabold m-10">{userName} 상담사님 후기</h3>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="flex justify-center w-full">
               <div className="w-full max-w-xl h-60">
@@ -163,6 +177,11 @@ export default function DoctorDetail() {
                 </div>
               </div>
             ))}
+            {//onClick, text, sizeW, sizeH, fontSize
+            }
+          </div>
+          <div className="flex justify-center mt-10 h-20">
+          <MintButton text="리뷰더보기" sizeW="w-1/4" sizeH="h-full" fontSize="text-3xl" onClick={moreReview}/>
           </div>
         </div>
       </div>

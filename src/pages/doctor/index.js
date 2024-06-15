@@ -142,11 +142,7 @@ export default function DoctorList() {
       <div className="mx-auto w-[1586px]">
         <div className={`${styles.mainContainer} flex justify-center mt-5`}>
           <div className="flex justify-center px-2">
-            {" "}
-            {/* 여기서 px-4는 좌우 padding입니다 */}
             <div className={`${styles.searchArea} w-1/6`}>
-              {" "}
-              {/* flex-1을 사용하여 동적으로 너비를 조정할 수 있습니다 */}
               <div className={styles.searchBar}>
                 <div className={styles.searchTagDiv}>
                   <p className="my-10 text-4xl font-thin">나의 상황</p>
@@ -154,8 +150,8 @@ export default function DoctorList() {
                     <SearchSituationTag
                       key={index}
                       name={tag}
-                      handleClick={() => handleTagClick(tag)} // 상황 태그 클릭 핸들러
-                      isSelected={selectedTags.includes(tag)} // 선택 여부를 판단하여 스타일을 적용할 수 있도록 함
+                      handleClick={() => handleTagClick(tag)} 
+                      isSelected={selectedTags.includes(tag)} 
                     />
                   ))}
                 </div>
@@ -165,8 +161,8 @@ export default function DoctorList() {
                     <SearchSymptomTag
                       key={index}
                       name={tag}
-                      handleClick={() => handleTagClick(tag)} // 증상 태그 클릭 핸들러
-                      isSelected={selectedTags.includes(tag)} // 선택 여부를 판단하여 스타일을 적용할 수 있도록 함
+                      handleClick={() => handleTagClick(tag)} 
+                      isSelected={selectedTags.includes(tag)} 
                     />
                   ))}
                 </div>
