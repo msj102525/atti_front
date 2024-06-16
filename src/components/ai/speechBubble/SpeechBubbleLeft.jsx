@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import styles from "@/styles/ai/aiConsult.module.css";
+import styles from '@/styles/ai/speechBubbleLeft.module.css';
 
-export default function SpeechBubble({ messages, slow = false, answerValid=false }) {
+export default function SpeechBubbleLeft({ messages, slow = false, answerValid=false, setConcern }) {
     const [displayedText, setDisplayedText] = useState([]);
     const [currentLine, setCurrentLine] = useState(0);
     const [currentChar, setCurrentChar] = useState(0);
+    const [concern, updateConcern] = useState("");
+    const paragraphDelay = slow ? 1000 : 100;
 
-    // 문단 사이의 기본 지연 시간 (ms)
-    const paragraphDelay = slow ? 1000 : 100; // slow가 true이면 1초, 아니면 0.1초
-
-    // messages가 변경될 때마다 초기화
     useEffect(() => {
         setDisplayedText(messages.map(() => ""));
         setCurrentLine(0);
         setCurrentChar(0);
+        updateConcern(messages.join(' '));
     }, [messages]);
 
     useEffect(() => {
@@ -39,18 +38,26 @@ export default function SpeechBubble({ messages, slow = false, answerValid=false
         }
     }, [currentChar, currentLine, messages, slow, paragraphDelay]);
 
+    const handleTextChange = (e) => {
+        const newText = e.target.value;
+        updateConcern(newText);
+        setConcern(newText); // 부모 컴포넌트로 concern 전달
+    };
+
     return (
         <div className={styles.speechBubbleContainer}>
-        <hgroup className={styles.speechBubble}>
-            {displayedText.map((line, index) => (
-                <h1 key={index}>{line}</h1>
-            ))}
-            {answerValid && (
-                <div className={styles.answerText}>
-                    답변 듣기
-                </div>
-            )}
-        </hgroup>
+            <hgroup className={styles.speechBubble}>
+                <textarea
+                    className="w-full h-full min-w-[400px] min-h-[250px] text-xl leading-relaxed text-gray-800 font-sans p-4 resize-none rounded-md focus:outline-none"
+                    value={concern}
+                    onChange={handleTextChange}
+                />
+                {answerValid && (
+                    <div className="absolute right-5 bottom-5 text-red-500 text-base text-xl">
+                        마음에 들지 않으신가요? 답변을 수정하거나 재녹음을 해보세요!
+                    </div>
+                )}
+            </hgroup>
         </div>
     );
 }
