@@ -5,6 +5,9 @@ import MemberCard from "@/components/admin/MemberCard"; // MemberCard 컴포넌�
 import styles from "@/styles/admin/memberList.module.css";
 import { getMemberList, deleteMember } from "@/api/admin/memberList"; // 회원 관련 API 함수 가져오기
 import { handleAxiosError } from "@/api/errorAxiosHandle"; // 오류 처리 함수 가져오기
+import Header from "@/pages/common/Header";
+import Footer from "@/pages/common/Footer";
+import AdminSidebar from "@/components/admin/AdminSidebar"
 
 import SuspendModal from '@/components/admin/SuspendModal'; // SuspendModal 컴포넌트 가져오기
  
@@ -325,6 +328,12 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
     
 
     return (
+        <div>
+        <Header />
+        
+        <div style={{ display: 'flex' }}>
+                <AdminSidebar />
+                <div className={styles.content}>
         <div className={styles.container}>
             <h2>회원 리스트</h2>
             {/* <div style={{ height: "2vw", justifyContent: "center", textAlign: "right" }}> */}
@@ -376,6 +385,10 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
                 <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button>
                 {/* 페이지네이션 로직 추가 */}
             </div>
+        </div>
+        </div>
+        </div>
+        <Footer />
         </div>
     );
 });
