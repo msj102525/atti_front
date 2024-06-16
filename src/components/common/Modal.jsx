@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import MintButton from "./MintButton";
 import LottieAnimation from "./animation/LottieAnimation";
+import fireworkAnimation from "@/components/animationData/firework.json";
 
 const Modal = ({ isOpen, onClose, title, content, content2, imgUrl }) => {
   if (!isOpen) return null;
@@ -11,7 +12,7 @@ const Modal = ({ isOpen, onClose, title, content, content2, imgUrl }) => {
       <div className="relative w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <div className="flex justify-center mb-4">
           {imgUrl === "signUp" ? (
-            <LottieAnimation />
+            <LottieAnimation animationData={fireworkAnimation} />
           ) : (
             <img
               src={imgUrl}

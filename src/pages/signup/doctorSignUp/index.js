@@ -256,9 +256,9 @@ export default function DoctorSignUp() {
                 readOnly={emailReadOnly}
               />
             </div>
-            <div className="flex items-center justify-center">
+            <div className="flex justify-center">
               <button
-                className={`ml-2 h-12 px-3 rounded-full font-bold text-xs text-white ${
+                className={`ml-2 h-full px-3 rounded-full font-bold text-xs text-white ${
                   emailValid
                     ? "bg-teal-400 cursor-pointer"
                     : "bg-gray-400 cursor-not-allowed"
@@ -349,7 +349,7 @@ export default function DoctorSignUp() {
       <div className="w-full max-w-md px-4">
         <button
           onClick={handleSubmit}
-          className="w-full h-12 mt-8 mb-4 font-bold text-white bg-teal-400 rounded-full cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="w-full h-full mt-8 mb-4 font-bold text-white bg-teal-400 rounded-full cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
           disabled={!validateForm()}
         >
           회원가입
