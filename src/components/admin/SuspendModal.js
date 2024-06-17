@@ -19,18 +19,35 @@ const SuspendModal = ({ isOpen, onClose, user }) => {
 
   const handleSuspend = async () => {
     setLoading(true);
+    const suspensionData = {
+      userId: user.userId,
+      suspensionTitle: title, // title 값을 전송
+      suspensionContent: content,
+    };
+    console.log('Sending suspension data:', suspensionData); // 디버깅 메시지 추가
     try {
-      await suspendMember({
-        userId: user.userId,
-        suspensionTitle: title,
-        suspensionContent: content,
-      });
+      await suspendMember(suspensionData);
       window.location.reload(); // 페이지 새로고침
     } catch (error) {
       console.error('Error suspending member:', error);
     } finally {
       setLoading(false);
+      //onClose(); // 모달 닫기
     }
+    // try {
+    //   await suspendMember({
+    //     userId: user.userId,
+    //     suspensionTitle: suspensionTitle,
+    //     suspensionContent: suspensionContent,
+    //   });
+    //   window.location.reload(); // 페이지 새로고침
+    // } catch (error) {
+    //   console.error('Error suspending member:', error);
+    // } finally {
+    //   setLoading(false);
+    //   //추가한 부분 onClose();
+    //   //onClose();
+    // }
   };
 
   return (

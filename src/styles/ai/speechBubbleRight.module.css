@@ -1,0 +1,53 @@
+.speechBubbleContainer {
+    position: relative; 
+}
+
+
+.speechBubble {
+    position: relative;
+    background: white;
+    border-radius: .4em;
+    height: 80%;
+    width: 40%;
+    margin: 0;
+    padding: 1.5em; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif; 
+    font-size: 1.4rem; 
+    line-height: 1.5; 
+    color: #333; 
+    min-width: 650px;
+}
+
+.speechBubble:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 65px solid transparent;
+    border-left-color: white;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: -32.5px;
+    margin-right: -65px;
+}
+.speechBubble h1 {
+    margin: 10px;
+}
+
+.speechBubble p {
+    margin: 0; /* 텍스트 요소의 기본 마진 제거 */
+    padding: 0; /* 텍스트 요소의 기본 패딩 제거 */
+}
+.answerText {
+    position: absolute;
+    right: 20px; /* 오른쪽에서 20px 떨어진 위치 */
+    bottom: 20px; /* 아래에서 20px 떨어진 위치 */
+    color: blue; /* 텍스트 색상 파란색 */
+    font-size: 16px; /* 글씨 크기 */
+    cursor: pointer; /* 마우스 포인터 */
+}

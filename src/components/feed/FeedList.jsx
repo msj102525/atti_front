@@ -2,29 +2,19 @@ import { getListByCategory } from "@/api/feed/feed";
 import { useRef, useState, useEffect } from "react";
 
 export default function FeedList({ category }) {
-    const size = 10;
     const [feedData, setFeedData] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(0);
-    const [loading, setLoading] = useState(false);
-    const [totalPage, setTotalPage] = useState(0);
+    const elementRef = useRef(null);
+    const size = 10;
 
-    console.log(`page, totalPage: ${page}, ${totalPage}`);
+    useEffect(() => {
+        getListByCategory(category, page, size)
+        .then(res => {
+            setFeedData((prevProducts) => [...prevProducts, ...res]);
+        })
 
-    const observeRef = useRef(null);
-
-    const loadMoreData = async () => {
-        if (loading) return;
-        setLoading(true);
-
-        const newFeedData = await getListByCategory(category, page, size);
-
-        setFeedData(prevFeedData => [...prevFeedData, ...newFeedData]);
-        setPage(prevPage => prevPage + 1);
-        setLoading(false);
-
-    }
-
-
+    }, [page])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,10 +22,6 @@ export default function FeedList({ category }) {
                 const firstData = await getListByCategory(category, page, size);
                 setFeedData(firstData);
                 setPage(0);
-
-                if (feedData.length != 0) {
-                    setTotalPage(feedData[0].totalPage);
-                }
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -45,26 +31,39 @@ export default function FeedList({ category }) {
         fetchData();
     }, [category]);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            entries => {
-                if (entries[0].isIntersecting) {
-                    loadMoreData();
-                }
-            },
-            { threshold: 0.1 }
-        )
+    const fetchMoreItems = async () => {
+        console.log("page", page)
+        setPage(value => value + 1);
+    };
 
-        if (observeRef.current) {
-            observer.observe(observeRef.current);
+    const onIntersection = (entries) => {
+        const firstEntry = entries[0];
+
+        if (firstEntry.isIntersecting && hasMore) {
+            fetchMoreItems();
         }
 
+    };
+
+    // 컴포넌트 렌더링 이후에 실행되며 Intersection Observer를 설정
+    useEffect(() => {
+        const observer = new IntersectionObserver(onIntersection);
+
+        //elementRef가 현재 존재하면 observer로 해당 요소를 관찰.
+        if (elementRef.current) {
+            observer.observe(elementRef.current);
+        }
+
+        // 컴포넌트가 언마운트되거나 더 이상 관찰할 필요가 없을 때(observer를 해제할 때)반환.
         return () => {
-            if (observeRef.current) {
-                observer.unobserve(observeRef.current);
+            if (elementRef.current) {
+                observer.unobserve(elementRef.current);
             }
         };
-    }, [loading, page]);
+    }, [hasMore]);
+
+
+
 
 
     return (
@@ -105,7 +104,8 @@ export default function FeedList({ category }) {
                             </div>
                         </div>
                     ))}
-                    <div className={page > totalPage ? "hidden" : ""} ref={observeRef}>Loading...</div>
+                    {/* <div className={page > totalPage ? "hidden" : ""} ref={observeRef}>Loading...</div> */}
+                    <div ref={elementRef}>endData...</div>
                 </div>
             </div>
         </div>

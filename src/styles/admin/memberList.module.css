@@ -89,3 +89,9 @@
 .button:last-child {
   margin-right: 0;
 }
+
+/* Content adjustments to accommodate sidebar */
+.content {
+  margin-left: 220px; /* Add space to the left for the sidebar */
+  padding: 20px;
+}

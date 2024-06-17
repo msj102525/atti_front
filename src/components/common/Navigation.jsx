@@ -40,7 +40,7 @@ export default function Navigation() {
             <li
               className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}
             >
-              <Link href="#contact">AI 서비스</Link>
+              <Link href="/ai">AI 서비스</Link>
             </li>
             <li
               className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}
