@@ -8,30 +8,26 @@ const CustomEditor = dynamic(() => {
 }, { ssr: false });
 
 let user = {
-    userId: "문승종"
+    userId: "user01",
+    userProfileUrl: "#"
 }
 
 export default function FeedWriteForm(props) {
 
-    const [currentDate, setCurrentDate] = useState("");
     const [editorData, setEditorData] = useState("");
 
     const [formData, setFormData] = useState({
         userId: user.userId,
         feedContent: "",
-        category: "",
+        category: "일반 고민",
         isPublic: "",
     });
 
     const handleEditorChange = (data) => {
         setEditorData(data);
     };
-    
-    useEffect(() => {
-        const today = new Date();
-        const formattedDate = today.toLocaleDateString();
-        setCurrentDate(formattedDate);
-    }, []);
+
+
 
     useEffect(() => {
         setFormData((prevFormData) => ({
@@ -42,11 +38,11 @@ export default function FeedWriteForm(props) {
     }, [editorData, props.category]);
 
     useEffect(() => {
-        if (formData.isPublic === "Y" || formData.isPublic === "N") {
-            postFeed(formData);
+        if(formData.isPublic.length > 0) {
+            postFeed(formData)
         }
-        
-    }, [formData]);
+
+    }, [formData.isPublic]);
 
     const publicHandleSubmit = (e) => {
         e.preventDefault();
@@ -64,14 +60,16 @@ export default function FeedWriteForm(props) {
         }));
     };
 
+
     return (
         <div className='w-4/5 p-4 shadow-xl'>
             <div className='flex justify-between pb-4'>
-                <div className="border flex">
-                    <img className="" src="#" alt="profile-img" />
+                <div className="border flex items-center gap-2">
+                    <div className="border w-10 h-10 rounded-full overflow-hidden">
+                        {/* <img className="block w-full" src={user.userProfileUrl} alt="userImg" /> */}
+                        <img className="block w-full" src={"#"} alt="userImg" />
+                    </div>
                     <p>{user.userId}</p>
-                    <p className='pl-2 pr-2'>|</p>
-                    <p>{currentDate}</p>
                 </div>
                 <div className="flex gap-4">
                     <Button text={"등록"} onClick={publicHandleSubmit} />
@@ -81,7 +79,8 @@ export default function FeedWriteForm(props) {
             <div className="pb-4">
                 <CustomEditor value={editorData} setData={setEditorData} onChange={handleEditorChange} />
             </div>
-            <span className='p-1 border text-gray-500'>#{props.category}</span>
+            <span className='p-1 border text-gray-500'>#{formData.category != "" ? formData.category : "일반 고민"}</span>
+            {/* <span className='p-1 border text-gray-500'>#{formData.category}</span> */}
         </div>
     );
 }

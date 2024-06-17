@@ -40,7 +40,7 @@ export default function FeedNav({ getData }) {
     }, [category]);
 
     return (
-        <div className="text-black after:content-[''] after:block after:w-full after:h-px after:bg-gray-400 flex-auto sticky top-[7.65rem] bg-white">
+        <div className="text-black after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[1px] after:left-0 after-bottom-0 flex-auto sticky top-[7.65rem] bg-white">
             <div className="">
                 <div className="container mx-auto flex-row items-center">
                     <div className="space-x-7 p-4">

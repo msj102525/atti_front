@@ -26,12 +26,17 @@ const editorConfiguration = {
     ]
 };
 
+const editorConfigurationReply = {
+    toolbar: [
+    ]
+};
+
 function CustomEditor( props ) {
         return (
             <CKEditor
                 editor={ Editor }
                 config={ editorConfiguration }
-                data={ props.initialData }
+                data={ props.initialData || ""}
                 onChange={ (event, editor ) => {
                     const data = editor.getData();
                     props.setData(data)

@@ -1,5 +1,6 @@
 import { getListByCategory } from "@/api/feed/feed";
 import { useRef, useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function FeedList({ category }) {
     const [feedData, setFeedData] = useState([]);
@@ -75,40 +76,46 @@ export default function FeedList({ category }) {
             <div className="flex justify-center">
                 <div className="gap-8 columns-2">
                     {feedData.map((feed, idx) => (
-                        <div key={idx} className="flex flex-col border max-w-md p-4 rounded-[40px] mb-4">
-                            <div className="flex gap-2 text-m items-center text-gray-500 pb-2">
-                                <p>{feed.category}</p>
-                                <p>|</p>
-                                <div className="border w-10 h-10 rounded-full overflow-hidden">
-                                    {/* <img className="block w-full" src={feed.feedWriterProfileUrl} alt="userImg" /> */}
-                                    <img className="block w-full" src={"#"} alt="userImg" />
-                                </div>
-                                <p>{feed.inPublic === "Y" ? feed.feedWriterId : "비공개"}</p>
-                                <p>{feed.feedDate}</p>
-                            </div>
-                            <div className="text-lg max-h-60 overflow-hidden line-clamp-[8] mb-4">
-                                {feed.feedContent}
-                            </div>
-                            <div className="flex gap-1">
-                                <img src={feed.loginUserIsLiked ? "/feed/fillHeart.png" : "/feed/emptyHeart.png"} alt="" />
-                                <img src={"/feed/comment.png"} alt="댓글" />
-                                {feed.replyCount}
-                            </div>
-                            <div className={`${feed.dcomentExist ? "block" : "hidden"} border p-1 rounded-[20px] bg-cyan-100`}>
-                                <div className="flex items-center">
+                        <div key={idx} className="flex flex-col border max-w-md p-4 rounded-[40px] mb-4 cursor">
+                            <Link href={`feed/${feed.feedNum}`}>
+                                <div className="flex gap-2 text-m items-center text-gray-500 pb-2">
+                                    <p>{feed.category}</p>
+                                    <p>|</p>
                                     <div className="border w-10 h-10 rounded-full overflow-hidden">
-                                        {/* <img className="block w-full bg-white" src={feed.docterImgUrl} alt="userImg" /> */}
-                                        <img className="block w-full bg-white" src={"#"} alt="userImg" />
+                                        {/* <img className="block w-full" src={feed.feedWriterProfileUrl} alt="userImg" /> */}
+                                        <img className="block w-full" src={"#"} alt="userImg" />
                                     </div>
-                                    <p>{feed.docterName}님의 전문답변</p>
+                                    <p>{feed.inPublic === "Y" ? feed.feedWriterId : "비공개"}</p>
+                                    <p>{feed.feedDate}</p>
                                 </div>
-                                <div className="text-lg max-h-60 overflow-hidden line-clamp-[3] mb-4">
-                                    {feed.docterComment}
+
+                                <div className="text-lg max-h-60 overflow-hidden line-clamp-[8] mb-4" dangerouslySetInnerHTML={{ __html: feed.feedContent }} />
+
+                                <div className="flex gap-x-4">
+                                    <div className="flex gap-1">
+                                        <img src={feed.loginUserIsLiked ? "/feed/fillHeart.png" : "/feed/emptyHeart.png"} alt="" />
+                                        {feed.likeCount}
+                                    </div>
+                                    <div className="flex gap-1">
+                                        <img src={"/feed/comment.png"} alt="댓글" />
+                                        {feed.replyCount}
+                                    </div>
                                 </div>
-                            </div>
+                                <div className={`${feed.dcomentExist ? "block" : "hidden"} border p-1 rounded-[20px] bg-cyan-100`}>
+                                    <div className="flex items-center">
+                                        <div className="border w-10 h-10 rounded-full overflow-hidden">
+                                            {/* <img className="block w-full bg-white" src={feed.docterImgUrl} alt="userImg" /> */}
+                                            <img className="block w-full bg-white" src={"#"} alt="userImg" />
+                                        </div>
+                                        <p>{feed.docterName}님의 전문답변</p>
+                                    </div>
+                                    <div className="text-lg max-h-60 overflow-hidden line-clamp-[3] mb-4">
+                                        {feed.docterComment}
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
                     ))}
-                    {/* <div className={page > totalPage ? "hidden" : ""} ref={observeRef}>Loading...</div> */}
                     <div ref={elementRef}>endData...</div>
                 </div>
             </div>
