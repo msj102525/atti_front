@@ -25,7 +25,7 @@ export const top5FeedContent = () => {
 
 export const getListByCategory = async (category, page, size) => {
     try {
-        if (category === "모든 사연") category = "";
+        if (category === "모든 사연" || category === "최신순") category = "";
 
         console.log("axios start", category, page, size);
         console.log("page : ", page)

@@ -50,7 +50,7 @@ export default function Navigation() {
             <li
               className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}
             >
-              <Link href="/faq/faqList">FAQ</Link>
+              <Link href="/faq/faq">FAQ</Link>
             </li>
             <li
               className={` hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}

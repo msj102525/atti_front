@@ -16,13 +16,17 @@ export const getOnewordSubjectList = ({ page, size }) => {
 }
 
 export const getOnewordSubjectDetail = (owsjNum) => {
-    axios.get(`/onewordsubject/onesjdetail/${owsjNum}`).then(response => {
-        // console.log('Read count incremented successfully', response);
-        console.log('Read successfully : ', response);
-    }).catch(error => {
-        // console.error('Error incrementing read count', error);
-        console.error('Error : ', error);
-    });
+    return axios.get(`/onewordsubject/onesjdetail/${owsjNum}`)
+        .then(res => {
+            console.log('Read successfully : ', res);
+            console.log('Read successfully2 : ', res.data);
+            return res.data;
+        })
+        .catch(error => {
+																 
+            console.error('Error : ', error);
+            throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록 함
+        });
 }
 
 export const insertOnewordSubject = (onewordsubjectData) =>{
@@ -33,9 +37,13 @@ export const insertOnewordSubject = (onewordsubjectData) =>{
     })
 }
 
-export const updateOnewordSubject = (owsjNum, postData) =>{
+export const updateOnewordSubject = (postData) =>{
     console.log("postData : ", postData);
-    return axios.put(`/onewordsubject/${owsjNum}`, postData).then(res =>{
+    // return axios.put(`/onewordsubject/${owsjNum}`, postData).then(res =>{
+    //     console.log("res :", res);
+    //     return res;
+    // })
+    return axios.put(`/onewordsubject`, postData).then(res =>{
         console.log("res :", res);
         return res;
     })
@@ -43,7 +51,7 @@ export const updateOnewordSubject = (owsjNum, postData) =>{
 
 export const deleteOnewordSubject = (owsjNum) =>{
     console.log("owsjNum : ", owsjNum);
-    return axios.put("/onewordsubject", owsjNum).then(res =>{
+    return axios.delete(`/onewordsubject/${owsjNum}`, owsjNum).then(res =>{
         console.log("res :", res);
         return res;
     })

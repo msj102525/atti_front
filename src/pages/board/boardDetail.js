@@ -14,6 +14,20 @@ function NoticeDetail() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const router = useRouter();
     const { boardNum } = router.query;
+    const [userType, setUserType] = useState(''); // 유저 타입 상태 추가
+
+    useEffect(() => {
+        const fetchUserType = async () => {
+          try {
+            const response = await axios.get('http://localhost:8080/users/type'); // 유저 타입을 가져오는 API
+            setUserType(response.data.userType);
+          } catch (error) {
+            console.error('Error fetching user type:', error);
+          }
+        };
+    
+        fetchUserType();
+      }, []);
 
     useEffect(() => {
         if (boardNum) {
@@ -87,6 +101,7 @@ function NoticeDetail() {
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {userType === 'A' && (
                     <Mintbutton
                         onClick={handleBoardUpdateClick}
                         text="수정"
@@ -94,6 +109,8 @@ function NoticeDetail() {
                         sizeH="h-12"
                         fontSize="text-lg"
                     />
+                    )}
+                    {userType === 'A' && (
                     <Mintbutton
                         onClick={handleDeleteClick}
                         text="삭제"
@@ -101,6 +118,7 @@ function NoticeDetail() {
                         sizeH="h-12"
                         fontSize="text-lg"
                     />
+                    )}
                 </div>
             </div>
             <Modal

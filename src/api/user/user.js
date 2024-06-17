@@ -1,10 +1,10 @@
-import axios from "../axiosApi";
+import axios from "../axiosApi"; // axios 인스턴스를 사용
 import { authStore } from "@/pages/stores/authStore";
 
-
 const baseUrl = "/users";
-export const signup = (singUpData) => {
-  return axios.post(baseUrl + "/signup", singUpData).then((res) => {
+
+export const signup = (signUpData) => {
+  return axios.post(baseUrl + "/signup", signUpData).then((res) => {
     return res;
   });
 };
@@ -25,15 +25,44 @@ export const login = (loginData) => {
     });
 };
 
-
 export const logout = () => {
-  return axios.post("/logout").then((res) => {
-       return res;
+  const token = localStorage.getItem('token');
+  return axios.post("/logout", {}, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((res) => {
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("isAdmin");
+    window.localStorage.removeItem("refresh");
+    return res;
   });
 };
 
-export const logoutkakao = () =>{
-  return axios.post("/kakao/logout").then((res) =>{
+export const logoutkakao = () => {
+  const token = localStorage.getItem('token');
+  return axios.post("/kakao/logout", {}, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((res) => {
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("isAdmin");
+    window.localStorage.removeItem("refresh");
+    return res;
+  });
+};
+
+export const logoutSocial = () => {
+  const token = localStorage.getItem('token');
+  return axios.post("/logoutSocial", {}, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((res) => {
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("isAdmin");
+    window.localStorage.removeItem("refresh");
     return res;
   });
 };
