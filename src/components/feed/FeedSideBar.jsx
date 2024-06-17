@@ -44,14 +44,17 @@ export default function FeedSideBar() {
             <div className="text-xl text-center pt-2">
                 <p className="py-2">지금 주목 받는 사연</p>
                 <ul>
-                    {TOP5FEEDCONTENT.map((feedContent, idx) => (
-                        <li
-                            key={feedContent}
-                            className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-start font-semibold p-1 pl-6 truncate text-slate-500 text-lg"
-                        >
-                            {idx + 1}. {feedContent}
-                        </li>
-                    ))}
+                    {top5FeedContentResult.map((feed, idx) => {
+                        const sanitizedContent = feed.feedContent.replace(/<\/?[^>]+(>|$)/g, " ");
+                        return (
+                            <li
+                                key={idx}
+                                className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-start font-semibold p-1 pl-6 truncate text-slate-500 text-lg"
+                            >
+                                {idx + 1}. {sanitizedContent}
+                            </li>
+                        );
+                    })}
                 </ul>
             </div>
         </div>

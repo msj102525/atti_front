@@ -1,35 +1,57 @@
-import { usePathname } from "next/navigation";
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Button from "../common/Button";
 import { postFeed } from "@/api/feed/feed";
+import { useRouter } from 'next/router';
+
 
 const CustomEditorReply = dynamic(() => {
     return import('@/components/common/custom-editorReply');
 }, { ssr: false });
 
 
-
 let user = {
-    userId: "user05",
+    userId: "user01",
     userProfileUrl: "#"
 }
 
 
-
 export default function FeedDetail({ data }) {
+    const router = useRouter();
+
     const [editorData, setEditorData] = useState(data.feedContent);
-    const path = usePathname();
 
     const modFormData = {
         userId: data.feedWriterId,
+        category: data.category,
+        inPublic: data.inPublic,
         feedContent: editorData
     }
 
+    const [formData, setFormData] = useState({
+        userId: user.userId,
+        feedContent: "",
+        category: "일반 고민",
+        inPublic: "",
+    });
+
     const handleModSubmit = () => {
+        console.log(data);
         console.log(modFormData);
-        postFeed(modFormData);
-    }
+    
+        postFeed(modFormData)
+            .then(res => {
+                if (res.status === 201) {
+                    router.push("/feed"); 
+                } else {
+                    console.error("Unexpected response status:", res.status);
+                }
+            })
+            .catch(err => {
+                console.error("피드 등록 실패:", err);
+            });
+    };
+    
 
     return (
         <div className="max-w-screen-lg">
@@ -58,7 +80,7 @@ export default function FeedDetail({ data }) {
                 </div>
                 <div className="pb-4 w-[38vw]">
                     {editorData && (
-                        <CustomEditorReply value={editorData} initialData={data.feedContent} setData={setEditorData} />
+                        <CustomEditorReply readOnly={data.feedWriterId == user.userId ? false : true} value={editorData} initialData={data.feedContent} setData={setEditorData} />
                     )}
                 </div>
                 <div className="flex gap-x-4">

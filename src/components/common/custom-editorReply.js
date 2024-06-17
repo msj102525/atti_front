@@ -1,31 +1,36 @@
-// components/custom-editor.js
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import Editor from 'src/ckeditor5/build/ckeditor';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+const CustomEditorReply = ({ value, initialData, setData, readOnly }) => {
+    useEffect(() => {
+        // CKEditor 인스턴스에 접근해서 readOnly 모드 설정
+        const editorInstance = document.querySelector('.ck-editor__editable');
+        if (editorInstance) {
+            editorInstance.contentEditable = !readOnly;
+        }
+    }, [readOnly]);
 
-
-const editorConfigurationReply = {
-    toolbar: [
-    ],
-    placeholder: "댓글을 입력하세요"
-};
-
-
-
-function CustomEditorReply( props ) {
     return (
         <CKEditor
-            editor={ Editor }
-            config={ editorConfigurationReply }
-            data={ props.initialData || ""}
-            onChange={ (event, editor ) => {
+            editor={ClassicEditor}
+            data={initialData || ""}
+            config={{
+                toolbar: readOnly ? [] : undefined, // readOnly 모드일 때 툴바를 숨깁니다.
+            }}
+            disabled={readOnly}
+            onReady={editor => {
+                // readOnly 모드일 때 툴바 숨기기
+                if (readOnly) {
+                    editor.ui.view.toolbar.element.style.display = 'none';
+                }
+            }}
+            onChange={(event, editor) => {
                 const data = editor.getData();
-                props.setData(data)
-            } }
+                setData(data);
+            }}
         />
-    )
+    );
 }
 
 export default CustomEditorReply;

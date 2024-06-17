@@ -22,7 +22,7 @@ export default function FeedWriteForm(props) {
         userId: user.userId,
         feedContent: "",
         category: "일반 고민",
-        isPublic: "",
+        inPublic: "",
     });
 
     const handleEditorChange = (data) => {
@@ -40,24 +40,24 @@ export default function FeedWriteForm(props) {
     }, [editorData, props.category]);
 
     useEffect(() => {
-        if (formData.isPublic.length > 0) {
+        if (formData.inPublic.length > 0) {
             postFeed(formData)
                 .then(res => {
                     if (res.status === 201) {
-                        router.push("/feed"); // 응답 상태 코드가 201일 때 페이지 이동
+                        router.push("/feed"); 
                     }
                 })
                 .catch(err => {
                     console.error("피드 등록 실패:", err);
                 });
         }
-    }, [formData.isPublic, router]);
+    }, [formData.inPublic, router]);
 
     const publicHandleSubmit = (e) => {
         e.preventDefault();
         setFormData((prevFormData) => ({
             ...prevFormData,
-            isPublic: "Y"
+            inPublic: "Y"
         }));
     };
 
@@ -65,7 +65,7 @@ export default function FeedWriteForm(props) {
         e.preventDefault();
         setFormData((prevFormData) => ({
             ...prevFormData,
-            isPublic: "N"
+            inPublic: "N"
         }));
     };
 

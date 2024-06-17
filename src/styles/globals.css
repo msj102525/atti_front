@@ -28,7 +28,7 @@ input {
 }
 
 p {
-    cursor: default;
+    cursor: pointer;
 }
 
 html {
