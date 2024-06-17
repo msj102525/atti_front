@@ -26,7 +26,7 @@ const Sidebar = () => {
                     {openMenu === 'member' && (
                         <ul>
                             <li onClick={() => handleNavigation('/admin/memberList')}>회원 리스트</li>
-                            <li onClick={() => handleNavigation('/admin/suspendedMembers')}>정지 회원</li>
+                            <li onClick={() => handleNavigation('/admin/suspensionMemberList')}>정지 회원</li>
                         </ul>
                     )}
                     <li onClick={() => toggleMenu('post')}>

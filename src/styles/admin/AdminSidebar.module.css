@@ -3,18 +3,22 @@
     background-color: #d8fab8;
     padding: 10px;
     position: fixed;
-    top: 0;
+    /* top: 0; */
+    top: 120px; /* 헤더의 높이에 맞게 조정 (예시로 60px 설정) */
     left: 0;
-    height: 100%;
+    /* height: 100%; */
+    height: calc(100% - 60px); /* 헤더의 높이에 맞게 조정 */
     overflow: auto;
     font-family: Arial, sans-serif;
     font-size: 14px;
+    z-index: 1;/* 추가한 부분 */
 }
 
 .menu {
     display: flex;
     flex-direction: column;
-    height: calc(100% - 50px); /* Adjust height to account for title */
+    height: calc(100% - 50px); /*Adjust height to account for title */
+    /*height: 100%;*/
     padding-top: 10px;
 }
 

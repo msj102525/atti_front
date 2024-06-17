@@ -46,12 +46,39 @@ export const getMemberList = ({ searchField , searchInput, page, size }) => {
         });
 }
 
+//정지리스트 뽑아오기
+
+export const getSuspensionMemberList = ({ searchField , searchInput, page, size }) => {
+    // 쿼리 파라미터를 사용하여 URL 생성
+    // if (!searchField) {
+    //     searchField = 'userId';
+    // }
+    const params = new URLSearchParams({
+            searchField,
+            searchInput,
+            page,
+            size
+    }).toString();
+
+    return axios.get(`/admin/suspensionMemberList?${params}`)
+        .then(response => {
+            return response.data;
+        });
+}
+
 
 
 export const deleteMember = async (userId) => {
     const response = await axios.delete(`/admin/api/deletemembers/${userId}`);
     return response.data;
 };
+
+//정지해제(정지리스트상에서 삭제)
+export const deleteSuspensionMember = async (suspensionNo) => {
+    const response = await axios.delete(`/admin/api/deletesuspensionmembers/${suspensionNo}`);
+    return response.data;
+};
+
 
 export const updateMember = async (userId, userData) => {
     try {
