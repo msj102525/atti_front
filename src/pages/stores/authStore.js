@@ -21,7 +21,7 @@ class AuthStore {
     this.isAdmin = status;
   }
   setsocialLoggedIn(status){
-    socialLoggedIn = status;
+    this.socialLoggedIn = status;
   }
 }
 

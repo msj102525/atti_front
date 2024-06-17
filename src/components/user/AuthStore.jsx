@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { authStore } from '@/pages/stores/authStore';
-import { logout, logoutkakao, logoutSocial } from '@/api/user/user'; // 소셜 로그아웃 API 추가
+import { logout, logoutkakao, logoutSocial } from '@/api/user/user';
 
 const AuthStatus = observer(() => {
   const router = useRouter();
@@ -21,7 +21,6 @@ const AuthStatus = observer(() => {
         router.push('/'); 
       } else {
         await logout();
-        await logoutkakao();
         authStore.setLoggedIn(false); // 일반 로그아웃 처리
         router.push('/'); 
       }
