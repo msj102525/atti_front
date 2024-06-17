@@ -1,12 +1,11 @@
 import axios from '../axiosApi';
 
-export const postFeed = async (postData) => {
-    if(postData.category == "") postData.category = "일반 고민";
-    
+export const postFeed = (postData) => {
+    if (postData.category == "") postData.category = "일반 고민";
+
     console.log("AxiosPostData : ", postData);
-    return await axios.post("/feed", postData)
+    return axios.post("/feed", postData)
         .then(res => {
-            console.log("res :", res);
             return res;
         })
         .catch(err => {
@@ -17,7 +16,6 @@ export const postFeed = async (postData) => {
 export const top5FeedContent = () => {
     return axios.get("/feed/top5")
         .then(res => {
-            // console.log(res);
             return res.data;
         })
         .catch(err => {

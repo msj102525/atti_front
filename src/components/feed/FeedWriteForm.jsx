@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Button from '../common/Button';
 import { postFeed } from '@/api/feed/feed.js';
+import { useRouter } from 'next/router';
 
 const CustomEditor = dynamic(() => {
     return import('@/components/common/custom-editor');
@@ -13,6 +14,7 @@ let user = {
 }
 
 export default function FeedWriteForm(props) {
+    const router = useRouter();
 
     const [editorData, setEditorData] = useState("");
 
@@ -38,11 +40,18 @@ export default function FeedWriteForm(props) {
     }, [editorData, props.category]);
 
     useEffect(() => {
-        if(formData.isPublic.length > 0) {
+        if (formData.isPublic.length > 0) {
             postFeed(formData)
+                .then(res => {
+                    if (res.status === 201) {
+                        router.push("/feed"); // 응답 상태 코드가 201일 때 페이지 이동
+                    }
+                })
+                .catch(err => {
+                    console.error("피드 등록 실패:", err);
+                });
         }
-
-    }, [formData.isPublic]);
+    }, [formData.isPublic, router]);
 
     const publicHandleSubmit = (e) => {
         e.preventDefault();
