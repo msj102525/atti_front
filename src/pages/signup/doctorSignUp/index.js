@@ -15,6 +15,7 @@ export default function DoctorSignUp() {
   const [code, setCode] = useState("");
   const [emailReadOnly, setEmailReadOnly] = useState(false);
   const [codeReadOnly, setCodeReadOnly] = useState(false);
+  const [completeCertificate, setCompleteCertificate] = useState(false);
 
   const [idValid, setIdValid] = useState(false);
   const [pwValid, setPwValid] = useState(false);
@@ -95,6 +96,7 @@ export default function DoctorSignUp() {
   const sendCode = () => {
     setCodeInput(true);
     setEmailReadOnly(true);
+    setCompleteCertificate(true);
     handleEmailVerification();
   };
 
@@ -128,7 +130,7 @@ export default function DoctorSignUp() {
     setEmail(emailValue);
     if (
       emailValue.includes("@kma.org") ||
-      emailValue.includes("smkr96@naver.com")
+      emailValue.includes("smkr96@gachon.ac.kr")
     ) {
       setEmailValid(true);
       setEmailButtonColor("teal-400");
@@ -259,7 +261,7 @@ export default function DoctorSignUp() {
             <div className="flex justify-center">
               <button
                 className={`ml-2 h-full px-3 rounded-full font-bold text-xs text-white ${
-                  emailValid
+                  emailValid && !completeCertificate
                     ? "bg-teal-400 cursor-pointer"
                     : "bg-gray-400 cursor-not-allowed"
                 }`}

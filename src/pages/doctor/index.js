@@ -150,8 +150,8 @@ export default function DoctorList() {
                     <SearchSituationTag
                       key={index}
                       name={tag}
-                      handleClick={() => handleTagClick(tag)} 
-                      isSelected={selectedTags.includes(tag)} 
+                      handleClick={() => handleTagClick(tag)}
+                      isSelected={selectedTags.includes(tag)}
                     />
                   ))}
                 </div>
@@ -161,8 +161,8 @@ export default function DoctorList() {
                     <SearchSymptomTag
                       key={index}
                       name={tag}
-                      handleClick={() => handleTagClick(tag)} 
-                      isSelected={selectedTags.includes(tag)} 
+                      handleClick={() => handleTagClick(tag)}
+                      isSelected={selectedTags.includes(tag)}
                     />
                   ))}
                 </div>
