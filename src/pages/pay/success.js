@@ -1,0 +1,79 @@
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import Header from '../common/Header';
+import Footer from '../common/Footer';
+
+const SuccessPage = () => {
+  const router = useRouter();
+  const { paymentKey, orderId, amount } = router.query;
+  const [timeLeft, setTimeLeft] = useState(3);
+
+  useEffect(() => {
+    if (!paymentKey || !orderId || !amount) {
+      return;
+    }
+
+    async function confirmPayment() {
+      const requestData = {
+        paymentKey,
+        orderId,
+        amount,
+      };
+
+      try {
+        const response = await fetch('/api/confirm', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+          router.push(`/pay/fail?message=${json.message}&code=${json.code}`);
+        }
+
+        // 결제 성공 비즈니스 로직을 구현하세요.
+        console.log(json);
+      } catch (error) {
+        console.error('Error confirming payment:', error);
+        router.push(`/pay/fail?message=${error.message}&code=${error.code}`);
+      }
+    }
+
+    confirmPayment();
+  }, [paymentKey, orderId, amount]);
+
+  // useEffect(() => {
+  //   if (timeLeft > 0) {
+  //     const timer = setTimeout(() => {
+  //       setTimeLeft(timeLeft - 1);
+  //     }, 1000);
+  //     return () => clearTimeout(timer);
+  //   } else {
+  //     router.push('/chat/chat');
+  //   }
+  // }, [timeLeft, router]);
+
+  return (
+    <div className="bg-white min-h-screen flex flex-col">
+      <Header />
+      <div className="flex flex-col items-center justify-center flex-grow p-6">
+        <h2 className="text-4xl font-bold text-green-600 mb-6">결제 성공!</h2>
+        <div className="bg-green-50 shadow-lg rounded-lg p-8 w-full max-w-md border border-green-300">
+          <p className="text-xl font-medium text-gray-700 mb-2">주문번호: <span className="font-semibold">{orderId}</span></p>
+          <p className="text-xl font-medium text-gray-700 mb-2">결제 금액: <span className="font-semibold">{amount} 원</span></p>
+          <p className="text-xl font-medium text-gray-700">결제키: <span className="font-semibold">{paymentKey}</span></p>
+        </div>
+        <p className="mt-6 text-lg text-gray-600">
+          {timeLeft}초 후에 채팅 페이지로 이동합니다...
+        </p>
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default SuccessPage;

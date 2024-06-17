@@ -38,3 +38,26 @@
     width: 5px; /* 선의 두께 */
     background-color: #000000; /* 선 색상 */
   }
+
+  .paymentMethods {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .paymentMethod {
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 5px;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+  }
+  
+  .paymentMethod img {
+    display: block;
+  }
+  
+  .paymentMethod.selected {
+    border-color: blue; /* 선택된 결제 방법에 대한 스타일 추가 */
+  }

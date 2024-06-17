@@ -3,6 +3,7 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import FAQItem from './faqItem';
 import Header from '../common/Header';
+import Pagination from "@/components/common/page";  // Pagination 컴포넌트를 가져옵니다.
 import styles from '../../styles/faq/faqModal.module.css'; // 모듈 스타일 가져오기
 
 Modal.setAppElement('#__next'); // 이 줄을 추가하여 접근성을 설정합니다.
@@ -17,6 +18,9 @@ const FAQ = () => {
   const [categories, setCategories] = useState([]);
   const [userType, setUserType] = useState(''); // 유저 타입 상태 추가
   const [isEditMode, setIsEditMode] = useState(false); // 모드 상태 추가
+  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태 추가
+  const [pageCount, setPageCount] = useState(0); // 총 페이지 수 상태 추가
+  const itemsPerPage = 10; // 페이지 당 항목 수
 
   useEffect(() => {
     const fetchUserType = async () => {
@@ -30,15 +34,19 @@ const FAQ = () => {
 
     fetchUserType();
 
-    axios.get('http://localhost:8080/faq/faq')
-      .then(response => {
-        setFaqData(response.data);
-        setCategories(['All', ...new Set(response.data.map(faq => faq.faqCategory))]);
-      })
-      .catch(error => {
-        console.error('Error fetching FAQ data:', error);
-      });
-  }, []);
+    fetchFAQs(currentPage);
+  }, [currentPage]);
+
+  const fetchFAQs = async (page) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/faq/faq?page=${page}&size=${itemsPerPage}`);
+      setFaqData(response.data.content);
+      setPageCount(response.data.totalPages);
+      setCategories(['All', ...new Set(response.data.content.map(faq => faq.faqCategory))]);
+    } catch (error) {
+      console.error('Error fetching FAQ data:', error);
+    }
+  };
 
   const filteredFAQs = faqData
     .filter(faq => selectedCategory === 'All' || faq.faqCategory === selectedCategory)
@@ -63,8 +71,7 @@ const FAQ = () => {
     if (window.confirm('정말로 이 FAQ를 삭제하시겠습니까?')) {
       axios.delete(`http://localhost:8080/faq/faq/${faqToDelete.faqNum}`)
         .then(() => {
-          const updatedFAQData = faqData.filter(faq => faq.faqNum !== faqToDelete.faqNum);
-          setFaqData(updatedFAQData);
+          fetchFAQs(currentPage);
         })
         .catch(error => {
           console.error('Error deleting FAQ:', error);
@@ -79,10 +86,7 @@ const FAQ = () => {
 
       axios.put(`http://localhost:8080/faq/faq/${currentFAQ.faqNum}`, updatedFAQ)
         .then(response => {
-          const updatedFAQData = faqData.map(faq =>
-            faq.faqNum === currentFAQ.faqNum ? response.data : faq
-          );
-          setFaqData(updatedFAQData);
+          fetchFAQs(currentPage);
           setIsModalOpen(false);
         })
         .catch(error => {
@@ -97,7 +101,7 @@ const FAQ = () => {
 
       axios.post('http://localhost:8080/faq/faq', newFAQ)
         .then(response => {
-          setFaqData([...faqData, response.data]);
+          fetchFAQs(currentPage);
           setIsModalOpen(false);
         })
         .catch(error => {
@@ -110,6 +114,10 @@ const FAQ = () => {
     setCurrentFAQ({ faqTitle: '', faqContent: '', faqCategory: '' });
     setIsEditMode(false);
     setIsModalOpen(true);
+  };
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
   };
 
   return (
@@ -170,6 +178,11 @@ const FAQ = () => {
         </div>
       </div>
       
+      <Pagination
+        pageCount={pageCount}
+        onPageChange={handlePageChange}
+        currentPage={currentPage}
+      />
 
       <Modal
         isOpen={isModalOpen}
