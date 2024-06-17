@@ -34,7 +34,6 @@ const MemberListComponent = observer(() => {
     const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
 
     const searchField = searchType === 'id' ? 'userId' : 'userName';
-    
 
     
 
@@ -82,8 +81,11 @@ const MemberListComponent = observer(() => {
         () => getMemberList({ searchField: searchParams.searchField, searchInput: searchParams.searchInput, page: page - 1, size }),
         {
             keepPreviousData: true,
+
+            
         }
     );
+
 
     useEffect(() => {
         refetch();
@@ -256,9 +258,9 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
     
 
     // 관리자 여부 설정
-    //useEffect(() => {
-        //setIsAdmin(localStorage.getItem("isAdmin") === "true");
-    //}, []);
+    // useEffect(() => {
+    //     setIsAdmin(localStorage.getItem("isAdmin") === "true");
+    // }, []);
 
     
 

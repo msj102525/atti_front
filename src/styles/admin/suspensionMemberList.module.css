@@ -24,6 +24,7 @@
   .container h2 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
+    text-align: center; /* 텍스트 가운데 정렬 */
   }
   
   .container select, .container input[type="text"], .container button {
@@ -45,6 +46,8 @@
     border-collapse: collapse;
     margin-top: 1rem;
     background-color: #ffffff; /* 테이블 배경색 변경 */
+    border-radius: 8px; /* 테두리 둥글게 */
+    overflow: hidden; /* 둥근 모서리 유지 */
   }
   
   .table th, .table td {

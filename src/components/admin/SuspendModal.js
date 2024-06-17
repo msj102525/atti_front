@@ -30,7 +30,11 @@ const SuspendModal = ({ isOpen, onClose, user }) => {
       await suspendMember(suspensionData);
       window.location.reload(); // 페이지 새로고침
     } catch (error) {
+      if (error.response && error.response.status === 400 && error.response.data === "This user is already suspended.") {
+        alert("이미 정지된 회원입니다.");
+      } else {
       console.error('Error suspending member:', error);
+      }
     } finally {
       setLoading(false);
       //onClose(); // 모달 닫기

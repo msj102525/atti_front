@@ -12,6 +12,15 @@
     font-family: Arial, sans-serif;
     font-size: 14px;
     z-index: 1;/* 추가한 부분 */
+
+    max-height: 77%; /* 최대 높이 설정 */
+
+    border-radius: 8px;
+
+    text-align: center; /* 모든 텍스트를 가운데 정렬 */
+
+    
+    
 }
 
 .menu {
@@ -23,7 +32,7 @@
 }
 
 .menuTitle {
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 10px;
 }
 
@@ -39,6 +48,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    transition: background-color 0.3s ease; /*메뉴 항목에 애니메이션 추가 */
+
+    
 }
 
 .menu ul li:hover {
@@ -47,6 +60,15 @@
 
 .menu ul ul {
     padding-left: 15px;
+
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease; /* 서브메뉴 열리고 닫힐 때 애니메이션 */
+}
+
+/* open 추가  */
+.menu ul ul.open {
+    max-height: 500px; /* 서브메뉴의 최대 높이를 설정 (필요에 따라 조정) */
 }
 
 .arrow {
@@ -58,4 +80,5 @@
 .content {
     margin-left: 220px; /* Add space to the left for the sidebar */
     padding: 20px;
+
 }

@@ -33,7 +33,7 @@ const SuspensionMemberListComponent = observer(() => {
    
     const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
 
-    const searchField = searchType === 'id' ? 'userId' : 'userName';
+    const searchField = searchType === 'id' ? 'userId' : 'suspensionTitle';
     
 
     
@@ -335,7 +335,7 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
                 <AdminSidebar />
                 <div className={styles.content}>
         <div className={styles.container}>
-            <h2>정지 회원 리스트</h2>
+            <h2 className={styles.centeredText}>정지 회원</h2>
             {/* <div style={{ height: "2vw", justifyContent: "center", textAlign: "right" }}> */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                 {/* <select value={size} onChange={handleSizeChange} style={{ height: "88%" }}>
