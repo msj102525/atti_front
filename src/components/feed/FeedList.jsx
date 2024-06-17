@@ -9,20 +9,28 @@ export default function FeedList({ category }) {
     const size = 10;
 
     useEffect(() => {
-        getListByCategory(category, page, size)
-        .then(res => {
-            setFeedData((prevProducts) => [...prevProducts, ...res]);
-        })
+        if (page === 0) return;
 
-    }, [page])
+        const fetchMoreData = async () => {
+            await getListByCategory(category, page, size)
+                .then(res => {
+                    setFeedData(prevFeedData => [...prevFeedData, ...res]);
+                    setHasMore(res.length === size);
+                })
+                .catch(error => {
+                    console.error("Error fetching more data:", error);
+                })
+        };
+        fetchMoreData();
+    }, [page]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const firstData = await getListByCategory(category, page, size);
-                setFeedData(firstData);
+                const firstData = await getListByCategory(category, 0, 10);
                 setPage(0);
-
+                setFeedData(firstData);
+                setHasMore(firstData.length === size);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -45,7 +53,6 @@ export default function FeedList({ category }) {
 
     };
 
-    // 컴포넌트 렌더링 이후에 실행되며 Intersection Observer를 설정
     useEffect(() => {
         const observer = new IntersectionObserver(onIntersection);
 
@@ -61,9 +68,6 @@ export default function FeedList({ category }) {
             }
         };
     }, [hasMore]);
-
-
-
 
 
     return (

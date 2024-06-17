@@ -7,12 +7,25 @@ import Header from '../common/Header';
 import SearchForm from "./search";
 import Mintbutton from "@/components/common/MintButton"; 
 
-
 const List = () => {
   const [boards, setBoards] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+  const [userType, setUserType] = useState(''); // 유저 타입 상태 추가
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/users/type'); // 유저 타입을 가져오는 API
+        setUserType(response.data.userType);
+      } catch (error) {
+        console.error('Error fetching user type:', error);
+      }
+    };
+
+    fetchUserType();
+  }, []);
 
   useEffect(() => {
     const fetchData = async (page = 0) => {
@@ -38,8 +51,6 @@ const List = () => {
         const finalBoards = updatedBoards.sort((a, b) => b.boardNum - a.boardNum);
 
         // 최종 데이터 설정
-        setBoards(finalBoards);
-
         setBoards(finalBoards);
         setPageCount(response.data.totalPages);
       } catch (error) {
@@ -81,9 +92,6 @@ const List = () => {
     }
   };
 
-
-
-
   return (
     <div>
       <Header />
@@ -111,7 +119,7 @@ const List = () => {
           ))}
         </tbody>
       </table>
-      <SearchForm onSubmit={handleSearchSubmit} />
+      <SearchForm onSubmit={handleSearchSubmit} userType={userType} />
       <Pagination pageCount={pageCount} onPageChange={handlePageChange} currentPage={currentPage} />
     </div>
   );

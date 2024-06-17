@@ -3,13 +3,13 @@ import styles from '@/styles/admin/SuspendModal.module.css'; // 기존 모달 �
 import { suspendMember } from '@/api/admin/memberList'; // 회원 정지 API 함수
 
 const SuspendModal = ({ isOpen, onClose, user }) => {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('게시글 도배');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
-      setTitle('');
+      setTitle('게시글 도배');
       setContent('');
     }
   }, [user]);
@@ -21,15 +21,20 @@ const SuspendModal = ({ isOpen, onClose, user }) => {
     setLoading(true);
     const suspensionData = {
       userId: user.userId,
-      suspensionTitle: title, // title 값을 전송
+      suspensionTitle: title || '게시글 도배', // title 값을 전송
       suspensionContent: content,
+      suspensionStatus: 'unactive' 
     };
     console.log('Sending suspension data:', suspensionData); // 디버깅 메시지 추가
     try {
       await suspendMember(suspensionData);
       window.location.reload(); // 페이지 새로고침
     } catch (error) {
+      if (error.response && error.response.status === 400 && error.response.data === "This user is already suspended.") {
+        alert("이미 정지된 회원입니다.");
+      } else {
       console.error('Error suspending member:', error);
+      }
     } finally {
       setLoading(false);
       //onClose(); // 모달 닫기
