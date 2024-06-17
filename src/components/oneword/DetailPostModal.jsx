@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-const DetailPostModal = ({ isOpen, onClose, post, onEdit, isAdmin }) => {
+const DetailPostModal = ({ isOpen, onClose, post, onEdit, onDelete, isAdmin }) => {
     const [owsjNum, setOwsjNum] = useState(null);
     const [owsjSubject, setOwsjSubject] = useState('');
 
     const handleEdit = async () => {
         try {
             onEdit({
-                owsjNum,
+                owsjNum: post.owsjNum,
                 owsjSubject
             });
             onClose();
@@ -16,12 +16,23 @@ const DetailPostModal = ({ isOpen, onClose, post, onEdit, isAdmin }) => {
         }
     };
 
+    const handleDelete = async () => {
+        const confirmDelete = window.confirm("삭제하시겠습니까?");
+        if (confirmDelete) {
+            try {
+                onDelete(post.owsjNum);
+                onClose();
+            } catch (error) {
+                console.error("Error deleting post:", error);
+            }
+        }
+
+    };
+
     useEffect(() => {
         if (isOpen && post && post.owsjNum && post.owsjSubject) {
-            setOwsjNum(post.owsjNum);
             setOwsjSubject(post.owsjSubject);
         } else {
-            setOwsjNum(null);
             setOwsjSubject(""); // post가 null이거나 owsjSubject가 없는 경우 빈 문자열로 설정
         }
     }, [isOpen, post]);
@@ -48,6 +59,7 @@ const DetailPostModal = ({ isOpen, onClose, post, onEdit, isAdmin }) => {
                 flexDirection: 'column',
             }}>
                 <p>이 포스트는 공지사항으로 등록되었습니다.</p>
+                <p>owsjNum: {post.owsjNum}</p>
                 <textarea
                     rows="5"
                     placeholder="주제를 입력하세요..."
@@ -55,12 +67,13 @@ const DetailPostModal = ({ isOpen, onClose, post, onEdit, isAdmin }) => {
                     onChange={(e) => setOwsjSubject(e.target.value)}
                 />
 
-                <div style={{display: "flex"}}>
+                <div style={{ display: "flex" }}>
                     {/* <button onClick={onLike} className="btn btn-success">추천하기</button> */}
                     {
                         // isAdmin &&
                         <button onClick={handleEdit} className="btn btn-warning">수정하기</button>
                     }
+                    <button onClick={handleDelete} className="btn btn-danger">삭제하기</button>
                     <button onClick={onClose} className="btn btn-primary">닫기</button>
                 </div>
             </div>
