@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from "../../styles/board/search.module.css";
 import MintButton from "@/components/common/MintButton"; 
 import { useRouter } from 'next/router';
 
-const SearchForm = ({ onSubmit, userType }) => {
+const SearchForm = ({ onSubmit }) => {
   const [action, setAction] = useState('title');
   const [beginDate, setBeginDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [keyword, setKeyword] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const adminStatus = localStorage.getItem('isAdmin');
+    setIsAdmin(adminStatus === 'true');
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -75,7 +81,7 @@ const SearchForm = ({ onSubmit, userType }) => {
           fontSize="text-lg"
         />
       </form>
-      {userType === 'A' && (
+      {isAdmin && (
         <div>
           <MintButton
             onClick={moveWrite}

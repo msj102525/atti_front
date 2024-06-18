@@ -18,6 +18,7 @@
     "mobx": "^6.12.3",
     "mobx-react": "^9.1.1",
     "mobx-react-lite": "^4.0.7",
+    "mqtt": "^5.7.0",
     "next": "^14.2.4",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.2",

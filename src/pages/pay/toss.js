@@ -8,9 +8,14 @@ const TossPaymentPage = () => {
   const paymentMethodsWidgetRef = useRef(null);
   const agreementWidgetRef = useRef(null);
   const [paymentWidget, setPaymentWidget] = useState(null);
-  const [amount, setAmount] = useState(50000);
+  const { amount, orderId, orderName, selectedTime } = router.query;
 
   useEffect(() => {
+    // selectedTime을 localStorage에 저장
+    if (selectedTime) {
+      localStorage.setItem("selectedTime", selectedTime);
+    }
+
     const initializePaymentWidget = async () => {
       try {
         const widgetClientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
@@ -26,15 +31,15 @@ const TossPaymentPage = () => {
     };
 
     initializePaymentWidget();
-  }, [amount]);
+  }, [amount, selectedTime]);
 
   const handlePaymentRequest = async () => {
     if (!paymentWidget) return;
 
     try {
       await paymentWidget.requestPayment({
-        orderId: "1W_pCfO4rzGrew9szJEcThKe",
-        orderName: "토스 티셔츠 외 2건",
+        orderId,
+        orderName,
         successUrl: `${window.location.origin}/pay/success`,
         failUrl: `${window.location.origin}/pay/fail`,
         customerEmail: "customer123@gmail.com",

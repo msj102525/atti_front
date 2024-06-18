@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FAQItem = ({ question, answer, isOpen, onToggle, onEdit, onDelete }) => {
+const FAQItem = ({ question, answer, isOpen, onToggle, onEdit, onDelete, isAdmin }) => {
   return (
     <div className="border-b border-gray-200 py-4">
       <button
@@ -15,20 +15,22 @@ const FAQItem = ({ question, answer, isOpen, onToggle, onEdit, onDelete }) => {
       {isOpen && (
         <div className="mt-2 text-gray-700">
           <p>{answer}</p>
-          <div className="mt-4">
-            <button 
-              className="text-blue-500 hover:underline mr-4"
-              onClick={onEdit}
-            >
-              수정
-            </button>
-            <button 
-              className="text-red-500 hover:underline"
-              onClick={onDelete}
-            >
-              삭제
-            </button>
-          </div>
+          {isAdmin && (
+            <div className="mt-4">
+              <button 
+                className="text-blue-500 hover:underline mr-4"
+                onClick={onEdit}
+              >
+                수정
+              </button>
+              <button 
+                className="text-red-500 hover:underline"
+                onClick={onDelete}
+              >
+                삭제
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

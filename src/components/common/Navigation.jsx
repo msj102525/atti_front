@@ -12,7 +12,7 @@ export default function Navigation() {
     { href: "/oneword/OnewordSubject", label: "오늘 한 줄" },
     { href: "/ai", label: "AI 서비스" },
     { href: "/board/boardList", label: "공지사항" },
-    { href: "/faq/faqList", label: "FAQ" },
+    { href: "/faq/faq", label: "FAQ" },
     { href: "#contact", label: "문의하기" },
   ];
 

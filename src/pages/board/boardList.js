@@ -11,21 +11,7 @@ const List = () => {
   const [boards, setBoards] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-  const [userType, setUserType] = useState(''); // 유저 타입 상태 추가
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchUserType = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/users/type'); // 유저 타입을 가져오는 API
-        setUserType(response.data.userType);
-      } catch (error) {
-        console.error('Error fetching user type:', error);
-      }
-    };
-
-    fetchUserType();
-  }, []);
 
   useEffect(() => {
     const fetchData = async (page = 0) => {
@@ -119,7 +105,7 @@ const List = () => {
           ))}
         </tbody>
       </table>
-      <SearchForm onSubmit={handleSearchSubmit} userType={userType} />
+      <SearchForm onSubmit={handleSearchSubmit} />
       <Pagination pageCount={pageCount} onPageChange={handlePageChange} currentPage={currentPage} />
     </div>
   );

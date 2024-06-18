@@ -16,24 +16,18 @@ const FAQ = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFAQ, setCurrentFAQ] = useState({});
   const [categories, setCategories] = useState([]);
-  const [userType, setUserType] = useState(''); // 유저 타입 상태 추가
+  const [isAdmin, setIsAdmin] = useState(false); // isAdmin 상태 추가
   const [isEditMode, setIsEditMode] = useState(false); // 모드 상태 추가
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태 추가
   const [pageCount, setPageCount] = useState(0); // 총 페이지 수 상태 추가
   const itemsPerPage = 10; // 페이지 당 항목 수
 
   useEffect(() => {
-    const fetchUserType = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/users/type'); // 유저 타입을 가져오는 API
-        setUserType(response.data.userType);
-      } catch (error) {
-        console.error('Error fetching user type:', error);
-      }
-    };
+    const adminStatus = localStorage.getItem('isAdmin');
+    setIsAdmin(adminStatus === 'true');
+  }, []);
 
-    fetchUserType();
-
+  useEffect(() => {
     fetchFAQs(currentPage);
   }, [currentPage]);
 
@@ -142,7 +136,6 @@ const FAQ = () => {
                 </button>
               ))}
             </div>
-            
           </div>
           
           {filteredFAQs.map((faq, index) => (
@@ -152,29 +145,29 @@ const FAQ = () => {
               answer={faq.faqContent}
               isOpen={openFAQ === index}
               onToggle={() => handleToggle(index)}
-              onEdit={() => userType === 'A' && handleEdit(index)}
-              onDelete={() => userType === 'A' && handleDelete(index)}
+              onEdit={() => handleEdit(index)}
+              onDelete={() => handleDelete(index)}
+              isAdmin={isAdmin} // isAdmin 상태를 FAQItem 컴포넌트로 전달
             />
-            
           ))}
-        <div className="mt-4 sm:mt-0">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="mr-8 px-4 py-2 border rounded-full w-full sm:w-64"
-              />
-              
-        {userType === 'A' && (
-        <button
-          onClick={handleNewFAQ}
-          className="mt-8 mb-4 px-4 py-2 bg-teal-400 text-white rounded-full shadow-lg"
-        >
-          새 FAQ 작성
-        </button>
-        )}
-        </div>
+          
+          <div className="mt-4 sm:mt-0">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="mr-8 px-4 py-2 border rounded-full w-full sm:w-64"
+            />
+            {isAdmin && (
+              <button
+                onClick={handleNewFAQ}
+                className="mt-8 mb-4 px-4 py-2 bg-teal-400 text-white rounded-full shadow-lg"
+              >
+                새 FAQ 작성
+              </button>
+            )}
+          </div>
         </div>
       </div>
       

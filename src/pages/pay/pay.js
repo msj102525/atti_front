@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { termsContent1, termsContent2, termsContent3 } from './payContent';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
@@ -17,6 +18,32 @@ function App() {
   });
 
   const router = useRouter();
+  const [userId, setUserId] = useState('');
+
+  // 유저 이름 가져오기
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const token = localStorage.getItem('token'); // 로컬 스토리지에서 JWT를 가져옵니다.
+        if (!token) {
+          console.error("No token found");
+          return;
+        }
+
+        const response = await axios.get(`http://localhost:8080/users/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setUserId(response.data.userId); // User 엔티티의 userId 필드를 사용
+        console.log("Fetched userId:", response.data.userId); // 콘솔로 userId 출력
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   const handleButtonClick = (time, price) => {
     setSelectedTime(time);
@@ -40,9 +67,11 @@ function App() {
     if (allTermsChecked && selectedPayment === 'toss') {
       try {
         const totalAmount = price + price / 10;
-        router.push(`/pay/toss?amount=${totalAmount}&orderId=order_${Date.now()}&selectedTime=${selectedTime}&orderName=${selectedTime} 채팅 이용권`);
+        const orderId = `${userId}_${new Date().toISOString().replace(/[-:.]/g, '')}`;
+
+        router.push(`/pay/toss?amount=${totalAmount}&orderId=${orderId}&selectedTime=${selectedTime}&orderName=${selectedTime} 채팅 이용권`);
       } catch (error) {
-        console.error(error);
+        console.error("Error generating orderId:", error);
         alert('Payment request failed');
       }
     }
