@@ -3,7 +3,7 @@ import axios from '../axiosApi';
 export const postLike = (feedNum) => {
 
     console.log("AxiosPostLikeFeed : ", feedNum);
-    return axios.post(`/feed/like?feed=${feedNum}`)
+    return axios.post(`/like?feed=${feedNum}`)
         .then(res => {
             return res;
         })
