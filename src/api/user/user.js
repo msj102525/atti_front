@@ -24,14 +24,12 @@ export const login = (loginData) => {
         window.localStorage.setItem("profileUrl", response.data.profileUrl );
         window.localStorage.setItem("userType", response.data.userType || 'U');
         
-
         // authStore에 사용자 정보를 설정
         authStore.setLoggedIn(true);
         authStore.setUserId(response.data.userId);
         authStore.setUserName(response.data.userName);
         authStore.setNickName(response.data.nickName);
         authStore.setProfileUrl(response.data.profileUrl);
-        authStore.setUserType(response.data.userType || 'U');
       }
       return response;
     });

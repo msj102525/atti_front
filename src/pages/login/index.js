@@ -3,8 +3,21 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { login } from "@/api/user/user"; 
 import KakaoLogin from "@/components/user/kakaoLogin";
-import MoveMainLogo from "@/components/common/MoveMainLogo";// authStore import 추가
+import MoveMainLogo from "@/components/common/MoveMainLogo";
+import { authStore } from '@/pages/stores/authStore';
 // import Modal2 from "@/components/common/Modal2"; // 모달 컴포넌트 import 추가
+
+const redirectToUserTypePage = (userType, router) => {
+  if (userType === 'A') {
+    router.push('/admin/memberList');
+  } else if (userType === 'U') {
+    router.push('/');
+  } else if (userType === 'D') {
+    router.push('/');
+  } else {
+    router.push('/');
+  }
+};
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({
@@ -16,6 +29,7 @@ export default function LoginForm() {
     // const [modalMessage, setModalMessage] = useState('');
 
     const router = useRouter();
+
     const handleLoginSuccess = (data) => {
         const token = data.headers["authorization"] || data.headers["Authorization"];
         const pureToken = token ? token.split(" ")[1] : '';
@@ -26,25 +40,25 @@ export default function LoginForm() {
         window.localStorage.setItem("nickName", data.data.nickName || "");
         window.localStorage.setItem("profileUrl", data.data.profileUrl || '');
         window.localStorage.setItem("userType", data.data.userType || 'U');
-        window.localStorage.setItem("gender", data.data.gender || '');
-
+        
         authStore.setLoggedIn(true);
         authStore.setUserId(data.data.userId || '');
         authStore.setUserName(data.data.userName || "");
         authStore.setNickName(data.data.nickName || "");
         authStore.setProfileUrl(data.data.profileUrl || '');
         authStore.setUserType(data.data.userType || 'U');
-        authStore.setGender(data.data.gender || '');
+
+        redirectToUserTypePage(data.data.userType, router); // 로그인 성공 후 리다이렉션
     };
 
     const loginMutation = useMutation(loginData => login(loginData), {
         onSuccess: (data) => {
-            handleLoginSuccess(data); // 로그인 성공 시 상태 설정
-            router.push('/');
+            handleLoginSuccess(data);
         },
         onError: (error) => {
-            setModalMessage('로그인에 실패했습니다. 다시 시도해주세요.');
-            setIsModalOpen(true);
+            console.error('로그인 실패:', error);
+            // setModalMessage('로그인에 실패했습니다. 다시 시도해주세요.');
+            // setIsModalOpen(true);
         },
     });
 

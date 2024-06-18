@@ -12,6 +12,18 @@ const AuthStatus = observer(() => {
     authStore.checkLoggedIn();
   }, []);
 
+  const redirectToUserTypePage = () => {
+    const userType = authStore.userType;
+    if (userType === 'A') {
+      router.push('/admin/memberList');
+    } else if (userType === 'U') {
+      router.push('/');
+    } else if (userType === 'D') {
+      router.push('/');
+    } else {
+      router.push('/');
+    }
+  };
 
   const handleLoginClick = async () => {
     try {
@@ -50,7 +62,8 @@ const AuthStatus = observer(() => {
     </div>
   );
 });
-// 새로운 함수 추가
+
+
 export const sendTempPassword = (data) => {
   return axios.post("/send-temp-password", data).then((res) => res);
 };

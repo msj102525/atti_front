@@ -5,11 +5,10 @@ class AuthStore {
   isAdmin = false;
   logoutkakao = false;
   userId = '';
-  userName = "";
-  nickName = "";
+  userName = '';
+  nickName = '';
   profileUrl = '';
   userType = '';
-
 
   constructor() {
     makeAutoObservable(this);
@@ -20,11 +19,10 @@ class AuthStore {
       this.isAdmin = JSON.parse(localStorage.getItem("isAdmin")) || false;
       this.logoutkakao = JSON.parse(localStorage.getItem("logoutkakao")) || false;
       this.userId = localStorage.getItem("userId") || '';
-      this.userName = localStorage.getItem("userName") || "";
-      this.nickName = localStorage.getItem("nickName") || "";
+      this.userName = localStorage.getItem("userName") || '';
+      this.nickName = localStorage.getItem("nickName") || '';
       this.profileUrl = localStorage.getItem("profileUrl") || '';
       this.userType = localStorage.getItem("userType") || '';
-
     }
   }
 
@@ -54,9 +52,9 @@ class AuthStore {
     localStorage.setItem("userId", userId);
   }
 
-  setUserName(status) {
+  setUserName(userName) {
     this.userName = userName;
-    localStorage.setItem("userName", userName, JSON.stringify(status));
+    localStorage.setItem("userName", userName);
   }
 
   setNickName(nickname) {
@@ -78,7 +76,6 @@ class AuthStore {
       throw new Error(`Invalid userType: ${type}. Valid values are 'U', 'A', 'D'.`);
     }
   }
-
 }
 
 export const authStore = new AuthStore();
