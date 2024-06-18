@@ -1,15 +1,15 @@
-import { makeAutoObservable, autorun } from "mobx";
+import { makeAutoObservable } from "mobx";
 
 class AuthStore {
   loggedIn = false;
   isAdmin = false;
   logoutkakao = false;
-  userId = false;
-  userName = '';
-  nickName = '';
+  userId = '';
+  userName = "";
+  nickName = "";
   profileUrl = '';
   userType = '';
-  gender = '';
+
 
   constructor() {
     makeAutoObservable(this);
@@ -19,18 +19,18 @@ class AuthStore {
       this.loggedIn = JSON.parse(localStorage.getItem("loggedIn")) || false;
       this.isAdmin = JSON.parse(localStorage.getItem("isAdmin")) || false;
       this.logoutkakao = JSON.parse(localStorage.getItem("logoutkakao")) || false;
-      this.userId = localStorage.getItem("userId") || false;
-      this.userName = localStorage.getItem("userName") || '';
-      this.nickName = localStorage.getItem("nickName") || '';
+      this.userId = localStorage.getItem("userId") || '';
+      this.userName = localStorage.getItem("userName") || "";
+      this.nickName = localStorage.getItem("nickName") || "";
       this.profileUrl = localStorage.getItem("profileUrl") || '';
       this.userType = localStorage.getItem("userType") || '';
-      // this.gender = localStorage.getItem("gender") || '';
-    }
 
+    }
   }
 
   setLoggedIn(status) {
     this.loggedIn = status;
+    localStorage.setItem("loggedIn", JSON.stringify(status));
   }
 
   checkLoggedIn() {
@@ -41,45 +41,44 @@ class AuthStore {
 
   setIsAdmin(status) {
     this.isAdmin = status;
+    localStorage.setItem("isAdmin", JSON.stringify(status));
   }
 
   setSocialLoggedIn(status) {
     this.logoutkakao = status;
+    localStorage.setItem("logoutkakao", JSON.stringify(status));
   }
 
-  setUserId(id) {
-    this.userId = id;
+  setUserId(userId) {
+    this.userId = userId;
+    localStorage.setItem("userId", userId);
   }
 
-  setUserName(name) {
-    this.userName = name;
+  setUserName(status) {
+    this.userName = userName;
+    localStorage.setItem("userName", userName, JSON.stringify(status));
   }
 
   setNickName(nickname) {
     this.nickName = nickname;
+    localStorage.setItem("nickName", nickname);
   }
 
   setProfileUrl(url) {
     this.profileUrl = url;
+    localStorage.setItem("profileUrl", url);
   }
 
   setUserType(type) {
     const validTypes = ['U', 'A', 'D'];
     if (validTypes.includes(type)) {
       this.userType = type;
+      localStorage.setItem("userType", type);
     } else {
       throw new Error(`Invalid userType: ${type}. Valid values are 'U', 'A', 'D'.`);
     }
   }
 
-  setGender(type) {
-    const validGenders = ['F', 'M'];
-    if (validGenders.includes(type)) {
-      this.gender = type;
-    } else {
-      throw new Error(`Invalid gender: ${type}. Valid values are 'F', 'M'.`);
-    }
-  }
 }
 
 export const authStore = new AuthStore();

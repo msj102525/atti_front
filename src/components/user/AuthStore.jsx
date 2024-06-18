@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { authStore } from '@/pages/stores/authStore';
 import { logout, logoutkakao } from '@/api/user/user';
+// import { authStore } from '@/pages/stores/authStore';
 
 const AuthStatus = observer(() => {
   const router = useRouter();
@@ -10,6 +11,7 @@ const AuthStatus = observer(() => {
   useEffect(() => {
     authStore.checkLoggedIn();
   }, []);
+
 
   const handleLoginClick = async () => {
     try {
@@ -25,6 +27,7 @@ const AuthStatus = observer(() => {
         router.push('/'); 
       }
     } catch (error) {
+
       console.error('로그아웃 실패:', error);
     }
   };
@@ -55,5 +58,6 @@ export const sendTempPassword = (data) => {
 export const verifyTempPassword = (data) => {
   return axios.post("/verify-temp-password", data).then((res) => res);
 };
+
 
 export default AuthStatus;
