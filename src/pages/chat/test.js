@@ -8,6 +8,8 @@ const ChatApp = () => {
   const messagesEndRef = useRef(null);
   const client = useRef(null);
   const clientId = useRef(`client_${Math.random().toString(16).substr(2, 8)}`);
+  const loggedInUserId = 'admin'; // 현재 로그인한 사용자 ID
+  const targetUserId = 'user11'; // 메시지를 받을 사용자 ID
 
   useEffect(() => {
     // MQTT 클라이언트 초기화 및 연결
@@ -15,9 +17,10 @@ const ChatApp = () => {
 
     client.current.on('connect', () => {
       console.log('MQTT connected');
-      client.current.subscribe('chat/topic', (err) => {
+      // 로그인한 사용자 ID의 채널을 구독
+      client.current.subscribe(`chat/${loggedInUserId}`, (err) => {
         if (!err) {
-          console.log('Subscribed to chat/topic');
+          console.log(`Subscribed to chat/${loggedInUserId}`);
         }
       });
     });
@@ -50,7 +53,8 @@ const ChatApp = () => {
   const sendMessage = () => {
     if (inputValue.trim()) {
       const message = { text: inputValue, sender: 'A', clientId: clientId.current };
-      client.current.publish('chat/topic', JSON.stringify(message));
+      // 대상 사용자 ID의 채널에 메시지를 발행
+      client.current.publish(`chat/${targetUserId}`, JSON.stringify(message));
       setMessages([...messages, message]);
       setInputValue('');
     }
