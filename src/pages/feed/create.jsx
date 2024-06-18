@@ -4,10 +4,13 @@ import FeedSideBar from "@/components/feed/FeedSideBar";
 import FeedWriteForm from "@/components/feed/FeedWriteForm";
 import { useState } from "react";
 
+
 export default function FeedWrite() {
     const [data, setData] = useState("");
     const getData = childData => {
         setData(childData);
+
+        
     }
 
     return (

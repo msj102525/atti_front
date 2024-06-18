@@ -5,8 +5,8 @@ import { updateFeed } from "@/api/feed/feed";
 import { useRouter } from 'next/router';
 
 
-const CustomEditorReply = dynamic(() => {
-    return import('@/components/common/custom-editorReply');
+const CustomEditor = dynamic(() => {
+    return import('@/components/common/custom-editor');
 }, { ssr: false });
 
 
@@ -49,7 +49,7 @@ export default function FeedDetail({ data }) {
 
 
     return (
-        <div className="max-w-screen-lg pb-4">
+        <div className="max-w-screen-lg p-4">
             <div className="after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[2px] after:left-0 after-bottom-0">
                 <div className="flex p-4">
                     <p>홈화면&gt;</p>
@@ -73,9 +73,9 @@ export default function FeedDetail({ data }) {
                         <Button text={"삭제"} />
                     </div>
                 </div>
-                <div className="pb-4 w-[38vw]">
+                <div className="py-8 w-[38vw]">
                     {editorData && (
-                        <CustomEditorReply readOnly={data.feedWriterId == user.userId ? false : true} value={editorData} initialData={data.feedContent} setData={setEditorData} />
+                        <CustomEditor readOnly={data.feedWriterId == user.userId ? false : true} value={editorData} initialData={data.feedContent} setData={setEditorData} />
                     )}
                 </div>
                 <div className="flex gap-x-4">

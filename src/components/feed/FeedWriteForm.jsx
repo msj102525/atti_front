@@ -71,7 +71,7 @@ export default function FeedWriteForm(props) {
 
 
     return (
-        <div className='w-4/5 p-4 shadow-xl'>
+        <div className='w-full p-4 shadow-xl'>
             <div className='flex justify-between pb-4'>
                 <div className="border flex items-center gap-2">
                     <div className="border w-10 h-10 rounded-full overflow-hidden">
@@ -85,8 +85,8 @@ export default function FeedWriteForm(props) {
                     <Button text={"비공개"} onClick={privateHandleSubmit} />
                 </div>
             </div>
-            <div className="pb-4">
-                <CustomEditor value={editorData} setData={setEditorData} onChange={handleEditorChange} />
+            <div className="py-8">
+                <CustomEditor value={editorData} setData={setEditorData} onChange={handleEditorChange} readOnly={false} />
             </div>
             <span className='p-1 border text-gray-500'>#{formData.category != "" ? formData.category : "일반 고민"}</span>
             {/* <span className='p-1 border text-gray-500'>#{formData.category}</span> */}

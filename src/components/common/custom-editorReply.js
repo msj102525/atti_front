@@ -16,15 +16,9 @@ const CustomEditorReply = ({ value, initialData, setData, readOnly }) => {
             editor={ClassicEditor}
             data={initialData || ""}
             config={{
-                toolbar: readOnly ? [] : undefined, // readOnly 모드일 때 툴바를 숨깁니다.
+                toolbar: readOnly ? [] : undefined,
             }}
             disabled={readOnly}
-            onReady={editor => {
-                // readOnly 모드일 때 툴바 숨기기
-                if (readOnly) {
-                    editor.ui.view.toolbar.element.style.display = 'none';
-                }
-            }}
             onChange={(event, editor) => {
                 const data = editor.getData();
                 setData(data);

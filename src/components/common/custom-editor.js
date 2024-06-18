@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import Editor from 'src/ckeditor5/build/ckeditor';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const editorConfiguration = {
     toolbar: [
@@ -26,22 +26,21 @@ const editorConfiguration = {
     ]
 };
 
-const editorConfigurationReply = {
-    toolbar: [
-    ]
-};
 
-function CustomEditor( props ) {
+const CustomEditor = ({ value, initialData, setData, readOnly } ) => {
         return (
             <CKEditor
-                editor={ Editor }
-                config={ editorConfiguration }
-                data={ props.initialData || ""}
-                onChange={ (event, editor ) => {
-                    const data = editor.getData();
-                    props.setData(data)
-                } }
-            />
+            editor={ClassicEditor}
+            data={initialData || ""}
+            config={{
+                toolbar: readOnly ? [] : editorConfiguration.toolbar,
+            }}
+            disabled={readOnly}
+            onChange={(event, editor) => {
+                const data = editor.getData();
+                setData(data);
+            }}
+        />
         )
 }
 
