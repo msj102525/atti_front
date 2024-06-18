@@ -4,41 +4,27 @@ import Header from "../common/Header";
 import FeedSideBar from "@/components/feed/FeedSideBar";
 import FeedDetail from "@/components/feed/FeedDetail";
 import { getFeedByFeedNum } from "@/api/feed/feed";
-import ReplyWirteForm from "@/components/reply/ReplyWriteForm";
-import { jwtDecode } from "jwt-decode";
+import ReplyWriteForm from "@/components/reply/ReplyWriteForm";
+import ReplyList from "@/components/reply/ReplyList";
+import { da } from "date-fns/locale";
 
 export default function Feed() {
     const [data, setData] = useState(null);
     const path = usePathname();
-    // const [payload, setPayload] = useState(null);
-    // console.log(payload);
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem("token");
-    //     if (token) {
-    //         try {
-    //             const decoded = jwtDecode(token);
-    //             setPayload(decoded);
-    //         } catch (error) {
-    //             console.error('Invalid token', error);
-    //         }
-    //     }
-    // }, []);
+    const fetchData = async () => {
+        if (!path) return;
+
+        const feedNum = path.substring(6);
+        try {
+            const res = await getFeedByFeedNum(feedNum);
+            setData(res);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (!path) return;
-
-            const feedNum = path.substring(6);
-            try {
-                const res = await getFeedByFeedNum(feedNum);
-                console.log(res);
-                setData(res);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
         fetchData();
     }, [path]);
 
@@ -52,13 +38,14 @@ export default function Feed() {
                 <Header />
             </div>
             <div className="flex justify-center">
-                <div className="border-solid border flex justify-between max-w-6xl max-w-screen-2xl gap-x-10">
+                <div className="border-solid border flex justify-between w-[1536px] gap-x-10">
                     <div className="border-solid border flex-2 p-2">
                         <FeedSideBar />
                     </div>
                     <div className="border-solid border flex-1">
                         <FeedDetail data={data} />
-                        <ReplyWirteForm data={data} />
+                        <ReplyWriteForm data={data} fetchData={fetchData} />
+                        <ReplyList data={data} />
                     </div>
                 </div>
             </div>

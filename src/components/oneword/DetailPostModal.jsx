@@ -58,9 +58,11 @@ const DetailPostModal = ({ isOpen, onClose, post, onEdit, onDelete, isAdmin }) =
                 display: 'flex',
                 flexDirection: 'column',
             }}>
-                <p>이 포스트는 공지사항으로 등록되었습니다.</p>
-                <p>owsjNum: {post.owsjNum}</p>
+                <p>오늘 한 줄 주제 등록</p>
+                <p>번호 : {post.owsjNum}</p>
+                <label htmlFor="owsjSubject">주제:</label>
                 <textarea
+                    id="owsjSubject"
                     rows="5"
                     placeholder="주제를 입력하세요..."
                     value={owsjSubject}
@@ -68,7 +70,6 @@ const DetailPostModal = ({ isOpen, onClose, post, onEdit, onDelete, isAdmin }) =
                 />
 
                 <div style={{ display: "flex" }}>
-                    {/* <button onClick={onLike} className="btn btn-success">추천하기</button> */}
                     {
                         // isAdmin &&
                         <button onClick={handleEdit} className="btn btn-warning">수정하기</button>

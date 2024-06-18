@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Button from "../common/Button";
 import { updateFeed } from "@/api/feed/feed";
@@ -30,9 +30,6 @@ export default function FeedDetail({ data }) {
     }
 
     const handleModSubmit = () => {
-        console.log(data);
-        console.log(modFormData);
-
         updateFeed(modFormData)
             .then(res => {
                 if (res.status === 204) {
@@ -61,7 +58,7 @@ export default function FeedDetail({ data }) {
     return (
         <div className="max-w-screen-lg p-4">
             <div className="after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[2px] after:left-0 after-bottom-0">
-                <div className="flex p-4">
+                <div className="flex p-4 gap-x-2">
                     <p>홈화면&gt;</p>
                     <p>커뮤니티&gt;</p>
                     <p>{data.category}</p>
@@ -71,7 +68,6 @@ export default function FeedDetail({ data }) {
                 <div className='flex justify-between pb-4'>
                     <div className="flex items-center gap-x-2 text-gray-400">
                         <div className="border w-10 h-10 rounded-full overflow-hidden">
-                            {/* <img className="block w-full" src={editorData.feedWriterProfileUrl} alt="userImg" /> */}
                             <img className="block w-full" src={"#"} alt="userImg" />
                         </div>
                         <p>{data.inPublic === "Y" ? data.feedWriterId : "비공개"}</p>

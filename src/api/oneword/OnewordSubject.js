@@ -15,6 +15,14 @@ export const getOnewordSubjectList = ({ page, size }) => {
         });
 }
 
+export const getOnewordSubjectListCount = () => {
+    // 쿼리 파라미터를 사용하여 URL 생성
+    return axios.get(`/onewordsubject/list/count`)
+        .then(res => {
+            return res.data;
+        });
+}
+
 export const getOnewordSubjectDetail = (owsjNum) => {
     return axios.get(`/onewordsubject/onesjdetail/${owsjNum}`)
         .then(res => {
@@ -23,7 +31,6 @@ export const getOnewordSubjectDetail = (owsjNum) => {
             return res.data;
         })
         .catch(error => {
-																 
             console.error('Error : ', error);
             throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록 함
         });
