@@ -27,13 +27,14 @@ const editorConfiguration = {
 };
 
 
-const CustomEditor = ({ value, initialData, setData, readOnly } ) => {
+const CustomEditor = ({ value, initialData, setData, readOnly, placeholder } ) => {
         return (
             <CKEditor
             editor={ClassicEditor}
             data={initialData || ""}
             config={{
                 toolbar: readOnly ? [] : editorConfiguration.toolbar,
+                placeholder: placeholder,
             }}
             disabled={readOnly}
             onChange={(event, editor) => {

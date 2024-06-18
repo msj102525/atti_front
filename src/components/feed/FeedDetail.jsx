@@ -3,23 +3,23 @@ import dynamic from 'next/dynamic';
 import Button from "../common/Button";
 import { updateFeed } from "@/api/feed/feed";
 import { useRouter } from 'next/router';
-
+import { postLike } from '@/api/likeHistory/likeHistory';
 
 const CustomEditor = dynamic(() => {
     return import('@/components/common/custom-editor');
 }, { ssr: false });
-
 
 let user = {
     userId: "user01",
     userProfileUrl: "#"
 }
 
-
 export default function FeedDetail({ data }) {
     const router = useRouter();
 
     const [editorData, setEditorData] = useState(data.feedContent);
+    const [likeCount, setLikeCount] = useState(data.likeCount);
+    const [loginUserIsLiked, setLoginUserIsLiked] = useState(data.loginUserIsLiked);
 
     const modFormData = {
         userId: data.feedWriterId,
@@ -28,7 +28,6 @@ export default function FeedDetail({ data }) {
         inPublic: data.inPublic,
         feedContent: editorData
     }
-
 
     const handleModSubmit = () => {
         console.log(data);
@@ -47,6 +46,17 @@ export default function FeedDetail({ data }) {
             });
     };
 
+    const handleLikeSubmit = async () => {
+        try {
+            const response = await postLike(data.feedNum);
+            if (response.status === 200) {
+                setLoginUserIsLiked(!loginUserIsLiked);
+                setLikeCount(loginUserIsLiked ? likeCount - 1 : likeCount + 1);
+            }
+        } catch (err) {
+            console.error("좋아요 처리 실패:", err);
+        }
+    }
 
     return (
         <div className="max-w-screen-lg p-4">
@@ -79,9 +89,9 @@ export default function FeedDetail({ data }) {
                     )}
                 </div>
                 <div className="flex gap-x-4">
-                    <div className="flex gap-1 cursor-pointer">
-                        <img src={data.loginUserIsLiked ? "/feed/fillHeart.png" : "/feed/emptyHeart.png"} alt="" />
-                        {data.likeCount}
+                    <div className="flex gap-1 cursor-pointer" onClick={handleLikeSubmit}>
+                        <img src={loginUserIsLiked ? "/feed/fillHeart.png" : "/feed/emptyHeart.png"} alt="" />
+                        {likeCount}
                     </div>
                     <div className="flex gap-1">
                         <img src={"/feed/comment.png"} alt="댓글" />

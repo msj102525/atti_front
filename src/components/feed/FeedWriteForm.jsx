@@ -73,7 +73,7 @@ export default function FeedWriteForm(props) {
     return (
         <div className='w-full p-4 shadow-xl'>
             <div className='flex justify-between pb-4'>
-                <div className="border flex items-center gap-2">
+                <div className="border flex items-center gap-2 text-gray-400">
                     <div className="border w-10 h-10 rounded-full overflow-hidden">
                         {/* <img className="block w-full" src={user.userProfileUrl} alt="userImg" /> */}
                         <img className="block w-full" src={"#"} alt="userImg" />
@@ -86,7 +86,7 @@ export default function FeedWriteForm(props) {
                 </div>
             </div>
             <div className="py-8">
-                <CustomEditor value={editorData} setData={setEditorData} onChange={handleEditorChange} readOnly={false} />
+                <CustomEditor placeholder={"글 작성"} value={editorData} setData={setEditorData} onChange={handleEditorChange} readOnly={false} />
             </div>
             <span className='p-1 border text-gray-500'>#{formData.category != "" ? formData.category : "일반 고민"}</span>
             {/* <span className='p-1 border text-gray-500'>#{formData.category}</span> */}

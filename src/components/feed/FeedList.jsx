@@ -88,9 +88,8 @@ export default function FeedList({ category }) {
                                     <p>{feed.inPublic === "Y" ? feed.feedWriterId : "비공개"}</p>
                                     <p>{feed.feedDate}</p>
                                 </div>
-
-                                <div className="text-lg max-h-60 overflow-hidden line-clamp-[8] mb-4" dangerouslySetInnerHTML={{ __html: feed.feedContent }} />
-
+                                <div className="text-lg max-h-60 overflow-hidden line-clamp-[8] mb-4"
+                                    dangerouslySetInnerHTML={{ __html: feed.feedContent }} />
                                 <div className="flex gap-x-4">
                                     <div className="flex gap-1">
                                         <img src={feed.loginUserIsLiked ? "/feed/fillHeart.png" : "/feed/emptyHeart.png"} alt="" />

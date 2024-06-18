@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const CustomEditorReply = ({ value, initialData, setData, readOnly }) => {
+const CustomEditorReply = ({ value, initialData, setData, readOnly, placeholder }) => {
     useEffect(() => {
         // CKEditor 인스턴스에 접근해서 readOnly 모드 설정
         const editorInstance = document.querySelector('.ck-editor__editable');
@@ -17,6 +17,7 @@ const CustomEditorReply = ({ value, initialData, setData, readOnly }) => {
             data={initialData || ""}
             config={{
                 toolbar: readOnly ? [] : undefined,
+                placeholder: placeholder,
             }}
             disabled={readOnly}
             onChange={(event, editor) => {
