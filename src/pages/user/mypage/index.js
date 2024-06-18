@@ -114,20 +114,20 @@ export default function Mypage() {
           </div>
           <div className="mb-4">
             <label htmlFor="phone" className="block mb-1 text-sm font-semibold text-gray-800">전화번호:</label>
-            <input type="tel" id="phone" name="phone" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <input type="tel" id="phone" name="phone" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={phone} readOnly />
           </div>
           <div className="mb-4">
             <label className="block mb-1 text-sm font-semibold text-gray-800">성별:</label>
             <div>
-              <input type="radio" id="male" name="gender" value="M" checked={gender === 'M'} onChange={(e) => setGender(e.target.value)} />
+              <input type="radio" id="male" name="gender" value="M" checked={gender === 'M'} readOnly />
               <label htmlFor="male" className="mr-2">남</label>
-              <input type="radio" id="female" name="gender" value="F" checked={gender === 'F'} onChange={(e) => setGender(e.target.value)} />
+              <input type="radio" id="female" name="gender" value="F" checked={gender === 'F'} readOnly />
               <label htmlFor="female">여</label>
             </div>
           </div>
           <div className="mb-4">
             <label htmlFor="birthDate" className="block mb-1 text-sm font-semibold text-gray-800">생년월일:</label>
-            <input type="date" id="birthDate" name="birthDate" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+            <input type="date" id="birthDate" name="birthDate" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={birthDate} readOnly />
           </div>
           <div className="flex justify-center">
             <button type="button" className="w-full px-4 py-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer" onClick={handleUpdate}>수정</button>
