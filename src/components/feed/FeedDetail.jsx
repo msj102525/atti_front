@@ -56,7 +56,7 @@ export default function FeedDetail({ data }) {
     }
 
     return (
-        <div className="max-w-screen-lg p-4">
+        <div className="border max-w-screen-lg p-4 mx-auto">
             <div className="after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[2px] after:left-0 after-bottom-0">
                 <div className="flex p-4 gap-x-2">
                     <p>홈화면&gt;</p>
@@ -79,7 +79,7 @@ export default function FeedDetail({ data }) {
                         <Button text={"삭제"} />
                     </div>
                 </div>
-                <div className="py-8 w-[38vw]">
+                <div className="py-8 ">
                     {editorData && (
                         <CustomEditor readOnly={data.feedWriterId == user.userId ? false : true} value={editorData} initialData={data.feedContent} setData={setEditorData} />
                     )}
