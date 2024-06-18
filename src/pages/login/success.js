@@ -18,7 +18,7 @@ const LoginSuccess = () => {
             window.localStorage.setItem("nickName", nickName || '');
             window.localStorage.setItem("profileUrl", profileUrl || '');
             window.localStorage.setItem("userType", userType || 'U');
-            window.localStorage.setItem("gender", gender || '');
+            // window.localStorage.setItem("gender", gender || '');
 
             // authStore에 사용자 정보를 설정합니다.
             authStore.setIsAdmin(isAdmin === 'true');
@@ -27,7 +27,7 @@ const LoginSuccess = () => {
             authStore.setUserName(userName || '');
             authStore.setNickName(nickName || '');
             authStore.setProfileUrl(profileUrl || '');
-            authStore.setGender(gender || '');
+            // authStore.setGender(gender || '');
             authStore.setUserType(userType || 'U');
 
             // 원하는 페이지로 리다이렉트합니다.

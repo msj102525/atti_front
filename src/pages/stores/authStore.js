@@ -24,7 +24,7 @@ class AuthStore {
       this.nickName = localStorage.getItem("nickName") || '';
       this.profileUrl = localStorage.getItem("profileUrl") || '';
       this.userType = localStorage.getItem("userType") || '';
-      this.gender = localStorage.getItem("gender") || '';
+      // this.gender = localStorage.getItem("gender") || '';
     }
 
     // 상태가 변경될 때마다 LocalStorage에 저장
@@ -38,7 +38,7 @@ class AuthStore {
         localStorage.setItem("nickName", this.nickName);
         localStorage.setItem("profileUrl", this.profileUrl);
         localStorage.setItem("userType", this.userType);
-        localStorage.setItem("gender", this.gender);
+        // localStorage.setItem("gender", this.gender);
       });
     }
   }
