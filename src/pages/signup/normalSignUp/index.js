@@ -1,9 +1,22 @@
 import { useState } from "react";
-import styles from "../../../styles/signUp/doctorSignUp.module.css";
 import { signup } from "@/api/user/user.js";
 import KakaoSignup from "@/components/user/kakaoSignup";
+import Modal from "@/components/common/Modal";
+import MoveMainLogo from "@/components/common/MoveMainLogo";
 
 export default function NormalSignUp() {
+  //-----------------------------모달
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    window.location.href = "/login";
+  };
+  //----------------------------
+
   const [formData, setFormData] = useState({
     userId: "",
     password: "",
@@ -65,7 +78,6 @@ export default function NormalSignUp() {
     try {
       signUpData.userType = "U";
       await signup(signUpData);
-      // await axios.post('/signup', signUpData);
       setSuccessMessage(
         "회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동해주세요."
       );
@@ -89,114 +101,122 @@ export default function NormalSignUp() {
   };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.titleWrap}>
+    <div className="flex flex-col items-center h-screen p-4 bg-gray-100">
+      <MoveMainLogo />
+      <div className="mt-10 text-2xl font-bold text-gray-800">
         <h1>회원가입</h1>
       </div>
-      <div className={styles.contentWrap}>
+      <div className="flex flex-col w-full max-w-md p-6 mt-5 overflow-y-auto bg-white rounded-lg shadow-md max-h-[70vh]">
         <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="userId" className={styles.inputTitle}>
+          <div className="mb-4">
+            <label
+              htmlFor="userId"
+              className="block mb-1 text-sm font-semibold text-gray-800"
+            >
               아이디:
             </label>
-            <div className={styles.inputWrap}>
-              <input
-                type="text"
-                id="userId"
-                name="userId"
-                className={styles.input}
-                value={formData.userId}
-                onChange={handleInputChange}
-                placeholder="아이디를 입력하세요"
-              />
-            </div>
+            <input
+              type="text"
+              id="userId"
+              name="userId"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+              value={formData.userId}
+              onChange={handleInputChange}
+              placeholder="아이디를 입력하세요"
+            />
           </div>
-          <div>
-            <label htmlFor="password" className={styles.inputTitle}>
+          <div className="mb-4">
+            <label
+              htmlFor="password"
+              className="block mb-1 text-sm font-semibold text-gray-800"
+            >
               비밀번호:
             </label>
-            <div className={styles.inputWrap}>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                className={styles.input}
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder="비밀번호를 입력하세요"
-              />
-            </div>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="비밀번호를 입력하세요"
+            />
           </div>
-          <div>
-            <label htmlFor="confirmPassword" className={styles.inputTitle}>
+          <div className="mb-4">
+            <label
+              htmlFor="confirmPassword"
+              className="block mb-1 text-sm font-semibold text-gray-800"
+            >
               비밀번호 확인:
             </label>
-            <div className={styles.inputWrap}>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                className={styles.input}
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                placeholder="비밀번호를 다시 입력하세요"
-              />
-            </div>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              placeholder="비밀번호를 다시 입력하세요"
+            />
           </div>
-          <div>
-            <label htmlFor="userName" className={styles.inputTitle}>
+          <div className="mb-4">
+            <label
+              htmlFor="userName"
+              className="block mb-1 text-sm font-semibold text-gray-800"
+            >
               이름:
             </label>
-            <div className={styles.inputWrap}>
-              <input
-                type="text"
-                id="userName"
-                name="userName"
-                className={styles.input}
-                value={formData.userName}
-                onChange={handleInputChange}
-                placeholder="이름을 입력하세요"
-              />
-            </div>
+            <input
+              type="text"
+              id="userName"
+              name="userName"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+              value={formData.userName}
+              onChange={handleInputChange}
+              placeholder="이름을 입력하세요"
+            />
           </div>
-          <div>
-            <label htmlFor="email" className={styles.inputTitle}>
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block mb-1 text-sm font-semibold text-gray-800"
+            >
               이메일:
             </label>
-            <div className={styles.inputWrap}>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className={styles.input}
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="이메일을 입력하세요"
-              />
-            </div>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="이메일을 입력하세요"
+            />
           </div>
-          <div>
-            <label className={styles.inputTitle}>성별:</label>
-            <div className={styles.inputWrap}>
-              <label>
+          <div className="mb-4">
+            <label className="block mb-1 text-sm font-semibold text-gray-800">
+              성별:
+            </label>
+            <div className="flex items-center">
+              <label className="flex items-center mr-4">
                 <input
                   type="radio"
                   id="male"
                   name="gender"
                   value="M"
-                  className={styles.radio}
+                  className="mr-1"
                   checked={formData.gender === "M"}
                   onChange={handleInputChange}
                 />
                 남성
               </label>
-              <label>
+              <label className="flex items-center">
                 <input
                   type="radio"
                   id="female"
                   name="gender"
                   value="F"
-                  className={styles.radio}
+                  className="mr-1"
                   checked={formData.gender === "F"}
                   onChange={handleInputChange}
                 />
@@ -204,36 +224,55 @@ export default function NormalSignUp() {
               </label>
             </div>
             {genderErrorMessage && (
-              <p className={styles.errorMessageWrap}>{genderErrorMessage}</p>
+              <p className="mt-1 text-xs text-red-500">{genderErrorMessage}</p>
             )}
           </div>
-          <div>
-            <label htmlFor="birthDate" className={styles.inputTitle}>
+          <div className="mb-4">
+            <label
+              htmlFor="birthDate"
+              className="block mb-1 text-sm font-semibold text-gray-800"
+            >
               생년월일:
             </label>
-            <div className={styles.inputWrap}>
-              <input
-                type="date"
-                id="birthDate"
-                name="birthDate"
-                className={styles.input}
-                value={formData.birthDate}
-                onChange={handleInputChange}
-              />
-            </div>
+            <input
+              type="date"
+              id="birthDate"
+              name="birthDate"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+              value={formData.birthDate}
+              onChange={handleInputChange}
+            />
           </div>
-          <div className={styles.buttonDiv}>
-            <button type="submit" className={styles.bottomButton}>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="w-full px-4 py-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
               회원가입
             </button>
           </div>
-          <KakaoSignup />
+          <div className="mt-6">
+        <KakaoSignup />
+      </div>
+      <div>
+        <nanerSingup/>
+      </div>
         </form>
-        {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+        {successMessage && (
+          <p className="mt-4 text-green-600">{successMessage}</p>
+        )}
         {errorMessage && (
-          <p className={styles.errorMessageWrap}>{errorMessage}</p>
+          <p className="mt-4 text-xs text-red-500">{errorMessage}</p>
         )}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title="타이틀입니다."
+        content="내용 첫째줄입니다."
+        content2="내용 둘째줄 입니다."
+        imgUrl="signUp"
+      />
     </div>
   );
 }

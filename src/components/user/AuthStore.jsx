@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { authStore } from '@/pages/stores/authStore';
-import { logout, logoutkakao, logoutSocial } from '@/api/user/user';
+import { logout, logoutkakao } from '@/api/user/user';
 
 const AuthStatus = observer(() => {
   const router = useRouter();
@@ -16,7 +16,7 @@ const AuthStatus = observer(() => {
       if (!authStore.loggedIn && !authStore.socialLoggedIn) {
         router.push('/login'); // 로그인 페이지로 이동
       } else if (authStore.socialLoggedIn) {
-        await logoutSocial();
+        await logoutkakao();
         authStore.setSocialLoggedIn(false); // 소셜 로그아웃 처리
         router.push('/'); 
       } else {
@@ -47,5 +47,13 @@ const AuthStatus = observer(() => {
     </div>
   );
 });
+// 새로운 함수 추가
+export const sendTempPassword = (data) => {
+  return axios.post("/send-temp-password", data).then((res) => res);
+};
+
+export const verifyTempPassword = (data) => {
+  return axios.post("/verify-temp-password", data).then((res) => res);
+};
 
 export default AuthStatus;

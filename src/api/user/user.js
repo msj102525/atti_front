@@ -21,7 +21,7 @@ export const login = (loginData) => {
         authStore.setIsAdmin(response.data.isAdmin);
         authStore.checkLoggedIn();
       }
-      return response;
+      return response
     });
 };
 
@@ -39,6 +39,20 @@ export const logout = () => {
   });
 };
 
+
+export const logoutSocial = () => {
+  const token = localStorage.getItem('token');
+  return axios.post("/logoutSocial", {}, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((res) => {
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("isAdmin");
+    window.localStorage.removeItem("refresh");
+    return res;
+  });
+};
 export const logoutkakao = () => {
   const token = localStorage.getItem('token');
   return axios.post("/kakao/logout", {}, {
@@ -53,9 +67,9 @@ export const logoutkakao = () => {
   });
 };
 
-export const logoutSocial = () => {
+export const logoutNaver = () => {
   const token = localStorage.getItem('token');
-  return axios.post("/logoutSocial", {}, {
+  return axios.post("/naver/logout", {}, {
     headers: {
       'Authorization': `Bearer ${token}`
     }

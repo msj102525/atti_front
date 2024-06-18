@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { login } from "@/api/user/user"; 
+// import PasswordFind from "../user/password";
 import KakaoLogin from "@/components/user/kakaoLogin";
+import MoveMainLogo from "@/components/common/MoveMainLogo";
 
-export default function LoginFrom() {
+export default function LoginForm() {
+
     const [formData, setFormData] = useState({
         userId: '',
         password: '',
@@ -22,7 +25,7 @@ export default function LoginFrom() {
         },
     });
     
-    const handleNormalLogin = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevFormData => ({
             ...prevFormData,
@@ -36,45 +39,72 @@ export default function LoginFrom() {
     };
 
     return ( 
-        <div>
-        <img src="/common/header/attiLogo.png"/> 
-        
-        <div className="login-box">
-           
-            <form className="from" onSubmit={handleSubmit}>
-                <div className="formGroup">
-                    <label htmlFor="userId">아이디:</label>
-                    <input
-                        type="text"
-                        id="userId"
-                        name="userId"
-                        value={formData.userId}
-                        onChange={handleNormalLogin}
-                        required
-                    />
-                </div>
-                <div className="formGroup">
-                    <label htmlFor="password">비밀번호:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleNormalLogin}
-                        required
-                    />
-                </div>
-                <button type="submit">로그인</button>
-                <div className="social-login">
-                   <KakaoLogin/>
-                    <button type="social-submit" className="naver-login">네이버 로그인</button>
-                </div>
-                <div className="find-info">
-                    <a href="#">비밀번호 찾기</a>
-                    <a href="#">아이디 찾기</a>
-                </div>
-            </form>
-        </div>
+        <div className="flex flex-col items-center h-screen p-4 bg-gray-100">
+            <MoveMainLogo />
+            <div className="mt-10 text-2xl font-bold text-gray-800">
+                <h1>로그인</h1>
+            </div>
+            <div className="flex flex-col w-full max-w-lg p-8 mt-8 overflow-y-auto bg-white rounded-lg shadow-md max-h-[80vh]"> {/* Increased the max-width and padding */}
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label
+                            htmlFor="userId"
+                            className="block mb-1 text-sm font-semibold text-gray-800"
+                        >
+                            아이디:
+                        </label>
+                        <input
+                            type="text"
+                            id="userId"
+                            name="userId"
+                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+                            value={formData.userId}
+                            onChange={handleInputChange}
+                            placeholder="아이디를 입력하세요"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label
+                            htmlFor="password"
+                            className="block mb-1 text-sm font-semibold text-gray-800"
+                        >
+                            비밀번호:
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            placeholder="비밀번호를 입력하세요"
+                        />
+                    </div>
+                    <div className="flex justify-center">
+                        <button
+                            type="submit"
+                            className="w-full px-4 py-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        >
+                            로그인
+                        </button>
+                    </div>
+                    <div className="mt-4">
+                        <KakaoLogin className="transform scale-50" />
+                    </div>
+                    <div>
+                        
+                    </div>
+                    <div className="mt-4 flex justify-between text-sm text-gray-600">
+                        <button
+                        type="submit">
+                            비밀번호 찾기
+                        </button>
+                        <button>
+                            <a href="#">아이디 찾기</a>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
