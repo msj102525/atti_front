@@ -1,8 +1,8 @@
 export default function Footer() {
     return (
-        <div className=" flex justify-center">
-            <footer>
-                <div className="w-[1536px] border min-h-40">
+        <div className="w-full flex justify-center">
+            <footer className="w-full min-h-40 border-solid border-2 max-w-screen-2xl">
+                <div className="">
                     FOOTER
                 </div>
             </footer>
