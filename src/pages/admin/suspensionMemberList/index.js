@@ -368,7 +368,7 @@ const handleSearchChange = (event) => setSearchInput(event.target.value);
                     {data.map(user => (
                     
                         <SuspensionMemberCard
-                        key={user.userId}
+                        key={user.suspensionNo}
                         user={user}  
                         //handleEdit={openEditModal}  //수정모달 열기 핸들러 전달 
                         //handleSuspend={handleSuspend}

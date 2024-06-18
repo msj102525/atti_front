@@ -32,7 +32,7 @@ const Sidebar = () => {
                         <span className={styles.arrow}>{openMenu === 'post' ? '▲' : '▼'}</span>
                     </li>
                         <ul className={`${openMenu === 'post' ? styles.open : ''}`}>
-                            <li onClick={() => handleNavigation('/admin/communityPosts')}>커뮤니티</li>
+                            <li onClick={() => handleNavigation('/admin/communityAdminVersion')}>커뮤니티</li>
                             <li onClick={() => handleNavigation('/admin/announcements')}>공지사항</li>
                             <li onClick={() => handleNavigation('/admin/faqs')}>FAQ</li>
                             <li onClick={() => handleNavigation('/admin/inquiries')}>문의하기</li>
