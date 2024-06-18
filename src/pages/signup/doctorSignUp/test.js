@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { sendCodeToEmail } from "@/api/doctor/doctor.js";
-import { signup } from "@/api/user/user.js";
+import { signup, login } from "@/api/user/user.js"; // login 함수 import 추가
 import Modal from "@/components/common/modal";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
+import { useRouter } from "next/router"; // useRouter import 추가
+import { authStore } from "@/pages/stores/authStore"; // authStore import 추가
 
 export default function DoctorSignUp() {
   const [id, setId] = useState("");
@@ -34,12 +36,15 @@ export default function DoctorSignUp() {
   const [isVerified, setIsVerified] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const router = useRouter(); // useRouter 호출
+
   const openModal = () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setIsModalOpen(false);
+    await handleAutoLogin(); // 로그인 함수 호출
   };
 
   const handleEmailVerification = async () => {
@@ -81,13 +86,13 @@ export default function DoctorSignUp() {
 
     try {
       await signup(signUpData);
-      console.log("성공!");
+      console.log("회원가입 성공!");
       openModal();
     } catch (err) {
-      if (err.response.status === 500) {
+      if (err.response && err.response.status === 500) {
         alert("이미 존재하는 아이디입니다.");
       } else {
-        alert(err);
+        alert("회원가입에 실패했습니다. 다시 시도해주세요.");
       }
     }
   };
@@ -171,6 +176,41 @@ export default function DoctorSignUp() {
       setCodeReadOnly(true);
     } else {
       setIsVerified(false);
+    }
+  };
+
+  // 로그인 로직
+  const handleAutoLogin = async () => {
+    const loginData = {
+      userId: id,
+      password: pw,
+    };
+
+    try {
+      const data = await login(loginData);
+      const token =
+        data.headers["authorization"] || data.headers["Authorization"];
+      const pureToken = token ? token.split(" ")[1] : "";
+      window.localStorage.setItem("token", pureToken);
+      window.localStorage.setItem("refresh", data.data.refreshToken || "");
+      window.localStorage.setItem("userId", data.data.userId || "");
+      window.localStorage.setItem("userName", data.data.userName || "");
+      window.localStorage.setItem("nickName", data.data.nickName || "");
+      window.localStorage.setItem("profileUrl", data.data.profileUrl || "");
+      window.localStorage.setItem("userType", data.data.userType || "U");
+
+      authStore.setLoggedIn(true);
+      authStore.setUserId(data.data.userId || "");
+      authStore.setUserName(data.data.userName || "");
+      authStore.setNickName(data.data.nickName || "");
+      authStore.setProfileUrl(data.data.profileUrl || "");
+      authStore.setUserType(data.data.userType || "U");
+
+      router.push("/mypage"); // 로그인 성공 후 마이페이지로 리다이렉션
+    } catch (error) {
+      console.error("자동 로그인 실패:", error);
+      alert("자동 로그인에 실패했습니다. 로그인 페이지로 이동합니다.");
+      router.push("/login");
     }
   };
 
