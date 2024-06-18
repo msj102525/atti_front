@@ -12,11 +12,6 @@ export default function Home() {
           name="viewport"
           content="width=device-width, initial-scale=1.0"
         ></meta>
-        <script
-          src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
-          strategy="beforeInteractive"
-        ></script>
-        {/*카카오 지도 API */}
       </Head>
       <Header />
       <Container />
