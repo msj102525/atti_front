@@ -5,9 +5,11 @@ import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import OnewordSubjectListComponent from "../../components/oneword/OnewordSubjectListComponent";
 import OnewordSubjectWriteModalComponent from "../../components/oneword/OnewordSubjectWriteModalComponent";
+import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
 import { handleAxiosError } from "../../api/errorAxiosHandle";
-import { getOnewordSubjectList, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject } from "../../api/oneword/OnewordSubject";
+import { getOnewordSubjectList, getOnewordSubjectListCount, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject } from "../../api/oneword/OnewordSubject";
 import DetailPostModal from "../../components/oneword/DetailPostModal";
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const OnewordSubjectComponent = observer(() => {
     const [searchTitle, setSearchTitle] = React.useState("");
@@ -20,9 +22,13 @@ const OnewordSubjectComponent = observer(() => {
     const [isAdmin, setIsAdmin] = React.useState(false);
 
     const { data, isLoading } = useQuery(['onewordSubjectList', { page, size }], () => getOnewordSubjectList({
-        page: page - 1,
+        page: page,
         size: size,
     }), {
+        keepPreviousData: true,
+    });
+
+    const { data: getCount, isLoading: isLoading2 } = useQuery(['onewordSubjectListcount'], () => getOnewordSubjectListCount(), {
         keepPreviousData: true,
     });
 
@@ -64,16 +70,12 @@ const OnewordSubjectComponent = observer(() => {
         }
     };
 
-    const handlePageChange = (pageNumber) => {
-        // 페이지가 음수가 되지 않도록 처리
-        if (pageNumber < 1) {
-            setPage(1);
-        } else {
-            setPage(pageNumber);
-        }
+    const handlePageChange = ({ selected }) => {
+        // setCurrentPage(selected);
+        setPage(selected + 1);
     };
 
-    const handleSizeChange = (e) => setSize(e.target.value);
+    // const handleSizeChange = (e) => setSize(e.target.value);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -94,6 +96,7 @@ const OnewordSubjectComponent = observer(() => {
     const handleDelete = (owsjNum) => {
         deleteOnewordSubjectMutation.mutate(owsjNum);
     };
+
 
     const [selectedOnewordSubject, setSelectedOnewordSubject] = React.useState(null);
     const [isDetailModalOpen, setIsDetailModalOpen] = React.useState(false);
@@ -120,6 +123,13 @@ const OnewordSubjectComponent = observer(() => {
     if (isLoading) return <div>Loading...</div>;
     if (!data) return <div>No data</div>;
 
+    // if (isLoading || isLoading2) return <div>Loading...</div>;
+    // if (!data || !pageCount) return <div>No data</div>;
+
+    const totalPages = Math.ceil(getCount / size); // 전체 페이지 수
+
+    // console.log("전체 페이지수 : " + pageCount)
+
     // const totalRows = data ? data.length : 0; // 전체 행의 개수
     // const totalPages = Math.ceil(totalRows / size); // 전체 페이지 수
     // console.log("전체 갯수 : " + totalRows);
@@ -142,12 +152,12 @@ const OnewordSubjectComponent = observer(() => {
             <div className="container mt-5">
                 <h2>오늘 한 줄 주제</h2>
                 <div style={{ height: "2vw", justifyContent: "center", textAlign: "right" }}>
-                    <select value={size} onChange={handleSizeChange} style={{ height: "88%" }}>
+                    {/* <select value={size} onChange={handleSizeChange} style={{ height: "88%" }}>
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
                         <option value="20">20</option>
-                    </select>
+                    </select> */}
                     <input type="text" placeholder="Search by title..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
                     <button onClick={executeSearch}>검색</button>
                 </div>
@@ -200,10 +210,13 @@ const OnewordSubjectComponent = observer(() => {
                 />
 
                 {/* Pagination */}
-                <div>
+                {/* <div>
                     <button disabled={page === 1} onClick={() => handlePageChange(page - 1)}>Previous</button>
                     <span> Page {page} </span>
                     <button disabled={data.length < size} onClick={() => handlePageChange(page + 1)}>Next</button>
+                </div> */}
+                <div>
+                    <Pagination pageCount={totalPages} onPageChange={handlePageChange} page={page} />
                 </div>
             </div>
         </div>

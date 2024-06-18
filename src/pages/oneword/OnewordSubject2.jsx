@@ -98,38 +98,38 @@ const OnewordSubjectComponent2 = () => {
         setEditedTitle(e.target.value);
     };
 
-    // const handleTitleSave = async () => {
-    //     try {
-    //         const updatedSubject = {
-    //             ...selectedOnewordSubject,
-    //             owsjSubject: editedTitle
-    //         };
-    //         await handleEdit(updatedSubject);
-    //         setEditMode(false);
-    //     } catch (error) {
-    //         console.error("Error updating oneword subject:", error);
-    //     }
-    // };
-
     const handleTitleSave = async () => {
         try {
-            // 현재 선택된 주제의 이전 제목
-            const previousSubjectTitle = selectedOnewordSubject.owsjSubject;
-    
             const updatedSubject = {
                 ...selectedOnewordSubject,
                 owsjSubject: editedTitle
             };
-    
             await handleEdit(updatedSubject);
             setEditMode(false);
-    
-            // 여기서 previousSubjectTitle을 사용할 수 있음
-            console.log('이전 제목:', previousSubjectTitle);
         } catch (error) {
             console.error("Error updating oneword subject:", error);
         }
     };
+
+    // const handleTitleSave = async () => {
+    //     try {
+    //         // 현재 선택된 주제의 이전 제목
+    //         const previousSubjectTitle = selectedOnewordSubject.owsjSubject;
+    
+    //         const updatedSubject = {
+    //             ...selectedOnewordSubject,
+    //             owsjSubject: editedTitle
+    //         };
+    
+    //         await handleEdit(updatedSubject);
+    //         setEditMode(false);
+    
+    //         // 여기서 previousSubjectTitle을 사용할 수 있음
+    //         console.log('이전 제목:', previousSubjectTitle);
+    //     } catch (error) {
+    //         console.error("Error updating oneword subject:", error);
+    //     }
+    // };
 
     if (isLoading) return <div>Loading...</div>;
     if (!onewordSubjects) return <div>No data</div>;
