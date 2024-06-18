@@ -37,13 +37,9 @@ export const insertOnewordSubject = (onewordsubjectData) =>{
     })
 }
 
-export const updateOnewordSubject = (postData) =>{
-    console.log("postData : ", postData);
-    // return axios.put(`/onewordsubject/${owsjNum}`, postData).then(res =>{
-    //     console.log("res :", res);
-    //     return res;
-    // })
-    return axios.put(`/onewordsubject`, postData).then(res =>{
+export const updateOnewordSubject = (onewordSubjectData) =>{
+    console.log("postData : ", onewordSubjectData);
+    return axios.put(`/onewordsubject/${onewordSubjectData.owsjNum}`, onewordSubjectData).then(res =>{
         console.log("res :", res);
         return res;
     })
