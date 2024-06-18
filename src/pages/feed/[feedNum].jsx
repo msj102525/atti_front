@@ -4,11 +4,26 @@ import Header from "../common/Header";
 import FeedSideBar from "@/components/feed/FeedSideBar";
 import FeedDetail from "@/components/feed/FeedDetail";
 import { getFeedByFeedNum } from "@/api/feed/feed";
-import ReplyWirteForm from "@/components/feed/ReplyWriteForm";
+import ReplyWirteForm from "@/components/reply/ReplyWriteForm";
+import { jwtDecode } from "jwt-decode";
 
 export default function Feed() {
     const [data, setData] = useState(null);
     const path = usePathname();
+    // const [payload, setPayload] = useState(null);
+    // console.log(payload);
+
+    // useEffect(() => {
+    //     const token = localStorage.getItem("token");
+    //     if (token) {
+    //         try {
+    //             const decoded = jwtDecode(token);
+    //             setPayload(decoded);
+    //         } catch (error) {
+    //             console.error('Invalid token', error);
+    //         }
+    //     }
+    // }, []);
 
     useEffect(() => {
         const fetchData = async () => {

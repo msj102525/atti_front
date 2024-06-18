@@ -10,7 +10,7 @@ export default function ReplyWirteForm() {
 
     return (
         <div className="border p-4">
-            <CustomEditorReply value={editorDataReply} setData={setEditorDataReply} />
+            <CustomEditorReply className="border" value={editorDataReply} setData={setEditorDataReply} />
         </div>
     )
 }

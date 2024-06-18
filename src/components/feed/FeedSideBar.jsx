@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { top5FeedContent } from "@/api/feed/feed";
+import Link from "next/link";
 
 export default function FeedSideBar() {
     const [top5FeedContentResult, setTop5FeedContentResult] = useState([]);
@@ -51,7 +52,9 @@ export default function FeedSideBar() {
                                 key={idx}
                                 className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-start font-semibold p-1 pl-6 truncate text-slate-500 text-lg"
                             >
-                                {idx + 1}. {sanitizedContent}
+                                <Link href={`feed/${feed.feedNum}`}>
+                                    {idx + 1}. {sanitizedContent}
+                                </Link>
                             </li>
                         );
                     })}

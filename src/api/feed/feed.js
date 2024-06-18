@@ -16,7 +16,7 @@ export const postFeed = (postData) => {
 export const updateFeed = (postData) => {
 
     console.log("AxiosPostData : ", postData);
-    
+
     return axios.put("/feed", postData)
         .then(res => {
             return res;
@@ -29,6 +29,7 @@ export const updateFeed = (postData) => {
 export const top5FeedContent = () => {
     return axios.get("/feed/top5")
         .then(res => {
+            // console.log(res.data);
             return res.data;
         })
         .catch(err => {

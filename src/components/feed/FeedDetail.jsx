@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Button from "../common/Button";
-import { postFeed, updateFeed } from "@/api/feed/feed";
+import { updateFeed } from "@/api/feed/feed";
 import { useRouter } from 'next/router';
 
 
@@ -33,11 +33,11 @@ export default function FeedDetail({ data }) {
     const handleModSubmit = () => {
         console.log(data);
         console.log(modFormData);
-    
+
         updateFeed(modFormData)
             .then(res => {
                 if (res.status === 204) {
-                    router.push("/feed"); 
+                    router.push("/feed");
                 } else {
                     console.error("Unexpected response status:", res.status);
                 }
@@ -46,10 +46,10 @@ export default function FeedDetail({ data }) {
                 console.error("피드 등록 실패:", err);
             });
     };
-    
+
 
     return (
-        <div className="max-w-screen-lg">
+        <div className="max-w-screen-lg pb-4">
             <div className="after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[2px] after:left-0 after-bottom-0">
                 <div className="flex p-4">
                     <p>홈화면&gt;</p>
@@ -88,7 +88,6 @@ export default function FeedDetail({ data }) {
                         {data.replyCount}
                     </div>
                 </div>
-
             </div>
         </div>
     )
