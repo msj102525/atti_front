@@ -7,14 +7,24 @@ const SuccessPage = () => {
   const router = useRouter();
   const { paymentKey, orderId, amount } = router.query;
   const [timeLeft, setTimeLeft] = useState(3);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null); // 초기 상태를 null로 설정
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    // localStorage에서 selectedTime 가져오기
-    const storedSelectedTime = localStorage.getItem("selectedTime");
-    setSelectedTime(storedSelectedTime);
+    // 클라이언트 측에서만 실행
+    if (typeof window !== 'undefined') {
+      // localStorage에서 selectedTime 가져오기
+      const storedSelectedTime = localStorage.getItem("selectedTime");
+      setSelectedTime(storedSelectedTime);
 
-    if (!paymentKey || !orderId || !amount) {
+      const storedUserId = localStorage.getItem("userId");
+      setUserId(storedUserId)
+
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!paymentKey || !orderId || !amount || selectedTime === null) {
       return;
     }
 
@@ -23,7 +33,7 @@ const SuccessPage = () => {
         paymentKey,
         orderId,
         amount,
-        selectedTime: storedSelectedTime
+        selectedTime
       };
 
       try {
@@ -54,12 +64,12 @@ const SuccessPage = () => {
     }
 
     confirmPayment();
-  }, [paymentKey, orderId, amount]);
+  }, [paymentKey, orderId, amount, selectedTime]);
 
   const savePayment = async (orderId, amount) => {
     const paymentData = {
       payNum: orderId,
-      userId: 'userid01', // 예시 사용자 아이디
+      userId: userId, // 예시 사용자 아이디
       payAmount: amount,
       payMethod: '토스',
       payDate: new Date().toISOString()
@@ -95,6 +105,11 @@ const SuccessPage = () => {
       router.push('/chat/chat');
     }
   }, [timeLeft, router]);
+
+  // selectedTime이 설정될 때까지 아무것도 렌더링하지 않음
+  if (selectedTime === null) {
+    return null;
+  }
 
   return (
     <div className="bg-white min-h-screen flex flex-col">

@@ -18,25 +18,21 @@ function App() {
   });
 
   const router = useRouter();
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState(null); // 초기 상태를 null로 설정
 
-  // 유저 이름 가져오기
+  // 유저 ID 가져오기
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const token = localStorage.getItem('token'); // 로컬 스토리지에서 JWT를 가져옵니다.
-        if (!token) {
-          console.error("No token found");
+        const userIdFromStorage = localStorage.getItem('userId'); // 로컬 스토리지에서 userId를 가져옵니다.
+        if (!userIdFromStorage) {
+          console.error("No userId found");
           return;
         }
 
-        const response = await axios.get(`http://localhost:8080/users/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setUserId(response.data.userId); // User 엔티티의 userId 필드를 사용
-        console.log("Fetched userId:", response.data.userId); // 콘솔로 userId 출력
+        
+        setUserId(userIdFromStorage); // User 엔티티의 userId 필드를 사용
+        console.log("Fetched userId:", userIdFromStorage); // 콘솔로 userId 출력
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -76,6 +72,11 @@ function App() {
       }
     }
   };
+
+  if (userId === null) {
+    // userId가 설정될 때까지 아무것도 렌더링하지 않습니다.
+    return null;
+  }
 
   return (
     <div>

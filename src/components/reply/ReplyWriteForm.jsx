@@ -19,7 +19,7 @@ export default function ReplyWriteForm({ data, fetchData }) {
     const submitReply = async () => {
         const replyForm = {
             feedNum: data.feedNum,
-            replyContent: editorDataReply
+            replyContent: editorDataReply,
         }
 
         try {
@@ -36,8 +36,8 @@ export default function ReplyWriteForm({ data, fetchData }) {
     }
 
     return (
-        <div className="p-2 border">
-            <div className="flex gap-4 p-2 justify-between text-gray-400">
+        <div className="border max-w-screen-lg p-4 mx-auto">
+            <div className="border flex gap-4 p-2 justify-between text-gray-400">
                 <div className="border flex items-center gap-2 ">
                     <div className="border w-10 h-10 rounded-full overflow-hidden">
                         <img className="block w-full" src={"#"} alt="userImg" />
