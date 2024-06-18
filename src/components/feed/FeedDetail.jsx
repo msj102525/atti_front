@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Button from "../common/Button";
-import { postFeed } from "@/api/feed/feed";
+import { postFeed, updateFeed } from "@/api/feed/feed";
 import { useRouter } from 'next/router';
 
 
@@ -23,25 +23,20 @@ export default function FeedDetail({ data }) {
 
     const modFormData = {
         userId: data.feedWriterId,
+        feedNum: data.feedNum,
         category: data.category,
         inPublic: data.inPublic,
         feedContent: editorData
     }
 
-    const [formData, setFormData] = useState({
-        userId: user.userId,
-        feedContent: "",
-        category: "일반 고민",
-        inPublic: "",
-    });
 
     const handleModSubmit = () => {
         console.log(data);
         console.log(modFormData);
     
-        postFeed(modFormData)
+        updateFeed(modFormData)
             .then(res => {
-                if (res.status === 201) {
+                if (res.status === 204) {
                     router.push("/feed"); 
                 } else {
                     console.error("Unexpected response status:", res.status);

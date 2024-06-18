@@ -13,6 +13,19 @@ export const postFeed = (postData) => {
         });
 }
 
+export const updateFeed = (postData) => {
+
+    console.log("AxiosPostData : ", postData);
+    
+    return axios.put("/feed", postData)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
 export const top5FeedContent = () => {
     return axios.get("/feed/top5")
         .then(res => {
