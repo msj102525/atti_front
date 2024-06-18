@@ -38,7 +38,7 @@ export default function Feed() {
                 <Header />
             </div>
             <div className="flex justify-center">
-                <div className="border-solid border flex justify-between max-w-6xl max-w-screen-2xl gap-x-10">
+                <div className="border-solid border flex justify-between w-[1536px] gap-x-10">
                     <div className="border-solid border flex-2 p-2">
                         <FeedSideBar />
                     </div>

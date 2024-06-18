@@ -58,7 +58,7 @@ export default function FeedDetail({ data }) {
     return (
         <div className="max-w-screen-lg p-4">
             <div className="after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[2px] after:left-0 after-bottom-0">
-                <div className="flex p-4">
+                <div className="flex p-4 gap-x-2">
                     <p>홈화면&gt;</p>
                     <p>커뮤니티&gt;</p>
                     <p>{data.category}</p>
