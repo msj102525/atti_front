@@ -27,20 +27,6 @@ class AuthStore {
       // this.gender = localStorage.getItem("gender") || '';
     }
 
-    // 상태가 변경될 때마다 LocalStorage에 저장
-    if (typeof window !== "undefined") {
-      autorun(() => {
-        localStorage.setItem("loggedIn", JSON.stringify(this.loggedIn));
-        localStorage.setItem("isAdmin", JSON.stringify(this.isAdmin));
-        localStorage.setItem("logoutkakao", JSON.stringify(this.logoutkakao));
-        localStorage.setItem("userId", this.userId);
-        localStorage.setItem("userName", this.userName);
-        localStorage.setItem("nickName", this.nickName);
-        localStorage.setItem("profileUrl", this.profileUrl);
-        localStorage.setItem("userType", this.userType);
-        // localStorage.setItem("gender", this.gender);
-      });
-    }
   }
 
   setLoggedIn(status) {

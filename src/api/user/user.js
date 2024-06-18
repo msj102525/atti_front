@@ -23,16 +23,7 @@ export const login = (loginData) => {
         window.localStorage.setItem("nickName", response.data.nickName || '');
         window.localStorage.setItem("profileUrl", response.data.profileUrl || '');
         window.localStorage.setItem("userType", response.data.userType || 'U');
-        // window.localStorage.setItem("gender", response.data.gender || '');
-
-        authStore.setIsAdmin(response.data.isAdmin);
-        authStore.checkLoggedIn();
-        authStore.setUserId(response.data.userId || '');
-        authStore.setUserName(response.data.userName || '');
-        authStore.setNickName(response.data.nickName || '');
-        authStore.setProfileUrl(response.data.profileUrl || '');
-        // authStore.setGender(response.data.gender || '');
-        authStore.setUserType(response.data.userType || 'U');
+        
       }
       return response
     });
@@ -53,7 +44,6 @@ export const logout = () => {
     window.localStorage.removeItem("nickName");
     window.localStorage.removeItem("profileUrl");
     window.localStorage.removeItem("userType");
-    window.localStorage.removeItem("gender");
     return res;
   });
 };
