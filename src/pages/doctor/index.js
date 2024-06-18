@@ -139,7 +139,7 @@ export default function DoctorList() {
   return (
     <div>
       <Header />
-      <div className="mx-auto w-[1586px]">
+      <div className="mx-auto w-[1500px]">
         <div className={`${styles.mainContainer} flex justify-center mt-5`}>
           <div className="flex justify-center px-2">
             <div className={`${styles.searchArea} w-1/6`}>

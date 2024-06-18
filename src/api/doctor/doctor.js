@@ -15,8 +15,8 @@ export const searchList = (
   return axios.get(searchUrl).then((res) => res);
 };
 
-export const showDetail = (id) => {
-  return axios.get(baseUrl + "/" + id).then((res) => res);
+export const showDetail = (id, page) => {
+  return axios.get(`${baseUrl}/${id}?page=${page}`).then((res) => res);
 };
 
 // 메일 전송 함수

@@ -1,64 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { showDetail } from "@/api/doctor/doctor";
-import { useEffect, useState } from "react";
+import { showMoreReview } from "@/api/doctor/review";
 import Header from "@/pages/common/Header";
 import Footer from "@/pages/common/Footer";
-import styles from "@/styles/doctor/doctorDetail.module.css";
 import ListView from "@/components/doctor/ListView";
 import MintButton from "@/components/common/MintButton";
 import RatingDistribution from "@/components/doctor/RatingDistribution";
 import ReviewCard from "@/components/doctor/ReviewCard";
+import Tags from "@/components/doctor/Tags";
 
-const averageRating = 4.81;
-const ratingCounts = {
-  5: 143,
-  4: 10,
-  3: 1,
-  2: 2,
-  1: 0,
-};
-
-
-let reviewList = [
-  {
-    content:
-      "짧은 시간 안에 상황을 파악하고 감정적인 지원, 실질적인 조언을 해 주십니다.",
-    starPoint: 4,
-    nickName: "힘들어요",
-  },
-  {
-    content:
-      "힘든 시간을 보내는 동안 선생님과의 상담으로 인해 많은 힘을 얻을 수 있었어요.",
-    starPoint: 5,
-    nickName: "고구마",
-  },
-  {
-    content: "따뜻한 공감과 객관적인 상황분석.",
-    starPoint: 5,
-    nickName: "MBTIT",
-  },
-];
-// {
-//   content: "전반적으로 좋았습니다.",
-//   starPoint: 3,
-//   nickName: "밝은햇살",
-// },
-// {
-//   content: "긍정적인 에너지를 주셔서 감사합니다.",
-//   starPoint: 4,
-//   nickName: "행복한날",
-// },
-// {
-//   content: "실용적인 조언을 주셔서 많은 도움이 되었습니다.",
-//   starPoint: 4,
-//   nickName: "성실한조언자",
-// },
-// {
-//   content: "사용자7의 리뷰입니다.",
-//   starPoint: 3,
-//   nickName: "사용자7",
-// },
 export default function DoctorDetail() {
   const router = useRouter();
   const { id } = router.query;
@@ -68,51 +19,120 @@ export default function DoctorDetail() {
   const [profileUrl, setProfileUrl] = useState("");
   const [tagList, setTagList] = useState([]);
   const [doctorComment, setDoctorComment] = useState("");
-  const [reviews, setReviews] = useState(reviewList);
+  const [averageRating, setAverageRating] = useState(0.0);
+  const [ratingCounts, setRatingCounts] = useState({});
+  const [reviewList, setReviewList] = useState([]);
+  const [bufferedReview, setBufferedReview] = useState(null);
   const [reviewValid, setReviewValid] = useState(false);
+  const [currentReviewPage, setCurrentReviewPage] = useState(0);
+  const [hasMoreReviews, setHasMoreReviews] = useState(false);
+
   const handleConsult = () => {
     console.log("hello");
   };
-  const moreReview = () =>{
-    //엑시오스 요청을 통해 4개의 후기를 추가로 불러옴 만약 더이상 없다면 valid를 false로 바꾸고 버튼이 사라짐
-    let originalReviews = [...reviews];
-    //엑시오스 요청부분
-    originalReviews.push({content: "전반적으로 좋았습니다.",
-         starPoint: 3,
-         nickName: "밝은햇살",})
-    setReviews(originalReviews);  
-  
-  }
-  
+
+  const moreReview = () => {
+    //Case1 ) hasMoreReview가 false 이지만 버퍼가 남아있다 .
+    //그냥 버퍼를 출력하고 버튼을 비활성화
+    console.log(hasMoreReviews);
+    if (!hasMoreReviews) {
+      console.log("그냥 버퍼를 출력하고 버튼을 비활성화");
+      setReviewList((prevReviews) => [...prevReviews, bufferedReview]);
+      setBufferedReview(null);
+      setReviewValid(false);
+      //Case2 ) hasMoreReview가 true ( 그리고 이게 true라면 버퍼는 남아있을 수 밖에없다.)
+    } else {
+      console.log("우선 다음 리뷰들 요청을 보내고 hasMoreReview를 확인한다.");
+      console.log(currentReviewPage);
+      //현재 상태 ? hasMoreReview가 true이고 버퍼가 남아있다.
+      //우선 다음 리뷰들 요청을 보내고 hasMoreReview를 확인한다.
+      showMoreReview(id, currentReviewPage).then((res) => {
+        const resData = res.data;
+        const responseList = resData.reviewList;
+        console.log("리뷰가 남아있나요 ???" + resData.hasMoreReview);
+        if (resData.hasMoreReview) {
+          //Case2-1) 아직 다음 리뷰들이 남아있고 버퍼가 들어있는 상태
+          //대답온 리뷰들중 3개와 버퍼를 합쳐서 ReviewList에 추가하고 버퍼 리뷰에 마지막 하나를 추가한다.
+          console.log(
+            "대답온 리뷰들중 3개와 버퍼를 합쳐서 ReviewList에 추가하고 버퍼 리뷰에 마지막 하나를 추가한다."
+          );
+          const addList = [...responseList.slice(0, 3), bufferedReview];
+          setBufferedReview(responseList[3]);
+          setReviewList((prevReviews) => [...prevReviews, ...addList]);
+          setCurrentReviewPage(currentReviewPage + 1);
+        } else {
+          console.log("응답 리뷰가 돌아왔다. 근데 더이상 다음 리뷰는 없다 ..");
+          console.log(responseList.length);
+          //Case2-2) 응답 리뷰가 돌아왔다. 근데 더이상 다음 리뷰는 없다 .
+          setHasMoreReviews(false); //일단 더이상 없다는걸 표시
+          //지금 상태는 ? 버퍼가 들어가있다. 근데 다음 리뷰는 없다 더이상
+          // 먼저 갯수를 확인해보자 .
+          //Case2-2-1) 응답온 리뷰의 갯수가 4개 미만일 때
+          //응답온 리뷰들과 버퍼를 합쳐서 리뷰리스트에 추가하고 버퍼를 비우고 버튼을 비활성화한다.
+          if (responseList.length < 4) {
+            console.log(
+              "응답온 리뷰들과 버퍼를 합쳐서 리뷰리스트에 추가하고 버퍼를 비우고 버튼을 비활성화한다."
+            );
+            const addList = [...responseList.slice(0, 3), bufferedReview];
+            setBufferedReview(null);
+            setReviewList((prevReviews) => [...prevReviews, ...addList]);
+            setReviewValid(false);
+            //Case2-2-2) 응답온 리뷰의 갯수가 4개 일 때.
+          } else {
+            console.log("버퍼에 한개를 담고 그대로 출력");
+            //버퍼에 한개를 담고 그대로 출력
+            const addList = [...responseList.slice(0, 3), bufferedReview];
+            setBufferedReview(responseList[3]);
+            setReviewList((prevReviews) => [...prevReviews, ...addList]);
+          }
+        }
+      });
+    }
+  };
   useEffect(() => {
     if (id) {
-      showDetail(id)
+      showDetail(id, 0)
         .then((res) => {
-          const doctor = res.data.doctor;
+          const doctor = res.data;
           if (doctor) {
-            const educations = doctor.educations
-              ? doctor.educations.map((item) => item.education)
-              : [];
-            const careers = doctor.careers
-              ? doctor.careers.map((item) => item.career)
-              : [];
-            const tags = doctor.tags ? doctor.tags.map((item) => item.tag) : [];
-            setEducationList(educations);
-            setCareerList(careers);
-            setUserName(doctor.user?.userName || ""); // optional chaining 사용
-            setProfileUrl("/doctor.png" || "");
-            setDoctorComment(doctor.introduce || "");
-            setTagList(tags);
+            setEducationList(doctor.educations);
+            setCareerList(doctor.careers);
+            setUserName(doctor.userName);
+            setProfileUrl("/doctor.png");
+            setDoctorComment(doctor.introduce);
+            setTagList(doctor.tags);
+            setAverageRating(doctor.averageStarPoint);
+            setRatingCounts(doctor.ratingCount);
+
+            const initialReviews = doctor.reviews;
+
+            if (initialReviews.length < 4) {
+              // 초기 리뷰가 4개 미만일 때, 모든 리뷰를 출력하고 버튼을 비활성화
+              console.log(
+                "초기 리뷰가 4개 미만일 때, 모든 리뷰를 출력하고 버튼을 비활성화"
+              );
+              setReviewList(initialReviews);
+              setBufferedReview(null);
+              setReviewValid(false);
+            } else {
+              // 초기 리뷰가 4개 이상일 때, 첫 3개 리뷰를 표시하고, 나머지 1개를 buffer에 저장
+              console.log(
+                "초기 리뷰가 4개 이상일 때, 첫 3개 리뷰를 표시하고, 나머지 1개를 buffer에 저장"
+              );
+              setReviewList(initialReviews.slice(0, 3));
+              setBufferedReview(initialReviews[3]);
+              setReviewValid(true);
+              setCurrentReviewPage(currentReviewPage + 1);
+            }
+            console.log(doctor);
+            setHasMoreReviews(doctor.hasMoreReview);
           }
         })
         .catch((error) => {
-          console.error("정보불러오기 실패", error);
+          console.error("정보 불러오기 실패", error);
         });
-      // showReviews(id).then((res)=>{
-      // 처음 에는 3개만 로드
-      // })
     }
-  }, []);
+  }, [id]);
 
   return (
     <div>
@@ -139,7 +159,7 @@ export default function DoctorDetail() {
             <p className="text-2xl font-extrabold">{userName}님의 전문분야</p>
             <div className="flex mt-5">
               {tagList.map((tagName, index) => {
-                return <Tag key={index} name={tagName} />;
+                return <Tags key={index} name={tagName} />;
               })}
             </div>
           </div>
@@ -156,7 +176,9 @@ export default function DoctorDetail() {
         </div>
         <hr className="border-gray-800 border-3" />
         <div className="container px-4 py-8 mx-auto">
-        <h3 className="text-2xl font-extrabold m-10">{userName} 상담사님 후기</h3>
+          <h3 className="m-10 text-2xl font-extrabold">
+            {userName} 상담사님 후기
+          </h3>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="flex justify-center w-full">
               <div className="w-full max-w-xl h-60">
@@ -166,7 +188,7 @@ export default function DoctorDetail() {
                 />
               </div>
             </div>
-            {reviews.map((review, index) => (
+            {reviewList.map((review, index) => (
               <div key={index} className="flex justify-center">
                 <div className="w-full max-w-xl h-60">
                   <ReviewCard
@@ -177,23 +199,22 @@ export default function DoctorDetail() {
                 </div>
               </div>
             ))}
-            {//onClick, text, sizeW, sizeH, fontSize
-            }
           </div>
-          <div className="flex justify-center mt-10 h-20">
-          <MintButton text="리뷰더보기" sizeW="w-1/4" sizeH="h-full" fontSize="text-3xl" onClick={moreReview}/>
-          </div>
+          {reviewValid && (
+            <div className="flex justify-center h-20 mt-10">
+              <MintButton
+                text="리뷰더보기"
+                sizeW="w-1/4"
+                sizeH="h-full"
+                fontSize="text-3xl"
+                onClick={moreReview}
+                visible={reviewValid}
+              />
+            </div>
+          )}
         </div>
       </div>
       <Footer />
-    </div>
-  );
-}
-
-function Tag(props) {
-  return (
-    <div className="inline-block px-4 py-2 m-2 text-sm text-gray-700 bg-gray-200 rounded-lg">
-      {props.name}
     </div>
   );
 }
