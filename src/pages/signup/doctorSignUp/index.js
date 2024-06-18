@@ -84,11 +84,7 @@ export default function DoctorSignUp() {
       console.log("성공!");
       openModal();
     } catch (err) {
-      if (err.response.status === 500) {
-        alert("이미 존재하는 아이디입니다.");
-      } else {
-        alert(err);
-      }
+      alert(err.message);
     }
   };
 

@@ -206,7 +206,7 @@ export default function DoctorSignUp() {
       authStore.setProfileUrl(data.data.profileUrl || "");
       authStore.setUserType(data.data.userType || "U");
 
-      router.push("/mypage"); // 로그인 성공 후 마이페이지로 리다이렉션
+      router.push("/doctor/mypage"); // 로그인 성공 후 마이페이지로 리다이렉션
     } catch (error) {
       console.error("자동 로그인 실패:", error);
       alert("자동 로그인에 실패했습니다. 로그인 페이지로 이동합니다.");
