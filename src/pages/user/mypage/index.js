@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Header from '@/pages/common/header';
-import styles from '@/styles/user/mypage.module.css'
+import styles from '@/styles/user/mypage.module.css';
+import Modal from "@/components/common/Modal";
+import Footer from '@/pages/common/Footer';
+import { updateUser, deleteUser} from '@/api/user/userApi';
 
 export default function Mypage() {
-  const [name, setName] = useState('userId');
+  const [userId, setUserId] = useState('');
+  const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('가입시 입력한 이메일');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [gender, setGender] = useState('male');
+  const [gender, setGender] = useState('');
   const [birthDate, setBirthDate] = useState('');
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
   useEffect(() => {
-    // 서버로부터 데이터를 가져오는 함수
     const fetchData = async () => {
       try {
         const response = await fetch('/user');
         const data = await response.json();
-        
-        // 서버로부터 받은 데이터를 상태에 저장
-        setuserId(data.setuserId)
-        setName(data.name);
-        setNickname(data.nickname);
+
+        setUserId(data.userId);
+        setName(data.userName);
+        setNickname(data.nickName);
         setPassword(data.password);
         setEmail(data.email);
         setPhone(data.phone);
@@ -36,68 +41,102 @@ export default function Mypage() {
     fetchData();
   }, []);
 
-  const handleUpdate = () => {
-    alert('수정 완료!');
-  };
-
-  const handleCancel = () => {
-    if (confirm('탈퇴 하시겠습니까?')) {
-      alert('탈퇴 완료!');
+  const handleUpdate = async () => {
+    try {
+      const updatedUser = {
+        userId,
+        name,
+        nickname,
+        password,
+        email,
+        phone,
+        gender,
+        birthDate
+      };
+      await updateUser(updatedUser);
+      setModalMessage('수정 완료!');
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error(error);
+      setModalMessage('수정 실패!');
+      setIsModalOpen(true);
     }
   };
 
+  const handleCancel = async () => {
+    if (confirm('탈퇴 하시겠습니까?')) {
+      try {
+        await deleteUser(userId);
+        setModalMessage('탈퇴 완료!');
+        setIsModalOpen(true);
+      } catch (error) {
+        console.error(error);
+        setModalMessage('탈퇴 실패!');
+        setIsModalOpen(true);
+      }
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className={styles.container}>
-      <Header/>
+    <div className="flex flex-col items-center h-screen p-4 bg-gray-100">
+      <Header />
       <Head>
         <title>회원 정보 페이지</title>
       </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>내 정보 수정 (일반 회원)</h1>
-
-        <div className={styles.profilePicture}>
-          {/* <img src="/user.png" alt="Profile Picture" className={styles.profileImg} /> */}
-          <div className={styles.profileButtons}>
-            <button>등록</button>
-            <button>수정</button>
-            <button>삭제</button>
-          </div>
-        </div>
-
+      <div className="mt-10 text-2xl font-bold text-gray-900">
+        <h1>내 정보 수정 (일반 회원)</h1>
+      </div>
+      <div className="flex flex-col w-full max-w-md p-6 mt-5 overflow-y-auto bg-white rounded-lg shadow-md max-h-[70vh]">
         <form className={styles.form}>
-          <label>성명</label>
-          <input type="text" value={name} readOnly />
-          
-          <label>닉네임</label>
-          <input type="text" value={nickname} readOnly />
-          
-          <label>비밀번호</label>
-          <input type="password" value={password} readOnly />
-          
-          <label>이메일</label>
-          <input type="email" value={email} readOnly />
-          
-          <label>전화번호</label>
-          <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
-          
-          <label>성별</label>
-          <div>
-            <input type="radio" id="male" name="gender" value="male" checked={gender === 'male'} onChange={(e) => setGender(e.target.value)} />
-            <label htmlFor="male">남</label>
-            <input type="radio" id="female" name="gender" value="female" checked={gender === 'female'} onChange={(e) => setGender(e.target.value)} />
-            <label htmlFor="female">여</label>
+          <div className="mb-4">
+            <label htmlFor="userId" className="block mb-1 text-sm font-semibold text-gray-800">아이디:</label>
+            <input type="text" id="userId" name="userId" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={userId} readOnly />
           </div>
-          
-          <label>생년월일</label>
-          <input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
-
-          <div className={styles.buttons}>
-            <button type="button" onClick={handleUpdate}>수정</button>
-            <button type="button" onClick={handleCancel}>탈퇴</button>
+          <div className="mb-4">
+            <label htmlFor="userName" className="block mb-1 text-sm font-semibold text-gray-800">성명:</label>
+            <input type="text" id="userName" name="userName" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={name} readOnly />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="nickName" className="block mb-1 text-sm font-semibold text-gray-800">닉네임:</label>
+            <input type="text" id="nickName" name="nickName" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={nickname} readOnly />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block mb-1 text-sm font-semibold text-gray-800">비밀번호:</label>
+            <input type="password" id="password" name="password" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={password} readOnly />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="block mb-1 text-sm font-semibold text-gray-800">이메일:</label>
+            <input type="email" id="email" name="email" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={email} readOnly />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="phone" className="block mb-1 text-sm font-semibold text-gray-800">전화번호:</label>
+            <input type="tel" id="phone" name="phone" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1 text-sm font-semibold text-gray-800">성별:</label>
+            <div>
+              <input type="radio" id="male" name="gender" value="M" checked={gender === 'M'} onChange={(e) => setGender(e.target.value)} />
+              <label htmlFor="male" className="mr-2">남</label>
+              <input type="radio" id="female" name="gender" value="F" checked={gender === 'F'} onChange={(e) => setGender(e.target.value)} />
+              <label htmlFor="female">여</label>
+            </div>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="birthDate" className="block mb-1 text-sm font-semibold text-gray-800">생년월일:</label>
+            <input type="date" id="birthDate" name="birthDate" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+          </div>
+          <div className="flex justify-center">
+            <button type="button" className="w-full px-4 py-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer" onClick={handleUpdate}>수정</button>
+            <button type="button" className="w-full px-4 py-2 font-bold text-white bg-red-400 rounded-full cursor-pointer" onClick={handleCancel}>탈퇴</button>
           </div>
         </form>
-      </main>
+      </div>
+      <Footer />
+      <Modal isOpen={isModalOpen} onClose={closeModal} title="알림" content={modalMessage} />
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { authStore } from '@/pages/stores/authStore';
 import { logout, logoutkakao } from '@/api/user/user';
-// import { authStore } from '@/pages/stores/authStore';
 
 const AuthStatus = observer(() => {
   const router = useRouter();
@@ -39,7 +38,6 @@ const AuthStatus = observer(() => {
         router.push('/'); 
       }
     } catch (error) {
-
       console.error('로그아웃 실패:', error);
     }
   };
@@ -55,14 +53,21 @@ const AuthStatus = observer(() => {
       </button>
       <br/>
       {(authStore.loggedIn || authStore.socialLoggedIn) && (
-        <button onClick={handleMyPageClick}>
-          MyPage
+        <>
+          <button onClick={handleMyPageClick}>
+            MyPage
+          </button>
+          <p>{authStore.userName}님</p>
+        </>
+      )}
+      {!authStore.loggedIn && !authStore.socialLoggedIn && (
+        <button onClick={() => router.push('/signup')}>
+          회원가입
         </button>
       )}
     </div>
   );
 });
-
 
 export const sendTempPassword = (data) => {
   return axios.post("/send-temp-password", data).then((res) => res);
@@ -71,6 +76,5 @@ export const sendTempPassword = (data) => {
 export const verifyTempPassword = (data) => {
   return axios.post("/verify-temp-password", data).then((res) => res);
 };
-
 
 export default AuthStatus;

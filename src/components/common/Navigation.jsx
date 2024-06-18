@@ -46,9 +46,6 @@ export default function Navigation() {
           <li className="hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold">
             <AuthStatus />
           </li>
-          <li className="hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold">
-            <Link href="signup/">회원가입</Link>
-          </li>
         </div>
       </div>
     </div>

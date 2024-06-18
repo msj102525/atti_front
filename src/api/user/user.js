@@ -12,16 +12,18 @@ export const signup = (signUpData) => {
 export const login = (loginData) => {
   return axios.post("/login", loginData)
     .then((response) => {
+      console.log('Login response data:', response.data); // 응답 데이터 확인
+
       const token = response.headers["authorization"] || response.headers["Authorization"];
       if (token) {
         const pureToken = token.split(" ")[1];
         window.localStorage.setItem("token", pureToken);
         window.localStorage.setItem("isAdmin", response.data.isAdmin);
         window.localStorage.setItem("refresh", response.data.refresh);
-        window.localStorage.setItem("userId", response.data.userId );
-        window.localStorage.setItem("userName", response.data.userName );
+        window.localStorage.setItem("userId", response.data.userId);
+        window.localStorage.setItem("userName", response.data.userName);
         window.localStorage.setItem("nickName", response.data.nickName);
-        window.localStorage.setItem("profileUrl", response.data.profileUrl );
+        window.localStorage.setItem("profileUrl", response.data.profileUrl);
         window.localStorage.setItem("userType", response.data.userType || 'U');
         
         // authStore에 사용자 정보를 설정
@@ -30,8 +32,13 @@ export const login = (loginData) => {
         authStore.setUserName(response.data.userName);
         authStore.setNickName(response.data.nickName);
         authStore.setProfileUrl(response.data.profileUrl);
+        authStore.setUserType(response.data.userType || 'U');
       }
       return response;
+    })
+    .catch(error => {
+      console.error('Login error:', error);
+      throw error;
     });
 };
 

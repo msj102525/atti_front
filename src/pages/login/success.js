@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { authStore } from '../stores/authStore';
 const LoginSuccess = () => {
     const router = useRouter();
 
@@ -13,10 +14,11 @@ const LoginSuccess = () => {
             window.localStorage.setItem("refresh", refresh);
             window.localStorage.setItem("userId", userId || '');
             window.localStorage.setItem("userName", userName || '');
-            window.localStorage.setItem("nickName", nickName || '');
-            window.localStorage.setItem("profileUrl", profileUrl || '');
-            window.localStorage.setItem("userType", userType || 'U');
+            //window.localStorage.setItem("nickName", nickName || '');
+            // window.localStorage.setItem("profileUrl", profileUrl || '');
+            //window.localStorage.setItem("userType", userType || 'U');
             authStore.checkLoggedIn();
+            
         
             // 원하는 페이지로 리다이렉트합니다.
             router.push('/');

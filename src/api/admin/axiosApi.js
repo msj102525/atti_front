@@ -23,7 +23,9 @@ instance.interceptors.request.use(
 
 const refreshToken = async () => {
     try {
+
         const refreshToken = localStorage.getItem('refresh');
+        
         const response = await instance.post('/reissue', null, {
             headers: {
                 'Authorization': `Bearer ${refreshToken}`
@@ -51,9 +53,6 @@ const logout = () => {
     // 로그인 페이지로 리다이렉트
     window.location.href = '/login';
 };
-
-
-
 
 // 응답 인터셉터 추가
 // instance.interceptors.response.use(
