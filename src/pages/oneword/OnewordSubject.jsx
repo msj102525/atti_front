@@ -12,7 +12,7 @@ import DetailPostModal from "../../components/oneword/DetailPostModal";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 const OnewordSubjectComponent = observer(() => {
-    const [searchTitle, setSearchTitle] = React.useState("");
+    const [keyword, setKeyword] = React.useState("");
     const [searchInput, setSearchInput] = React.useState("");
     const [page, setPage] = React.useState(1);
     const [size, setSize] = React.useState(10);
@@ -21,14 +21,17 @@ const OnewordSubjectComponent = observer(() => {
     const queryClient = useQueryClient();
     const [isAdmin, setIsAdmin] = React.useState(false);
 
-    const { data, isLoading } = useQuery(['onewordSubjectList', { page, size }], () => getOnewordSubjectList({
+    const { data, isLoading } = useQuery(['onewordSubjectList', {keyword, page, size }], () => getOnewordSubjectList({
+        keyword: keyword,
         page: page,
         size: size,
     }), {
         keepPreviousData: true,
     });
 
-    const { data: getCount, isLoading: isLoading2 } = useQuery(['onewordSubjectListcount'], () => getOnewordSubjectListCount(), {
+    const { data: getCount, isLoading: isLoading2 } = useQuery(['onewordSubjectListcount', { keyword }], () => getOnewordSubjectListCount({
+        keyword: keyword,
+    }), {
         keepPreviousData: true,
     });
 
@@ -62,7 +65,7 @@ const OnewordSubjectComponent = observer(() => {
 
     const handleSearchChange = (e) => setSearchInput(e.target.value);
 
-    const executeSearch = () => setSearchTitle(searchInput);
+    const executeSearch = () => setKeyword(searchInput);
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
@@ -80,10 +83,10 @@ const OnewordSubjectComponent = observer(() => {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    // 등록
+    //// 등록
     const handleSubmit = (onewordSubjectData) => insertOnewordSubjectMutation.mutate(onewordSubjectData);
 
-    // 수정
+    //// 수정
     const handleEdit = (onewordSubjectData) => {
         console.log('Edit onewordSubjectData:', onewordSubjectData.owsjNum);
         updateOnewordSubjectMutation.mutate({
@@ -92,7 +95,7 @@ const OnewordSubjectComponent = observer(() => {
         });
     };
 
-    // 삭제
+    //// 삭제
     const handleDelete = (owsjNum) => {
         deleteOnewordSubjectMutation.mutate(owsjNum);
     };
@@ -101,7 +104,7 @@ const OnewordSubjectComponent = observer(() => {
     const [selectedOnewordSubject, setSelectedOnewordSubject] = React.useState(null);
     const [isDetailModalOpen, setIsDetailModalOpen] = React.useState(false);
 
-    // 상세 조회
+    //// 상세 조회
     const readSubjectDetailMutation = useMutation(getOnewordSubjectDetail, {
         onSuccess: () => {
             queryClient.invalidateQueries('onewordSubjectList').then();
@@ -123,26 +126,7 @@ const OnewordSubjectComponent = observer(() => {
     if (isLoading) return <div>Loading...</div>;
     if (!data) return <div>No data</div>;
 
-    // if (isLoading || isLoading2) return <div>Loading...</div>;
-    // if (!data || !pageCount) return <div>No data</div>;
-
-    const totalPages = Math.ceil(getCount / size); // 전체 페이지 수
-
-    // console.log("전체 페이지수 : " + pageCount)
-
-    // const totalRows = data ? data.length : 0; // 전체 행의 개수
-    // const totalPages = Math.ceil(totalRows / size); // 전체 페이지 수
-    // console.log("전체 갯수 : " + totalRows);
-    // console.log("전체 페이지수 : " + totalPages);
-
-    // // 빈 항목으로 채울 개수 계산
-    // // const emptyItemCount = size * totalPages - totalRows;
-    // const emptyItemCount = size - totalRows;
-    // console.log("공백 갯수 : " + emptyItemCount);
-
-    // // 데이터가 없는 경우 빈 항목을 포함하여 데이터 생성
-    // const filledData = data ? data.concat(Array.from({ length: emptyItemCount }, (_, index) => ({ id: data.length + index, name: 'Placeholder' }))) : Array.from({ length: size }, (_, index) => ({ id: index, name: 'Placeholder' }));
-    // console.log("최종 갯수 : " + filledData.length);
+    const totalPages = Math.ceil(getCount / size); /// 전체 페이지 수
 
     return (
         <div>
@@ -151,14 +135,14 @@ const OnewordSubjectComponent = observer(() => {
             </div>
             <div className="container mt-5">
                 <h2>오늘 한 줄 주제</h2>
-                <div style={{ height: "2vw", justifyContent: "center", textAlign: "right" }}>
+                <div style={{ height: "2vw", justifyContent: "center", textAlign: "left" }}>
                     {/* <select value={size} onChange={handleSizeChange} style={{ height: "88%" }}>
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
                         <option value="20">20</option>
                     </select> */}
-                    <input type="text" placeholder="Search by title..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
+                    <input type="text" placeholder="제목" value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
                     <button onClick={executeSearch}>검색</button>
                 </div>
             </div>
@@ -175,14 +159,14 @@ const OnewordSubjectComponent = observer(() => {
                         </thead>
                         <tbody>
                             {data.map((onewordsubject, i) => (
-                                <OnewordSubjectListComponent key={onewordsubject.owsjNum} onewordsubject={onewordsubject} isPinned onNoticeClick={() => openDetailModal(onewordsubject)} />
+                                <OnewordSubjectListComponent key={onewordsubject.owsjNum} onewordsubject={onewordsubject} isPinned onOnewordSubjectClick={() => openDetailModal(onewordsubject)} />
                             ))
                             }
                             {/* {data.pinnedNotices.map(notice => (
-                            <OnewordSubjectListForm key={notice.id} notice={notice} isPinned onNoticeClick={() => openDetailModal(notice)} />
+                            <OnewordSubjectListForm key={notice.id} notice={notice} isPinned onOnewordSubjectClick={() => openDetailModal(notice)} />
                         ))}
                         {data.regularNotices.map(notice => (
-                            <OnewordSubjectListForm key={notice.id} notice={notice} onNoticeClick={() => openDetailModal(notice)} />
+                            <OnewordSubjectListForm key={notice.id} notice={notice} onOnewordSubjectClick={() => openDetailModal(notice)} />
                         ))} */}
                         </tbody>
                     </table>
@@ -203,7 +187,6 @@ const OnewordSubjectComponent = observer(() => {
                     isOpen={isDetailModalOpen}
                     onClose={closeDetailModal}
                     post={selectedOnewordSubject}
-                    // onLike={handleLike}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                     isAdmin={isAdmin}

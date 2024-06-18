@@ -3,11 +3,11 @@ import { observer } from "mobx-react";
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
-const OnewordSubjectListComponent2 = observer(({ onewordsubject, onNoticeClick }) => {
+const OnewordSubjectListComponent2 = observer(({ onewordsubject, onOnewordSubjectClick }) => {
     const relativeTime = (isoDate) => formatDistanceToNow(parseISO(isoDate), { addSuffix: true, locale: ko });
 
     const handleClick = () => {
-        onNoticeClick(onewordsubject); // 올바른 onewordsubject 객체를 전달하는지 확인
+        onOnewordSubjectClick(onewordsubject); //// 올바른 onewordsubject 객체를 전달하는지 확인
     };
 
     // const handleEditClick = () => {

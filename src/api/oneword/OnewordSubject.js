@@ -1,8 +1,9 @@
 import axios from '@/api/axiosApi';
 
-export const getOnewordSubjectList = ({ page, size }) => {
+export const getOnewordSubjectList = ({ keyword, page, size }) => {
     // 쿼리 파라미터를 사용하여 URL 생성
     const params = new URLSearchParams({
+        keyword,
         page,
         size
     }).toString();
@@ -15,9 +16,13 @@ export const getOnewordSubjectList = ({ page, size }) => {
         });
 }
 
-export const getOnewordSubjectListCount = () => {
+export const getOnewordSubjectListCount = ({keyword}) => {
+    const params = new URLSearchParams({
+        keyword
+    }).toString();
+
     // 쿼리 파라미터를 사용하여 URL 생성
-    return axios.get(`/onewordsubject/list/count`)
+    return axios.get(`/onewordsubject/list/count?${params}`)
         .then(res => {
             return res.data;
         });
@@ -33,6 +38,37 @@ export const getOnewordSubjectDetail = (owsjNum) => {
         .catch(error => {
             console.error('Error : ', error);
             throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록 함
+        });
+}
+
+// 제목으로 검색
+export const getSearchOwsjSubject = ({ keyword, page, size }) => {
+    // 쿼리 파라미터를 사용하여 URL 생성
+    const params = new URLSearchParams({
+        keyword,
+        page,
+        size
+    }).toString();
+
+    console.log("getSearchOwsjSubject : ");
+
+    return axios.get(`/onewordsubject/searchowsjsubject?${params}`)
+        .then(res => {
+            return res.data;
+        });
+}
+
+// 제목으로 검색 건수
+export const getSearchOwsjSubjectCount = ({ keyword }) => {
+    // 쿼리 파라미터를 사용하여 URL 생성
+    const params = new URLSearchParams({
+        keyword
+    }).toString();
+
+    // 쿼리 파라미터를 사용하여 URL 생성
+    return axios.get(`/onewordsubject/searchowsjsubject/count?${params}`)
+        .then(res => {
+            return res.data;
         });
 }
 

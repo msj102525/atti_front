@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
-const OnewordSubjectListComponent = observer(({ onewordsubject, isPinned = false, onNoticeClick  }) => {
+const OnewordSubjectListComponent = observer(({ onewordsubject, isPinned = false, onOnewordSubjectClick  }) => {
     const relativeTime = (isoDate) => formatDistanceToNow(parseISO(isoDate), { addSuffix: true, locale: ko });
 
     const date = onewordsubject.owsjWriteDate ? new Date(onewordsubject.owsjWriteDate) : null;
@@ -12,7 +12,7 @@ const OnewordSubjectListComponent = observer(({ onewordsubject, isPinned = false
     const formattedDate = date ? `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}` : '';
     
     return (
-        <tr onClick={onNoticeClick} style={{ background: isPinned ? "skyblue" : "none" }}>
+        <tr onClick={onOnewordSubjectClick} style={{ background: "skyblue" }}>
             {/* <td style={{ width: "5vw", textAlign: "center" }}>{isPinned ? "공지" : "일반"}</td> */}
             <td style={{ width: "5vw", textAlign: "center" }}>{onewordsubject.owsjNum}</td>
             <td style={{ textAlign: "left" }}>{onewordsubject.owsjSubject}</td>
