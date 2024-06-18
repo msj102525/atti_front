@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
-import Chat12 from '../chat/test';
+import Test from '../chat/test';
 
 const Chat = () => {
   const [selectedRating, setSelectedRating] = useState(0);
@@ -101,7 +101,7 @@ const Chat = () => {
 
         {/* 오른쪽 영역 */}
         <div className="w-1/2 flex flex-col ">
-          <Chat12/>
+          <Test/>
         </div>
       </div>
       <Footer />

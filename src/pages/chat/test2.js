@@ -8,8 +8,8 @@ const ChatApp = () => {
   const messagesEndRef = useRef(null);
   const client = useRef(null);
   const clientId = useRef(`client_${Math.random().toString(16).substr(2, 8)}`);
-  const loggedInUserId = 'admin'; // 현재 로그인한 사용자 ID
-  const targetUserId = 'user11'; // 메시지를 받을 사용자 ID
+  const loggedInUserId = 'user11'; // 현재 로그인한 사용자 ID
+  const targetUserId = 'admin'; // 메시지를 받을 사용자 ID
 
   useEffect(() => {
     // 로컬 스토리지에서 메시지 불러오기
