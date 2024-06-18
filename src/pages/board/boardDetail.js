@@ -17,19 +17,6 @@ function NoticeDetail() {
     const [userType, setUserType] = useState(''); // 유저 타입 상태 추가
 
     useEffect(() => {
-        const fetchUserType = async () => {
-          try {
-            const response = await axios.get('http://localhost:8080/users/type'); // 유저 타입을 가져오는 API
-            setUserType(response.data.userType);
-          } catch (error) {
-            console.error('Error fetching user type:', error);
-          }
-        };
-    
-        fetchUserType();
-      }, []);
-
-    useEffect(() => {
         if (boardNum) {
             const fetchBoardDetail = async () => {
                 try {
