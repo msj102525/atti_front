@@ -22,6 +22,7 @@ export default function PhilosopherConsult({
   const [isFetching, setIsFetching] = useState(false); // 서버 응답 대기 상태
   const [repeatMessages, setRepeatMessages] = useState(false);
   const [audioEnd, setAudioEnd] = useState(false);
+  const [audioSrc, setAudioSrc] = useState(null);
 
   const { recording, startRecording, stopRecording, uploadAudio, audioBlob } =
     useAudioRecorder();
@@ -114,10 +115,20 @@ export default function PhilosopherConsult({
       const answer = await cosultToPhilosopher(philosopher.model, concern);
 
       let answerData = answer.data;
+      let textData = answerData.text
+
+      console.log(answerData + '장세민');
+      console.log(answerData.text + '장세민');
+      console.log(answerData.audio + '장세민');
+
+      setAudioSrc(`data:audio/mp3;base64,${answerData.audio}`);
+
+      console.log(audioSrc + '장세민2');
+
       // 답변 온 걸 .으로 분리해서 리스트로 만듦
       let chunks = [];
-      for (let i = 0; i < answerData.length; i += 25) {
-        chunks.push(answerData.slice(i, i + 25).trim());
+      for (let i = 0; i < textData.length; i += 25) {
+        chunks.push(textData.slice(i, i + 25).trim());
       }
       let messageList = chunks.filter((chunk) => chunk.length > 0);
       setRepeatMessages(false);
@@ -194,6 +205,15 @@ export default function PhilosopherConsult({
             />
           )}
         </div>
+        <div>
+        {audioSrc && (
+        <div>
+          <audio controls src={audioSrc} autoPlay style={{ display: 'none' }}></audio>
+        </div>
+        )}
+        </div>
+
+
       </div>
     </div>
   );

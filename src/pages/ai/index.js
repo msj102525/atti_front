@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import PhilosopherConsult from "@/components/ai/PhilosopherConsult";
 import Footer from "../common/Footer";
 
+
 export default function Ai() {
   let initialText = [
     "지금 당신의 그 고민",
