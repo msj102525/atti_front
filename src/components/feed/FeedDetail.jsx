@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Button from "../common/Button";
 import { updateFeed } from "@/api/feed/feed";
 import { useRouter } from 'next/router';
+import { postLike } from '@/api/likeHistory/likeHistory';
 
 const CustomEditor = dynamic(() => {
     return import('@/components/common/custom-editor');
