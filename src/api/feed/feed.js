@@ -37,7 +37,7 @@ export const top5FeedContent = () => {
         });
 }
 
-export const getListByCategory = async (category, page, size) => {
+export const getFeedListByCategory = async (category, page, size) => {
     try {
         if (category === "모든 사연" || category === "최신순") category = "";
 
@@ -66,6 +66,38 @@ export const getFeedByFeedNum = async (feedNum) => {
         throw error;
     }
 }
+
+
+export const formatDate = (feedDate) => {
+    const currentDate = new Date();
+    const dateToCompare = new Date(feedDate);
+
+    const currentDateOnly = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    const dateToCompareOnly = new Date(dateToCompare.getFullYear(), dateToCompare.getMonth(), dateToCompare.getDate());
+
+    const timeDiff = currentDateOnly - dateToCompareOnly;
+    const dayDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+    if (dayDiff === 0) {
+        return '오늘';
+    } else if (dayDiff === 1) {
+        return '하루 전';
+    } else if (dayDiff === 2) {
+        return '이틀 전';
+    } else if (dayDiff === 3) {
+        return '사흘 전';
+    } else if (dayDiff === 4) {
+        return '나흘 전';
+    } else if (dayDiff === 5) {
+        return '닷새 전';
+    } else if (dayDiff === 6) {
+        return '엿새 전';
+    } else if (dayDiff === 7) {
+        return '이레 전';
+    } else {
+        return `${dayDiff}일 전`;
+    }
+};
 
 
 

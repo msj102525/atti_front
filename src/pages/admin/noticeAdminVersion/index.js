@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from 'react-query';
-import CommunityAdminVersionBoardCard from "@/components/admin/CommunityAdminVersionBoardCard"; // MemberCard 컴포넌트 가져오기
-import styles from "@/styles/admin/communityAdminVersion.module.css";
-import { getCommunityAdminVersionList, deleteCommunityAdminVersion } from "@/api/admin/adminboard"; // 회원 관련 API 함수 가져오기
+import NoticeAdminVersionBoardCard from "@/components/admin/NoticeAdminVersionBoardCard"; // MemberCard 컴포넌트 가져오기
+import styles from "@/styles/admin/noticeAdminVersion.module.css";
+import { getNoticeAdminVersionList, deleteNoticeAdminVersion } from "@/api/admin/adminboard"; // 회원 관련 API 함수 가져오기
 import { handleAxiosError } from "@/api/errorAxiosHandle"; // 오류 처리 함수 가져오기
 import Header from "@/pages/common/Header";
 import Footer from "@/pages/common/Footer";
 import AdminSidebar from "@/components/admin/AdminSidebar"
+import { useRouter } from 'next/router';
+
+import SuspendModal from '@/components/admin/SuspendModal'; // SuspendModal 컴포넌트 가져오기
+
 
 // QueryClient 생성
 const queryClient = new QueryClient();
 
 
-const CommunityAdminVersionListComponent = observer(() => {
+const NoticeAdminVersionListComponent = observer(() => {
     //const [searchField, setSearchField] = useState("id"); // 검색 필드 상태
     const [searchInput, setSearchInput] = useState(""); // 검색 입력 상태
     const [page, setPage] = useState(1); // 현재 페이지 상태
@@ -30,13 +34,15 @@ const CommunityAdminVersionListComponent = observer(() => {
 
     const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
 
-    const searchField = searchType === 'id' ? 'userId' : 'feedContent';
+    const searchField = searchType === 'id' ? 'boardWriter' : 'boardContent';
+
+    const router = useRouter();
 
 
 
     const { data, isLoading, error, refetch } = useQuery(
-        ['communityAdminVersionList', { searchField: searchParams.searchField, searchInput: searchParams.searchInput, page, size }],
-        () => getCommunityAdminVersionList({ searchField: searchParams.searchField, searchInput: searchParams.searchInput, page: page - 1, size }),
+        ['noticeAdminVersionList', { searchField: searchParams.searchField, searchInput: searchParams.searchInput, page, size }],
+        () => getNoticeAdminVersionList({ searchField: searchParams.searchField, searchInput: searchParams.searchInput, page: page - 1, size }),
         {
             keepPreviousData: true,
         }
@@ -48,16 +54,17 @@ const CommunityAdminVersionListComponent = observer(() => {
 
 
 
-
     // 회원 삭제 뮤테이션
-    const deleteCommunityAdminVersionMutation = useMutation(deleteCommunityAdminVersion, {
+    const deleteNoticeAdminVersionMutation = useMutation(deleteNoticeAdminVersion, {
         onSuccess: () => {
-            queryClient.invalidateQueries('communityAdminVersionList'); // 회원 리스트 쿼리 무효화
+            queryClient.invalidateQueries('noticeAdminVersionList'); // 회원 리스트 쿼리 무효화
         },
         onError: handleAxiosError, // 오류 처리
 
 
     });
+
+
 
 
 
@@ -91,6 +98,7 @@ const CommunityAdminVersionListComponent = observer(() => {
     const handleSearchChange = (event) => setSearchInput(event.target.value);
 
 
+
     // 관리자 여부 설정
     //useEffect(() => {
     //setIsAdmin(localStorage.getItem("isAdmin") === "true");
@@ -99,9 +107,9 @@ const CommunityAdminVersionListComponent = observer(() => {
 
 
     // 회원 삭제 핸들러
-    const handleDelete = (feedNum) => {
-        console.log(`Delete member with ID: ${feedNum}`);
-        deleteCommunityAdminVersionMutation.mutate(feedNum);
+    const handleDelete = (boardNum) => {
+        console.log(`Delete member with ID: ${boardNum}`);
+        deleteNoticeAdminVersionMutation.mutate(boardNum);
     };
 
     //수정모달 작업중 ***************************
@@ -115,6 +123,12 @@ const CommunityAdminVersionListComponent = observer(() => {
         setIsModalOpen(false); // 모달 닫기
     };
 
+    //이동
+
+    const handleNavigation = (path) => {
+        router.push(path);
+    };
+
 
     if (isLoading) return <div>Loading...</div>; // 로딩 중일 때 표시
     //밑에 한 줄 추가
@@ -125,12 +139,13 @@ const CommunityAdminVersionListComponent = observer(() => {
     return (
         <div>
             <Header />
-
             <div style={{ display: 'flex' }}>
                 <AdminSidebar />
                 <div className={styles.content}>
                     <div className={styles.container}>
-                        <h2 className={styles.centeredText}>커뮤니티(Admin ver.)</h2>
+                        <h2 className={styles.centeredText}>공지사항(Admin ver.)</h2>
+                        <button className={styles.mkbutton} onClick={() => handleNavigation('/board/boardWrite')}>글쓰기</button>
+
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                             <select value={searchType} onChange={handleSearchTypeChange}>
                                 <option value="id">아이디</option>
@@ -143,15 +158,19 @@ const CommunityAdminVersionListComponent = observer(() => {
                             <thead>
                                 <tr>
                                     <th style={{ width: "5vw", textAlign: "center" }}>회원아이디</th>
-                                    <th style={{ textAlign: "center" }}>내용</th>
+                                    <th style={{ textAlign: "center" }}>제목</th>
+                                    <th style={{ width: "30vw", textAlign: "center" }}>내용</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
                                 </tr>
                             </thead>
                             <tbody>
+                                {/* {data.members.map(member => (  */}
+
+                                {/* {data && data.members && Array.isArray(data.members) && data.members.map(user => ( */}
                                 {/* {data.map(user => (
                     
-                        <CommunityAdminVersionBoardCard
-                        key={user.feeedNum} // feedNum을 key로 사용
+                        <NoticeAdminVersionBoardCard
+                        key={user.boardNum}
                         user={user} 
                         handleDelete={handleDelete}
                         />
@@ -159,8 +178,8 @@ const CommunityAdminVersionListComponent = observer(() => {
 
                                 {data && Array.isArray(data) ? (
                                     data.map(user => (
-                                        <CommunityAdminVersionBoardCard
-                                            key={user.feeedNum} // feedNum을 key로 사용
+                                        <NoticeAdminVersionBoardCard
+                                            key={user.boardNum}
                                             user={user}
                                             handleDelete={handleDelete}
                                         />
@@ -170,6 +189,8 @@ const CommunityAdminVersionListComponent = observer(() => {
                                         <td colSpan="5" style={{ textAlign: 'center' }}>No data</td>
                                     </tr>
                                 )}
+
+
                             </tbody>
                         </table>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
@@ -186,12 +207,12 @@ const CommunityAdminVersionListComponent = observer(() => {
 
 
 // QueryClientProvider로 감싸기
-const CommunityAdminVersionListPage = () => {
+const NoticeAdminVersionListPage = () => {
     return (
         <QueryClientProvider client={queryClient}>
-            <CommunityAdminVersionListComponent />
+            <NoticeAdminVersionListComponent />
         </QueryClientProvider>
     );
 };
 
-export default CommunityAdminVersionListPage;
+export default NoticeAdminVersionListPage;

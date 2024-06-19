@@ -6,7 +6,6 @@ import FeedDetail from "@/components/feed/FeedDetail";
 import { getFeedByFeedNum } from "@/api/feed/feed";
 import ReplyWriteForm from "@/components/reply/ReplyWriteForm";
 import ReplyList from "@/components/reply/ReplyList";
-import { da } from "date-fns/locale";
 
 export default function Feed() {
     const [data, setData] = useState(null);
@@ -34,7 +33,7 @@ export default function Feed() {
 
     return (
         <div>
-            <div className="sticky top-0">
+            <div className="sticky top-0 z-50">
                 <Header />
             </div>
             <div className="flex justify-center">
@@ -42,10 +41,10 @@ export default function Feed() {
                     <div className="border-solid border flex-2 p-2">
                         <FeedSideBar />
                     </div>
-                    <div className="border-solid border flex-1">
+                    <div className="border-solid border flex-1  relative z-[0]">
                         <FeedDetail data={data} />
                         <ReplyWriteForm data={data} fetchData={fetchData} />
-                        <ReplyList data={data} />
+                        <ReplyList data={data} fetchData={fetchData} />
                     </div>
                 </div>
             </div>

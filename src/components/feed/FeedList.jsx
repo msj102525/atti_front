@@ -1,6 +1,7 @@
-import { getListByCategory } from "@/api/feed/feed";
+import { getFeedListByCategory } from "@/api/feed/feed";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import { formatDate } from "@/api/feed/feed";
 
 export default function FeedList({ category }) {
     const [feedData, setFeedData] = useState([]);
@@ -13,7 +14,7 @@ export default function FeedList({ category }) {
         if (page === 0) return;
 
         const fetchMoreData = async () => {
-            await getListByCategory(category, page, size)
+            await getFeedListByCategory(category, page, size)
                 .then(res => {
                     setFeedData(prevFeedData => [...prevFeedData, ...res]);
                     setHasMore(res.length === size);
@@ -28,7 +29,7 @@ export default function FeedList({ category }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const firstData = await getListByCategory(category, 0, 10);
+                const firstData = await getFeedListByCategory(category, 0, 10);
                 setPage(0);
                 setFeedData(firstData);
                 setHasMore(firstData.length === size);
@@ -71,6 +72,7 @@ export default function FeedList({ category }) {
     }, [hasMore]);
 
 
+
     return (
         <div className="p-10">
             <div className="flex justify-center">
@@ -78,7 +80,7 @@ export default function FeedList({ category }) {
                     {feedData.map((feed, idx) => (
                         <div key={idx} className="flex flex-col border max-w-md p-4 rounded-[40px] mb-4 cursor-pointer">
                             <Link href={`feed/${feed.feedNum}`}>
-                                <div className="flex gap-2 text-m items-center text-gray-500 pb-2">
+                                <div className="flex gap-2 text-m items-center text-gray-500 pb-2 min-w-96">
                                     <p>{feed.category}</p>
                                     <p>|</p>
                                     <div className="border w-10 h-10 rounded-full overflow-hidden">
@@ -86,7 +88,7 @@ export default function FeedList({ category }) {
                                         <img className="block w-full" src={"#"} alt="userImg" />
                                     </div>
                                     <p>{feed.inPublic === "Y" ? feed.feedWriterId : "비공개"}</p>
-                                    <p>{feed.feedDate}</p>
+                                    <p>{formatDate(feed.feedDate)}</p>
                                 </div>
                                 <div className="text-lg max-h-60 overflow-hidden line-clamp-[8] mb-4"
                                     dangerouslySetInnerHTML={{ __html: feed.feedContent }} />
@@ -100,7 +102,7 @@ export default function FeedList({ category }) {
                                         {feed.replyCount}
                                     </div>
                                 </div>
-                                <div className={`${feed.dcomentExist ? "block" : "hidden"} border p-1 rounded-[20px] bg-cyan-100`}>
+                                <div className={`${feed.dcomentExist ? "block" : "hidden"} border p-1 rounded-[20px] bg-customBrown2`}>
                                     <div className="flex items-center">
                                         <div className="border w-10 h-10 rounded-full overflow-hidden">
                                             {/* <img className="block w-full bg-white" src={feed.docterImgUrl} alt="userImg" /> */}

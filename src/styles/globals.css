@@ -27,10 +27,6 @@ input {
   outline: none;
 }
 
-p {
-  cursor: pointer;
-}
-
 html {
   font-family: sans-serif;
   font-weight: 600;
@@ -51,6 +47,18 @@ html {
 @media screen and (max-width: 900px) {
   html {
     font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 830px) {
+  html {
+    font-size: 8px;
+  }
+}
+
+@media screen and (max-width: 660px) {
+  html {
+    font-size: 7px;
   }
 }
 
