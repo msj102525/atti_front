@@ -1,6 +1,6 @@
 import styles from "../../styles/doctor/selectSignUp.module.css";
 import { useRouter } from "next/router";
-import Header from "../common/header";
+import Header from "../common/Header";
 import Footer from "../common/Footer";
 
 export default function SignUp() {
