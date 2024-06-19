@@ -21,7 +21,7 @@ const OnewordSubjectComponent = observer(() => {
     const queryClient = useQueryClient();
     const [isAdmin, setIsAdmin] = React.useState(false);
 
-    const { data, isLoading } = useQuery(['onewordSubjectList', {keyword, page, size }], () => getOnewordSubjectList({
+    const { data, isLoading } = useQuery(['onewordSubjectList', { keyword, page, size }], () => getOnewordSubjectList({
         keyword: keyword,
         page: page,
         size: size,
@@ -29,9 +29,10 @@ const OnewordSubjectComponent = observer(() => {
         keepPreviousData: true,
     });
 
-    const { data: getCount, isLoading: isLoading2 } = useQuery(['onewordSubjectListcount', { keyword }], () => getOnewordSubjectListCount({
-        keyword: keyword,
-    }), {
+    const { data: getCount, isLoading: isLoading2 } = useQuery(['onewordSubjectListcount', { keyword }],
+        () => getOnewordSubjectListCount({
+            keyword: keyword,
+        }), {
         keepPreviousData: true,
     });
 
@@ -74,7 +75,6 @@ const OnewordSubjectComponent = observer(() => {
     };
 
     const handlePageChange = ({ selected }) => {
-        // setCurrentPage(selected);
         setPage(selected + 1);
     };
 
@@ -133,7 +133,8 @@ const OnewordSubjectComponent = observer(() => {
             <div>
                 <Header />
             </div>
-            <div className="container mt-5">
+            {/* <div className="container mt-5"> */}
+            <div className="container mx-auto mt-5">
                 <h2>오늘 한 줄 주제</h2>
                 <div style={{ height: "2vw", justifyContent: "center", textAlign: "left" }}>
                     {/* <select value={size} onChange={handleSizeChange} style={{ height: "88%" }}>
@@ -142,32 +143,42 @@ const OnewordSubjectComponent = observer(() => {
                         <option value="15">15</option>
                         <option value="20">20</option>
                     </select> */}
-                    <input type="text" placeholder="제목" value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
+                    <input type="text" placeholder="제목" className="border border-black rounded py-2 px-4"
+                        value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
                     <button onClick={executeSearch}>검색</button>
                 </div>
             </div>
-            <div>
-                <div className={styles['table-container']}>
-                    <table className="table">
+            <div className="container mx-auto mt-5">
+                {/* <div className={styles['table-container']}> */}
+                <div>
+                    <table className="min-w-full divide-y divide-gray-200">
                         <thead>
-                            <tr>
-                                <th style={{ width: "5vw", textAlign: "center" }}>번호</th>
-                                <th style={{ textAlign: "center" }}>제목</th>
-                                <th style={{ width: "10vw", textAlign: "center" }}>글쓴이</th>
-                                <th style={{ width: "7vw", textAlign: "center" }}>작성일</th>
+                            <tr className="bg-gray-50">
+                                <th className="px-6 py-3 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" style={{ width: "5vw", textAlign: "center" }}>번호</th>
+                                <th className="px-6 py-3 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" style={{ textAlign: "center" }}>제목</th>
+                                <th className="px-6 py-3 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" style={{ width: "10vw", textAlign: "center" }}>글쓴이</th>
+                                <th className="px-6 py-3 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" style={{ width: "7vw", textAlign: "center" }}>작성일</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {data.map((onewordsubject, i) => (
-                                <OnewordSubjectListComponent key={onewordsubject.owsjNum} onewordsubject={onewordsubject} isPinned onOnewordSubjectClick={() => openDetailModal(onewordsubject)} />
-                            ))
-                            }
-                            {/* {data.pinnedNotices.map(notice => (
-                            <OnewordSubjectListForm key={notice.id} notice={notice} isPinned onOnewordSubjectClick={() => openDetailModal(notice)} />
-                        ))}
-                        {data.regularNotices.map(notice => (
-                            <OnewordSubjectListForm key={notice.id} notice={notice} onOnewordSubjectClick={() => openDetailModal(notice)} />
-                        ))} */}
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {/* 데이터가 있을 경우 최대 10개의 행을 표시 */}
+                            {data.slice(0, 10).map((onewordsubject, index) => (
+                                <OnewordSubjectListComponent
+                                    key={onewordsubject.owsjNum}
+                                    onewordsubject={onewordsubject}
+                                    isPinned
+                                    onOnewordSubjectClick={() => openDetailModal(onewordsubject)}
+                                />
+                            ))}
+
+                            {/* 데이터가 10개 미만인 경우 빈 공간을 추가하여 10개의 행을 유지 */}
+                            {Array.from({ length: Math.max(10 - data.length, 0) }).map((_, index) => (
+                                <tr key={`empty-${index}`} className="h-16">
+                                    <td className="px-6 py-4 whitespace-no-wrap" colSpan="4">
+                                        {/* 빈 공간 */}
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -179,7 +190,7 @@ const OnewordSubjectComponent = observer(() => {
                 }
 
                 <div>
-                    <button onClick={openModal}>글쓰기</button>
+                    <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">글쓰기</button>
                 </div>
 
                 <OnewordSubjectWriteModalComponent isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />

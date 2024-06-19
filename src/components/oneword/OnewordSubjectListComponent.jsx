@@ -12,16 +12,14 @@ const OnewordSubjectListComponent = observer(({ onewordsubject, isPinned = false
     const formattedDate = date ? `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}` : '';
     
     return (
-        <tr onClick={onOnewordSubjectClick} style={{ background: "skyblue" }}>
-            {/* <td style={{ width: "5vw", textAlign: "center" }}>{isPinned ? "공지" : "일반"}</td> */}
-            <td style={{ width: "5vw", textAlign: "center" }}>{onewordsubject.owsjNum}</td>
-            <td style={{ textAlign: "left" }}>{onewordsubject.owsjSubject}</td>
-            <td style={{ width: "10vw", textAlign: "center" }}>{onewordsubject.owsjWriter}</td>
-            {/* <td style={{ width: "10vw", textAlign: "center" }}>{formattedDate}</td> */}
-            <td style={{ width: "10vw", textAlign: "center" }}>{formattedDate}</td>
-            {/* <td style={{ width: "7vw", textAlign: "center" }}>{relativeTime(onewordsubject.owsjWriteDate)}</td> */}
+        <tr onClick={onOnewordSubjectClick}>
+            <td className="px-6 py-4 whitespace-no-wrap" style={{ width: "5vw", textAlign: "center" }}>{onewordsubject.owsjNum}</td>
+            <td className="px-6 py-4 whitespace-no-wrap" style={{ textAlign: "left" }}>{onewordsubject.owsjSubject}</td>
+            <td className="px-6 py-4 whitespace-no-wrap" style={{ width: "10vw", textAlign: "center" }}>{onewordsubject.owsjWriter}</td>
+            <td className="px-6 py-4 whitespace-no-wrap" style={{ width: "10vw", textAlign: "center" }}>{formattedDate}</td>
         </tr>
     );
+      
 });
 
 export default OnewordSubjectListComponent;
