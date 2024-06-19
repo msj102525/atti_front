@@ -52,7 +52,7 @@ export default function FeedSideBar() {
                                 key={idx}
                                 className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-start font-semibold p-1 pl-6 truncate text-slate-500 text-lg"
                             >
-                                <Link href={`feed/${feed.feedNum}`}>
+                                <Link href={`/feed/${feed.feedNum}`}>
                                     {idx + 1}. {sanitizedContent}
                                 </Link>
                             </li>
