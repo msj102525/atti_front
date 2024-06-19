@@ -4,6 +4,7 @@ import Button from "../common/Button";
 import { updateFeed } from "@/api/feed/feed";
 import { useRouter } from 'next/router';
 import { postLike } from '@/api/likeHistory/likeHistory';
+import { formatDate } from '@/api/feed/feed';
 
 const CustomEditor = dynamic(() => {
     return import('@/components/common/custom-editor');
@@ -72,7 +73,7 @@ export default function FeedDetail({ data }) {
                         </div>
                         <p>{data.inPublic === "Y" ? data.feedWriterId : "비공개"}</p>
                         <p> | </p>
-                        <p>{data.feedDate}</p>
+                        <p>{formatDate(data.feedDate)}</p>
                     </div>
                     <div className={data.feedWriterId == user.userId ? "flex gap-4" : "hidden"}>
                         <Button text={"수정"} onClick={handleModSubmit} />

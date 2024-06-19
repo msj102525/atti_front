@@ -1,6 +1,7 @@
 import { getListByCategory } from "@/api/feed/feed";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import { formatDate } from "@/api/feed/feed";
 
 export default function FeedList({ category }) {
     const [feedData, setFeedData] = useState([]);
@@ -71,6 +72,7 @@ export default function FeedList({ category }) {
     }, [hasMore]);
 
 
+
     return (
         <div className="p-10">
             <div className="flex justify-center">
@@ -78,7 +80,7 @@ export default function FeedList({ category }) {
                     {feedData.map((feed, idx) => (
                         <div key={idx} className="flex flex-col border max-w-md p-4 rounded-[40px] mb-4 cursor-pointer">
                             <Link href={`feed/${feed.feedNum}`}>
-                                <div className="flex gap-2 text-m items-center text-gray-500 pb-2">
+                                <div className="flex gap-2 text-m items-center text-gray-500 pb-2 min-w-96">
                                     <p>{feed.category}</p>
                                     <p>|</p>
                                     <div className="border w-10 h-10 rounded-full overflow-hidden">
@@ -86,7 +88,7 @@ export default function FeedList({ category }) {
                                         <img className="block w-full" src={"#"} alt="userImg" />
                                     </div>
                                     <p>{feed.inPublic === "Y" ? feed.feedWriterId : "비공개"}</p>
-                                    <p>{feed.feedDate}</p>
+                                    <p>{formatDate(feed.feedDate)}</p>
                                 </div>
                                 <div className="text-lg max-h-60 overflow-hidden line-clamp-[8] mb-4"
                                     dangerouslySetInnerHTML={{ __html: feed.feedContent }} />
