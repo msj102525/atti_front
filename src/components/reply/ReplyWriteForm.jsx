@@ -20,6 +20,7 @@ export default function ReplyWriteForm({ data, fetchData }) {
         const replyForm = {
             feedNum: data.feedNum,
             replyContent: editorDataReply,
+            replyReplyRef: data.replyNum
         }
 
         try {

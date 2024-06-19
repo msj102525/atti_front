@@ -1,4 +1,4 @@
-import { getListByCategory } from "@/api/feed/feed";
+import { getFeedListByCategory } from "@/api/feed/feed";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { formatDate } from "@/api/feed/feed";
@@ -14,7 +14,7 @@ export default function FeedList({ category }) {
         if (page === 0) return;
 
         const fetchMoreData = async () => {
-            await getListByCategory(category, page, size)
+            await getFeedListByCategory(category, page, size)
                 .then(res => {
                     setFeedData(prevFeedData => [...prevFeedData, ...res]);
                     setHasMore(res.length === size);
@@ -29,7 +29,7 @@ export default function FeedList({ category }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const firstData = await getListByCategory(category, 0, 10);
+                const firstData = await getFeedListByCategory(category, 0, 10);
                 setPage(0);
                 setFeedData(firstData);
                 setHasMore(firstData.length === size);
@@ -102,7 +102,7 @@ export default function FeedList({ category }) {
                                         {feed.replyCount}
                                     </div>
                                 </div>
-                                <div className={`${feed.dcomentExist ? "block" : "hidden"} border p-1 rounded-[20px] bg-cyan-100`}>
+                                <div className={`${feed.dcomentExist ? "block" : "hidden"} border p-1 rounded-[20px] bg-customBrown2`}>
                                     <div className="flex items-center">
                                         <div className="border w-10 h-10 rounded-full overflow-hidden">
                                             {/* <img className="block w-full bg-white" src={feed.docterImgUrl} alt="userImg" /> */}

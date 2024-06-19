@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       colors: {
         customBrown: "#5E3229",
+        customBrown2: "rgba(150, 75, 0, 0.6)",
       },
     },
     // height: {

@@ -37,7 +37,7 @@ export const top5FeedContent = () => {
         });
 }
 
-export const getListByCategory = async (category, page, size) => {
+export const getFeedListByCategory = async (category, page, size) => {
     try {
         if (category === "모든 사연" || category === "최신순") category = "";
 
