@@ -32,7 +32,7 @@
 }
 
 .menuTitle {
-    font-size: 18px;
+    font-size: 20px;
     margin-bottom: 10px;
 }
 
@@ -48,6 +48,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 15px;
 
     transition: background-color 0.3s ease; /*메뉴 항목에 애니메이션 추가 */
 
