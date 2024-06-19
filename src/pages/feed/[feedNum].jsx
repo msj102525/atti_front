@@ -44,7 +44,7 @@ export default function Feed() {
                     <div className="border-solid border flex-1  relative z-[0]">
                         <FeedDetail data={data} />
                         <ReplyWriteForm data={data} fetchData={fetchData} />
-                        <ReplyList data={data} />
+                        <ReplyList data={data} fetchData={fetchData} />
                     </div>
                 </div>
             </div>
