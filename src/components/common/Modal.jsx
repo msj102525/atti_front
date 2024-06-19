@@ -11,15 +11,17 @@ const Modal = ({ isOpen, onClose, title, content, content2, imgUrl }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="relative w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <div className="flex justify-center mb-4">
-          {imgUrl === "signUp" ? (
-            <LottieAnimation animationData={fireworkAnimation} />
-          ) : (
-            <img
-              src={imgUrl}
-              alt="Modal Image"
-              className="object-cover w-24 h-24 rounded-lg shadow-lg"
-            />
-          )}
+          {imgUrl ? (
+            imgUrl === "signUp" ? (
+              <LottieAnimation animationData={fireworkAnimation} />
+            ) : (
+              <img
+                src={imgUrl}
+                alt="Modal Image"
+                className="object-cover w-24 h-24 rounded-lg shadow-lg"
+              />
+            )
+          ) : null}
         </div>
 
         <h2 className="mb-4 text-2xl font-semibold text-center text-gray-800">

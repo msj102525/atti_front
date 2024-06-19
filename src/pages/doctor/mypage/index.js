@@ -1,23 +1,44 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Header from "@/pages/common/header";
 import Footer from "@/pages/common/footer";
 import MintButton from "@/components/common/MintButton";
 import KakaoAddress from "@/components/doctor/KakaoAddress";
+import { getDoctorMypageData, updateDoctorProfile } from "@/api/doctor/doctor"; // 업데이트 API 임포트
+import { useRouter } from "next/router";
+import FileUploadButton from "@/components/doctor/fileUploadButton";
+import Modal from "@/components/common/Modal";
+import { getCoordinatesFromAddress } from "../../../hooks/getCoordinates";
 
 export default function DoctorUpdate() {
   const [userId, setUserId] = useState("");
+  const [hospitalName, setHospitalName] = useState("");
+  const [introduce, setIntroduce] = useState("");
+  const [hospitalPhone, setHospitalPhone] = useState("");
   const [address, setAddress] = useState("");
   const [zonecode, setZonecode] = useState("");
   const [extraAddress, setExtraAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const [careers, setCareers] = useState([]);
+  const [originalCareers, setOriginalCareers] = useState([]);
   const [educations, setEducations] = useState([]);
+  const [originalEducations, setOriginalEducations] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [profileUrl, setProfileUrl] = useState("");
-  const handleProfileChange = () => {
-    console.log("프로필 수정");
-  };
-  const updateDoctor = () => {};
+  const [originalTags, setOriginalTags] = useState([]);
+
+  const [hospitalFileName, setHospitalFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null); // 추가된 상태
+
+  // 모달 관련
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState({
+    title: "",
+    content: "",
+    redirectTo: "",
+  });
+
+  const router = useRouter();
+
   const tagList = [
     [
       "결혼/육아",
@@ -46,35 +67,157 @@ export default function DoctorUpdate() {
   ];
 
   useEffect(() => {
-    const tempUserId = localStorage.getItem("userId");
-    setUserId(tempUserId);
-    const userType = localStorage.getItem("userType");
+    // 테스트 코드 --------------------------------------------------------
+    let tempUserId = "user003";
+    let userType = "D";
+    // const tempUserId = localStorage.getItem("userId");
+    // setUserId(tempUserId);
+    // const userType = localStorage.getItem("userType");
+    // setUserType(userType);
+    //---------------------------------------------------------
+
     if (!tempUserId) {
-      router.push("/login");
+      setModalMessage({
+        title: "로그인 필요",
+        content: "로그인 페이지로 이동합니다.",
+        redirectTo: "/login",
+      });
+      setIsModalOpen(true);
       return;
     }
+
     if (userType !== "D") {
-      alert("권한이 없습니다 !");
-      router.push("/");
+      setModalMessage({
+        title: "권한 오류",
+        content: "권한이 없습니다. 메인 페이지로 이동합니다.",
+        redirectTo: "/",
+      });
+      setIsModalOpen(true);
+      return;
     }
+
     const fetchDoctorData = async () => {
       try {
-        const response = await axios.get(`/api/user/${userId}`);
-        setUserData(response.data);
+        const res = await getDoctorMypageData();
+        const response = res.data;
+        setAddress(response.address);
+        setZonecode(response.zonecode);
+        setExtraAddress(response.extraAddress);
+        setDetailAddress(response.detailAddress);
+        setCareers(response.careers);
+        setOriginalCareers(response.careers);
+        setEducations(response.educations);
+        setOriginalEducations(response.educations);
+        setSelectedTags(response.selectedTags);
+        setOriginalTags(response.selectedTags);
+        setHospitalFileName(response.hospitalFileName);
+        setHospitalName(response.hospitalName);
+        setHospitalPhone(response.hospitalPhone);
+        setIntroduce(response.introduce);
       } catch (error) {
-        console.error("사용자 데이터를 가져오는데 실패했습니다:", error);
+        console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
       }
     };
+
     fetchDoctorData();
   }, []);
-  //경력, 학력 관리 함수---------------------------------------
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    if (modalMessage.redirectTo) {
+      router.push(modalMessage.redirectTo);
+    }
+  };
+
+  // 이미지 파일 선택 및 미리보기
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setHospitalFileName(URL.createObjectURL(file)); // 미리보기용 URL
+      setSelectedFile(file); // 업로드할 파일 저장
+    }
+  };
+
+  // 병원 정보와 이미지를 함께 저장
+  const updateDoctor = async () => {
+    // if (!userId) {
+    //   alert("사용자 정보가 없습니다.");
+    //   return;
+    // }
+    const coordinates = await getCoordinatesFromAddress(address);
+
+    //이미 조회된 정보가 프론트에 있으므로, 삭제할거 추가할거 리스트로 전달
+    const addCareerList = careers.filter(
+      (item) => !originalCareers.includes(item)
+    );
+    const deleteCareerList = originalCareers.filter(
+      (item) => !careers.includes(item)
+    );
+    const addEducationList = educations.filter(
+      (item) => !originalEducations.includes(item)
+    );
+    const deleteEducationList = originalEducations.filter(
+      (item) => !educations.includes(item)
+    );
+    const addTagList = selectedTags.filter(
+      (item) => !originalTags.includes(item)
+    );
+    const deleteTagList = originalTags.filter(
+      (item) => !selectedTags.includes(item)
+    );
+    const latitude = parseFloat(coordinates.latitude.toFixed(6));
+    const longitude = parseFloat(coordinates.longitude.toFixed(6));
+    const doctorData = {
+      hospitalName,
+      introduce,
+      hospitalPhone,
+      address,
+      zonecode,
+      latitude,
+      longitude,
+      extraAddress,
+      detailAddress,
+      addCareerList,
+      deleteCareerList,
+      addEducationList,
+      deleteEducationList,
+      addTagList,
+      deleteTagList,
+    };
+
+    // FormData 객체 생성
+    const formData = new FormData();
+
+    // JSON 데이터를 Blob으로 감싸서 FormData에 추가
+    formData.append(
+      "doctorData",
+      new Blob([JSON.stringify(doctorData)], { type: "application/json" })
+    );
+    if (selectedFile) {
+      formData.append("hospitalImage", selectedFile); // 이미지 파일 추가
+    }
+    try {
+      const response = await updateDoctorProfile(formData);
+      if (response.status === 200) {
+        setModalMessage({
+          title: "수정되었습니다 !",
+          content: "메인페이지로 이동합니다.",
+          redirectTo: "/",
+        });
+        setIsModalOpen(true);
+        return;
+      }
+    } catch (error) {
+      console.error("병원 정보 업데이트 오류:", error);
+    }
+  };
+
+  // 경력, 학력 관리 함수들 ---------------------------------------
   const addEdu = () => {
     const educationInput = document.getElementById("education");
     if (educationInput && educationInput.value.trim() !== "") {
       if (educations.length < 5) {
-        const originEdu = [...educations];
-        originEdu.push(educationInput.value.trim());
-        setEducations(originEdu);
+        setEducations([...educations, educationInput.value.trim()]);
         educationInput.value = "";
       } else {
         alert("최대 5개의 학력만 추가할 수 있습니다.");
@@ -86,9 +229,7 @@ export default function DoctorUpdate() {
     const careerInput = document.getElementById("career");
     if (careerInput && careerInput.value.trim() !== "") {
       if (careers.length < 5) {
-        const originCareer = [...careers];
-        originCareer.push(careerInput.value.trim());
-        setCareers(originCareer);
+        setCareers([...careers, careerInput.value.trim()]);
         careerInput.value = "";
       } else {
         alert("최대 5개의 경력만 추가할 수 있습니다.");
@@ -104,7 +245,7 @@ export default function DoctorUpdate() {
     setCareers(careers.filter((_, i) => i !== index));
   };
   //---------------------------------------------------------
-  //태그 관리함수 --------------------------------------
+  // 태그 관리 함수 --------------------------------------
   const toggleTag = (tag) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter((t) => t !== tag));
@@ -122,7 +263,7 @@ export default function DoctorUpdate() {
       <Header />
       <div className="w-[900px] mx-auto">
         <div>
-          <div className="mt-8 ml-8 text-3xl">의사회원정보 수정</div>
+          <div className="mt-8 ml-8 text-3xl">병원정보</div>
           <div className="flex flex-wrap mt-8">
             <div className="w-full p-8 md:w-2/3">
               <div className="w-full mb-4">
@@ -131,6 +272,8 @@ export default function DoctorUpdate() {
                   type="text"
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="병원 이름을 입력해주세요"
+                  value={hospitalName}
+                  onChange={(e) => setHospitalName(e.target.value)}
                 />
               </div>
               <KakaoAddress
@@ -149,27 +292,17 @@ export default function DoctorUpdate() {
                   type="text"
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="병원 전화번호를 입력해주세요"
+                  value={hospitalPhone}
+                  onChange={(e) => setHospitalPhone(e.target.value)}
                 />
               </div>
             </div>
             <div className="flex flex-col items-center justify-center w-full p-8 md:w-1/3">
-              <div className="flex items-center w-full mb-4">
-                <img
-                  src="/doctor.png"
-                  alt="Doctor Profile"
-                  className="w-full rounded"
-                />
-              </div>
-              <div className="w-full">
-                <MintButton
-                  onClick={handleProfileChange}
-                  text="프로필 사진"
-                  text2="등록하기"
-                  sizeW="w-full"
-                  sizeH="h-15"
-                  fontSize="text-lg"
-                />
-              </div>
+              <FileUploadButton
+                onChange={handleImageChange}
+                onReset={() => setHospitalFileName(null)}
+                hospitalFileName={hospitalFileName}
+              />
             </div>
           </div>
         </div>
@@ -216,6 +349,8 @@ export default function DoctorUpdate() {
           <textarea
             className="w-full h-48 p-4 mt-4 text-xl border border-gray-400 rounded"
             placeholder="간단한 소갯말을 입력해주세요"
+            value={introduce}
+            onChange={(e) => setIntroduce(e.target.value)}
           ></textarea>
         </div>
         <div className="flex flex-col justify-center p-8">
@@ -250,8 +385,8 @@ export default function DoctorUpdate() {
               </div>
             </div>
           </div>
+          <div className="mt-6 text-2xl">선택된 태그</div>
           <div className="h-48 p-8 mt-8 overflow-auto border border-gray-400 rounded">
-            <div className="mb-2 text-xl">선택된 태그</div>
             <div className="flex flex-wrap gap-2">
               {selectedTags.map((tag, i) => (
                 <div
@@ -275,10 +410,18 @@ export default function DoctorUpdate() {
         </div>
       </div>
       <Footer />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        title={modalMessage.title}
+        content={modalMessage.content}
+        imgUrl="/doctor/pleaseLoginDoctorImage.png"
+      />
     </div>
   );
 }
 
+// Tag 컴포넌트
 function Tag({ name, selected, onClick, onRemove }) {
   return (
     <div
@@ -303,6 +446,7 @@ function Tag({ name, selected, onClick, onRemove }) {
   );
 }
 
+// AddInput 컴포넌트
 function AddInput({ id, onClick, disabled }) {
   return (
     <div className="flex items-center mb-2">
@@ -326,6 +470,7 @@ function AddInput({ id, onClick, disabled }) {
   );
 }
 
+// DeleteContent 컴포넌트
 function DeleteContent({ content, onClick }) {
   return (
     <div className="flex items-center mb-2">
