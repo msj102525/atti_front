@@ -1,5 +1,4 @@
 import Header from "../common/Header";
-import styles from '@/styles/oneword/onewordsubject.module.css';
 import React, { useEffect } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
@@ -9,7 +8,6 @@ import Pagination from "@/components/common/page";  // Pagination 컴포넌트 �
 import { handleAxiosError } from "../../api/errorAxiosHandle";
 import { getOnewordSubjectList, getOnewordSubjectListCount, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject } from "../../api/oneword/OnewordSubject";
 import DetailPostModal from "../../components/oneword/DetailPostModal";
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const OnewordSubjectComponent = observer(() => {
     const [keyword, setKeyword] = React.useState("");
