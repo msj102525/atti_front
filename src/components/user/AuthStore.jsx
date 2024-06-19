@@ -1,8 +1,10 @@
+/*src/components/user/AuthStatus.js*/
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { authStore } from '@/pages/stores/authStore';
 import { logout, logoutkakao } from '@/api/user/user';
+import { getUserData  } from '@/api/user/userApi';
 
 const AuthStatus = observer(() => {
   const router = useRouter();
@@ -42,9 +44,19 @@ const AuthStatus = observer(() => {
     }
   };
 
-  const handleMyPageClick = () => {
-    router.push('/user/mypage'); // mypage 페이지로 이동
+  const handleMyPageClick = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const userData = await getUserData(token);
+      router.push({
+        pathname: '/user/mypage', // mypage 페이지로 이동
+        query: { userId: JSON.stringify(userData) },
+      });
+    } catch (error) {
+      console.error('사용자 데이터 요청 실패:', error);
+    }
   };
+
 
   return (
     <div>
