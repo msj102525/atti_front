@@ -28,6 +28,8 @@ export default function DoctorUpdate() {
 
   const [hospitalFileName, setHospitalFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null); // 추가된 상태
+  //환경변수 선언
+  const serverImage = process.env.NEXT_PUBLIC_API_URL;
 
   // 모달 관련
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -118,7 +120,6 @@ export default function DoctorUpdate() {
         console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
       }
     };
-
     fetchDoctorData();
   }, []);
 
@@ -183,6 +184,7 @@ export default function DoctorUpdate() {
       deleteEducationList,
       addTagList,
       deleteTagList,
+      hospitalFileName,
     };
 
     // FormData 객체 생성
@@ -302,6 +304,8 @@ export default function DoctorUpdate() {
                 onChange={handleImageChange}
                 onReset={() => setHospitalFileName(null)}
                 hospitalFileName={hospitalFileName}
+                serverImage={serverImage}
+                setHospitalFileName={setHospitalFileName}
               />
             </div>
           </div>
