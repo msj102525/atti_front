@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { sendCodeToEmail } from "@/api/doctor/doctor.js";
-import { signup } from "@/api/user/user.js";
+import { signup, login } from "@/api/user/user.js"; // 로그인 API 임포트
 import Modal from "@/components/common/modal";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
 
@@ -38,8 +38,32 @@ export default function DoctorSignUp() {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setIsModalOpen(false);
+    // 로그인 시도
+    try {
+      const loginData = {
+        userId: id,
+        password: pw,
+      };
+      const response = await login(loginData);
+      const token =
+        response.headers["authorization"] || response.headers["Authorization"];
+      const pureToken = token ? token.split(" ")[1] : "";
+      window.localStorage.setItem("token", pureToken);
+      window.localStorage.setItem("refresh", response.data.refreshToken || "");
+      window.localStorage.setItem("userId", response.data.userId || "");
+      window.localStorage.setItem("userName", response.data.userName || "");
+      window.localStorage.setItem("nickName", response.data.nickName || "");
+      window.localStorage.setItem("profileUrl", response.data.profileUrl || "");
+      window.localStorage.setItem("userType", response.data.userType || "D");
+
+      // 마이페이지로 리다이렉트
+      window.location.href = "/doctor/mypage";
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      alert("로그인에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   const handleEmailVerification = async () => {
@@ -81,7 +105,7 @@ export default function DoctorSignUp() {
 
     try {
       await signup(signUpData);
-      console.log("성공!");
+      console.log("회원가입 성공!");
       openModal();
     } catch (err) {
       alert(err.message);
@@ -356,8 +380,8 @@ export default function DoctorSignUp() {
         isOpen={isModalOpen}
         onClose={closeModal}
         title={`회원가입을 축하합니다, ${name}님!`}
-        content="확인버튼을 누르면"
-        content2="추가정보 등록페이지로 이동합니다!"
+        content="확인버튼을 누르면 자동으로 로그인되고"
+        content2="마이페이지로 이동합니다!"
         imgUrl="signUp"
       />
     </div>

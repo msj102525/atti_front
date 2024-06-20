@@ -25,6 +25,7 @@ export default function DoctorUpdate() {
   const [originalEducations, setOriginalEducations] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [originalTags, setOriginalTags] = useState([]);
+  const [userType, setUserType] = useState("");
 
   const [hospitalFileName, setHospitalFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null); // 추가된 상태
@@ -70,12 +71,12 @@ export default function DoctorUpdate() {
 
   useEffect(() => {
     // 테스트 코드 --------------------------------------------------------
-    let tempUserId = "user003";
-    let userType = "D";
-    // const tempUserId = localStorage.getItem("userId");
-    // setUserId(tempUserId);
-    // const userType = localStorage.getItem("userType");
-    // setUserType(userType);
+    // let tempUserId = "user003";
+    // let userType = "D";
+    const tempUserId = localStorage.getItem("userId");
+    setUserId(tempUserId);
+    const userType = localStorage.getItem("userType");
+    setUserType(userType);
     //---------------------------------------------------------
 
     if (!tempUserId) {
