@@ -14,6 +14,7 @@ const Mypage = observer(() => {
   const fileInput = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [seletedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +52,9 @@ const Mypage = observer(() => {
         birthDate: authStore.birthDate,
         profileUrl: authStore.profileUrl
       };
+      const formData =new FormData();
+      formData 
+    
       await updateUser(updatedUser);
       setModalMessage('수정 완료!');
       setIsModalOpen(true);
