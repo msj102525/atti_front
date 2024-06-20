@@ -14,9 +14,9 @@ const LoginSuccess = () => {
             window.localStorage.setItem("refresh", refresh);
             window.localStorage.setItem("userId", userId || '');
             window.localStorage.setItem("userName", userName || '');
-            //window.localStorage.setItem("nickName", nickName || '');
-            // window.localStorage.setItem("profileUrl", profileUrl || '');
-            //window.localStorage.setItem("userType", userType || 'U');
+            window.localStorage.setItem("nickName", nickName || '');
+            window.localStorage.setItem("profileUrl", profileUrl || '');
+            window.localStorage.setItem("userType", userType || 'U');
             authStore.checkLoggedIn();
             
         

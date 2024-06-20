@@ -5,7 +5,7 @@ import { login } from "@/api/user/user";
 import KakaoLogin from "@/components/user/kakaoLogin";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
 import { authStore } from '@/pages/stores/authStore';
-// import Modal2 from "@/components/common/Modal2"; // 모달 컴포넌트 import 추가
+import Modal2 from "@/components/common/Modal2"; // 모달 컴포넌트 import 추가
 
 const redirectToUserTypePage = (userType, router) => {
   if (userType === 'A') {
@@ -25,8 +25,8 @@ export default function LoginForm() {
         password: '',
     });
 
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [modalMessage, setModalMessage] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
     const router = useRouter();
 
@@ -57,8 +57,8 @@ export default function LoginForm() {
         },
         onError: (error) => {
             console.error('로그인 실패:', error);
-            // setModalMessage('로그인에 실패했습니다. 다시 시도해주세요.');
-            // setIsModalOpen(true);
+            setModalMessage('로그인에 실패했습니다. 다시 시도해주세요.');
+            setIsModalOpen(true);
         },
     });
 
@@ -75,9 +75,10 @@ export default function LoginForm() {
         loginMutation.mutate(formData);
     };
 
-    // const closeModal = () => {
-    //     setIsModalOpen(false);
-    // };
+    const closeModal = () => {
+       
+        setIsModalOpen(false);
+    };
 
     return ( 
         <div className="flex flex-col items-center h-screen p-4 bg-gray-100">
@@ -131,7 +132,7 @@ export default function LoginForm() {
                     </div>
                 </form>
             </div>
-            {/* <Modal2 isOpen={isModalOpen} onClose={closeModal} message={modalMessage} /> */}
+            <Modal2 isOpen={isModalOpen} onClose={closeModal} message={"로그인에 실패했습니다. 다시 시도해주세요."} />
         </div>
     );
 }
