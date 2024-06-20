@@ -25,10 +25,11 @@ const Mypage = observer(() => {
         authStore.setUserName(data.userName);
         authStore.setNickName(data.nickName);
         authStore.setEmail(data.email);
-        authStore.setProfileUrl(data.profileImage);
+        authStore.setProfileUrl(data.profileUrl);
         authStore.setUserType(data.userType);
         authStore.setGender(data.gender);
-
+        authStore.setPhone(data.phone);
+        authStore.setLoginType(data.loginType); // 로그인 유형 설정
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -40,16 +41,15 @@ const Mypage = observer(() => {
   const handleUpdate = async () => {
     try {
       const updatedUser = {
-        userId: authStore.userId,
-        name: authStore.userName,
-        nickname: authStore.nickName,
+        userId: authStore.userId, 
+        userName: authStore.userName,
+        nickName: authStore.nickName,
         password: authStore.password,
         email: authStore.email,
         phone: authStore.phone,
         gender: authStore.gender,
         birthDate: authStore.birthDate,
-        profileImage: authStore.profileUrl
-
+        profileUrl: authStore.profileUrl
       };
       await updateUser(updatedUser);
       setModalMessage('수정 완료!');
@@ -154,12 +154,14 @@ const Mypage = observer(() => {
           </div>
           <div className="mb-4">
             <label htmlFor="nickName" className="block mb-1 text-sm font-semibold text-gray-800">닉네임:</label>
-            <input type="text" id="nickName" name="nickName" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.nickName} readOnly />
+            <input type="text" id="nickName" name="nickName" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.nickName} />
           </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block mb-1 text-sm font-semibold text-gray-800">비밀번호:</label>
-            <input type="password" id="password" name="password" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.password} readOnly />
-          </div>
+          {authStore.loginType === 'regular' && (
+            <div className="mb-4">
+              <label htmlFor="password" className="block mb-1 text-sm font-semibold text-gray-800">비밀번호:</label>
+              <input type="password" id="password" name="password" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.password} />
+            </div>
+          )}
           <div className="mb-4">
             <label htmlFor="email" className="block mb-1 text-sm font-semibold text-gray-800">이메일:</label>
             <input type="email" id="email" name="email" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.email} readOnly />
@@ -179,7 +181,7 @@ const Mypage = observer(() => {
           </div>
           <div className="mb-4">
             <label htmlFor="birthDate" className="block mb-1 text-sm font-semibold text-gray-800">생년월일:</label>
-            <input type="Date" id="birthDate" name="birthDate" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.birthDate} onChange={(e) => authStore.setBirthDate(e.target.value)} />
+            <input type="date" id="birthDate" name="birthDate" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.birthDate} onChange={(e) => authStore.setBirthDate(e.target.value)} />
           </div>
           <div className="flex justify-center">
             <button type="button" className="w-full px-4 py-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer" onClick={handleUpdate}>수정</button>

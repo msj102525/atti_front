@@ -13,7 +13,8 @@ class AuthStore {
   gender = '';
   birthDate = '';
   phone = ''; 
-  
+  loginType = 'regular';  //일반 유저일때는 regular ,소셜은 각 이름들로 보임
+
   constructor() {
     makeAutoObservable(this);
 
@@ -31,6 +32,7 @@ class AuthStore {
       this.gender = localStorage.getItem("gender") || '';
       this.birthDate = localStorage.getItem("birthDate") || '';
       this.phone = localStorage.getItem("phone") || '';
+      this.loginType = localStorage.getItem("loginType") || 'regular';  
     }
   }
 
@@ -130,6 +132,11 @@ class AuthStore {
     this.phone = phone;
     localStorage.setItem("phone", phone);
   }
-}
 
+  setLoginType(type) {
+    this.loginType = type || 'regular';
+    localStorage.setItem("loginType", this.loginType);
+  } 
+
+}
 export const authStore = new AuthStore();
