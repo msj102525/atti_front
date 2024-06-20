@@ -26,6 +26,7 @@
   margin-bottom: 1rem;
   text-align: center; /* 텍스트 가운데 정렬 */
   /* text-shadow: -1px 0px #45daf5, 0px 1px #45daf5, 1px 0px #45daf5, 0px -1px #45daf5; */
+  background-color:#c6f0a4;
 }
 
 .container select, .container input[type="text"], .container button {
@@ -101,3 +102,4 @@
   width: calc(100% - 220px); /* 사이드바를 고려한 너비 */
 
 }
+
