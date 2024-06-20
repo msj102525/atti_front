@@ -22,6 +22,7 @@ const SUBCATEGORIES = [
 export default function FeedNav({ getData }) {
     const path = usePathname();
     const [category, setCategory] = useState("");
+    const [subCategory, setSubCategory] = useState("");
     const show = path !== "/feed/create";
 
     const handleCategoryClick = (event) => {
@@ -29,15 +30,14 @@ export default function FeedNav({ getData }) {
         setCategory(clickedCategory);
     };
 
-    console.log(`FeedNav.jsx: ${category}`);
-
-    const postData = (data) => {
-        getData(data);
+    const subHandleCategoryClick = (event) => {
+        const clickedCategory = event.target.textContent;
+        setSubCategory(clickedCategory);
     };
 
     useEffect(() => {
-        postData(category);
-    }, [category]);
+        getData({ category, subCategory });
+    }, [category, subCategory]);
 
     return (
         <div className="text-black after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[1px] after:left-0 after-bottom-0 flex-auto sticky top-[7.65rem] bg-white">
@@ -61,7 +61,7 @@ export default function FeedNav({ getData }) {
                             {SUBCATEGORIES.map((categoryItem) => (
                                 <li
                                     key={categoryItem}
-                                    onClick={handleCategoryClick}
+                                    onClick={subHandleCategoryClick}
                                     className="cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1"
                                 >
                                     {categoryItem}
@@ -77,3 +77,4 @@ export default function FeedNav({ getData }) {
         </div>
     )
 }
+

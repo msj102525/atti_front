@@ -37,14 +37,13 @@ export const top5FeedContent = () => {
         });
 }
 
-export const getFeedListByCategory = async (category, page, size) => {
+export const getFeedListByCategory = async (category, page, size, subCategory) => {
     try {
         if (category === "모든 사연" || category === "최신순") category = "";
 
-        console.log("axios start", category, page, size);
-        console.log("page : ", page)
+        console.log("axios start", category, page, size, subCategory);
 
-        const response = await axios.get(`/feed?category=${category}&page=${page}&size=${size}`);
+        const response = await axios.get(`/feed?category=${category}&page=${page}&size=${size}&subCategory=${subCategory}`);
 
         console.log(response.data);
 
