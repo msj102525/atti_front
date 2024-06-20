@@ -40,6 +40,7 @@ export default function LoginForm() {
         window.localStorage.setItem("nickName", data.data.nickName || "");
         window.localStorage.setItem("profileUrl", data.data.profileUrl || '');
         window.localStorage.setItem("userType", data.data.userType || 'U');
+        window.localStorage.setItem("birthDate", data.data.birthDate);
         
         authStore.setLoggedIn(true);
         authStore.setUserId(data.data.userId || '');
@@ -47,7 +48,7 @@ export default function LoginForm() {
         authStore.setNickName(data.data.nickName || "");
         authStore.setProfileUrl(data.data.profileUrl || '');
         authStore.setUserType(data.data.userType || 'U');
-
+    
         redirectToUserTypePage(data.data.userType, router); // 로그인 성공 후 리다이렉션
     };
 

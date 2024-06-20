@@ -3,14 +3,20 @@ import FeedNav from "@/components/feed/FeedNav";
 import FeedSideBar from "@/components/feed/FeedSideBar";
 import FeedWriteForm from "@/components/feed/FeedWriteForm";
 import { useState } from "react";
+import { authStore } from "../stores/authStore";
 
 
 export default function FeedWrite() {
-    const [data, setData] = useState("");
-    const getData = childData => {
-        setData(childData);
+    const [data, setData] = useState({});
+
+    const user = {
+        userId: authStore.userId,
+        userProfileUrl: authStore.userProfileUrl
+    }
 
 
+    const getData = ({ category, subCategory }) => {
+        setData({ category, subCategory });
     }
 
     return (
@@ -25,10 +31,10 @@ export default function FeedWrite() {
                     </div>
                     <div className="border-solid border flex-1 p-2">
                         <div>
-                            <FeedNav getData={getData} />
+                            <FeedNav user={user} getData={getData} />
                         </div>
                         <div className="flex w-full justify-center p-8 z-[0]">
-                            <FeedWriteForm category={data === "모든 사연" ? "일반 고민" : data} />
+                            <FeedWriteForm user={user} category={data.category === "모든 사연" ? "일반 고민" : data.category} />
                         </div>
                     </div>
                 </div>

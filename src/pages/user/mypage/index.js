@@ -49,6 +49,7 @@ const Mypage = observer(() => {
         gender: authStore.gender,
         birthDate: authStore.birthDate,
         profileImage: authStore.profileUrl
+
       };
       await updateUser(updatedUser);
       setModalMessage('수정 완료!');
@@ -178,7 +179,7 @@ const Mypage = observer(() => {
           </div>
           <div className="mb-4">
             <label htmlFor="birthDate" className="block mb-1 text-sm font-semibold text-gray-800">생년월일:</label>
-            <input type="date" id="birthDate" name="birthDate" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.birthDate} onChange={(e) => authStore.setBirthDate(e.target.value)} />
+            <input type="Date" id="birthDate" name="birthDate" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.birthDate} onChange={(e) => authStore.setBirthDate(e.target.value)} />
           </div>
           <div className="flex justify-center">
             <button type="button" className="w-full px-4 py-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer" onClick={handleUpdate}>수정</button>

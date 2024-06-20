@@ -3,12 +3,18 @@ import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { formatDate } from "@/api/feed/feed";
 
-export default function FeedList({ category, subCategory }) {
+export default function FeedList({ category, subCategory, user }) {
     const [feedData, setFeedData] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(0);
     const elementRef = useRef(null);
     const size = 10;
+
+    console.log(user);
+
+    let loginUser = {
+        userId: user.userId
+    }
 
     useEffect(() => {
         setPage(0);

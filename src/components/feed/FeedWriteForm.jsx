@@ -8,18 +8,14 @@ const CustomEditor = dynamic(() => {
     return import('@/components/common/custom-editor');
 }, { ssr: false });
 
-let user = {
-    userId: "user01",
-    userProfileUrl: "#"
-}
 
-export default function FeedWriteForm(props) {
+
+export default function FeedWriteForm({user, category}) {
     const router = useRouter();
 
     const [editorData, setEditorData] = useState("");
 
     const [formData, setFormData] = useState({
-        userId: user.userId,
         feedContent: "",
         category: "일반 고민",
         inPublic: "",
@@ -35,9 +31,9 @@ export default function FeedWriteForm(props) {
         setFormData((prevFormData) => ({
             ...prevFormData,
             feedContent: editorData,
-            category: props.category
+            category: category
         }));
-    }, [editorData, props.category]);
+    }, [editorData, category]);
 
     useEffect(() => {
         if (formData.inPublic.length > 0) {
@@ -75,12 +71,12 @@ export default function FeedWriteForm(props) {
             <div className='flex justify-between pb-4'>
                 <div className="border flex items-center gap-2 text-gray-400">
                     <div className="border w-10 h-10 rounded-full overflow-hidden">
-                        {/* <img className="block w-full" src={user.userProfileUrl} alt="userImg" /> */}
-                        <img className="block w-full" src={"#"} alt="userImg" />
+                        <img className="block w-full" src={user.userProfileUrl} alt="userImg" />
                     </div>
                     <p>{user.userId}</p>
                 </div>
-                <div className="flex gap-4">
+                {/* <div className="flex gap-4"> */}
+                <div className={`flex gap-4`}>
                     <Button text={"등록"} onClick={publicHandleSubmit} />
                     <Button text={"비공개"} onClick={privateHandleSubmit} />
                 </div>
@@ -89,7 +85,6 @@ export default function FeedWriteForm(props) {
                 <CustomEditor placeholder={"글 작성"} value={editorData} setData={setEditorData} onChange={handleEditorChange} readOnly={false} />
             </div>
             <span className='p-1 border text-gray-500'>#{formData.category != "" ? formData.category : "일반 고민"}</span>
-            {/* <span className='p-1 border text-gray-500'>#{formData.category}</span> */}
         </div>
     );
 }

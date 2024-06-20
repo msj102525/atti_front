@@ -26,16 +26,24 @@ export const login = (loginData) => {
         window.localStorage.setItem("email", response.data.email);
         window.localStorage.setItem("profileUrl", response.data.profileUrl);
         window.localStorage.setItem("userType", response.data.userType || 'U');
+        window.localStorage.setItem("birthDate", response.data.birthDate);
+        window.localStorage.setItem("phone", response.data.phone);
         
         // authStore에 사용자 정보를 설정
         authStore.setLoggedIn(true);
         authStore.setUserId(response.data.userId);
-        authStore.setUserName(response.data.userName);
+        authStore.setUserName(decodeURIComponent(response.data.userName));
         authStore.setNickName(response.data.nickName);
         authStore.setProfileUrl(response.data.profileUrl);
         authStore.setEmail(response.data.email);
         authStore.setGender(response.data.gender);
         authStore.setUserType(response.data.userType || 'U');
+        authStore.setBirthDate(response.data.birthDate);
+        authStore.setPhone(response.data.phone);
+
+        if (response.data.birthDate) {
+          authStore.setBirthDate(response.data.birthDate);
+        }
       }
       return response;
     })
@@ -61,4 +69,3 @@ export const logout = () => logoutCommon("/logout");
 export const logoutSocial = () => logoutCommon("/logoutSocial");
 export const logoutKakao = () => logoutCommon("/kakao/logout");
 export const logoutNaver = () => logoutCommon("/naver/logout");
-

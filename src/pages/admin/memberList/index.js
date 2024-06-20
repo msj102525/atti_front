@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from 'react-query';
 import MemberCard from "@/components/admin/MemberCard"; // MemberCard 컴포넌트 가져오기
@@ -10,6 +10,9 @@ import Footer from "@/pages/common/Footer";
 import AdminSidebar from "@/components/admin/AdminSidebar"
 
 import SuspendModal from '@/components/admin/SuspendModal'; // SuspendModal 컴포넌트 가져오기
+
+
+
 
 
 // QueryClient 생성
@@ -34,6 +37,7 @@ const MemberListComponent = observer(() => {
     const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
 
     const searchField = searchType === 'id' ? 'userId' : 'userName';
+
 
 
 
@@ -331,12 +335,16 @@ const MemberListComponent = observer(() => {
 
 
     return (
-        <div>
+        
+        <div className="max-w-screen-2xl mx-auto p-4">
             <Header />
 
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', minHeight: '1000px' }}>
+            {/* <div style={{ minHeight: '1000px'}}> */}
+            
                 <AdminSidebar />
-                <div className={styles.content}>
+                <div className={styles.content} flex justify-center mt-5>
+                {/* <div className={`${styles.content} flex justify-center mt-5`}> */}
                     <div className={styles.container}>
                         <h2>회원 리스트</h2>
                         {/* <div style={{ height: "2vw", justifyContent: "center", textAlign: "right" }}> */}
@@ -355,11 +363,12 @@ const MemberListComponent = observer(() => {
                             <input type="text" placeholder="검색..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
                             <button onClick={executeSearch}>검색</button>
                         </div>
+                        
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: "5vw", textAlign: "center" }}>회원아이디</th>
-                                    <th style={{ textAlign: "center" }}>회원이름</th>
+                                    <th style={{ width: "8vw", textAlign: "center" }}>회원아이디</th>
+                                    <th style={{ width: "8vw",textAlign: "center" }}>회원이름</th>
                                     <th style={{ width: "10vw", textAlign: "center" }}>닉네임</th>
                                     <th style={{ width: "7vw", textAlign: "center" }}>이메일</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
@@ -397,6 +406,7 @@ const MemberListComponent = observer(() => {
                                 )}
                             </tbody>
                         </table>
+                       
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                             {/* 페이지네이션 구현 (현재 페이지: {page}) */}
                             <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
@@ -405,8 +415,10 @@ const MemberListComponent = observer(() => {
                         </div>
                     </div>
                 </div>
+                
             </div>
             <Footer />
+            
         </div>
     );
 });

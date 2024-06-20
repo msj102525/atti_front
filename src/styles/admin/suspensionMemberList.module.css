@@ -1,101 +1,102 @@
 .page {
-    position: relative; /* 수정: absolute에서 relative로 변경 */
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 800px; /* 수정: max-width를 800px로 변경 */
-    padding: 0 20px;
-    margin: 0 auto; /* 가운데 정렬을 위해 추가 */
-  
-    background-color: #f7f7f7;
-  
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .container {
-    margin-top: 2rem;
-    background-color: #def3d6;
-    padding: 1rem; /* 패딩 추가 */
-    border-radius: 8px; /* 모서리 둥글게 */
-  }
-  
-  .container h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    text-align: center; /* 텍스트 가운데 정렬 */
-  }
-  
-  .container select, .container input[type="text"], .container button {
-    height: 2.5rem;
-    margin-right: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 4px; /* 모서리 둥글게 */
-  }
-  
-  .container button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-    background-color: #ffffff; /* 테이블 배경색 변경 */
-    border-radius: 8px; /* 테두리 둥글게 */
-    overflow: hidden; /* 둥근 모서리 유지 */
-  }
-  
-  .table th, .table td {
-    border: 1px solid #dddddd; /* 테두리 색상 변경 */
-    padding: 0.75rem;
-    text-align: center;
-  }
-  
-  .table th {
-    background-color: #007bff; /* 헤더 배경색 변경 */
-    color: #fff;
-  }
-  
-  .table tbody tr:nth-child(even) {
-    background-color: #cde6ff;
-  }
-  
-  .table tbody tr:hover {
-    background-color: #e9ecef;
-  }
-  
-  .table td button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    background-color: #28a745; /* 버튼 배경색 변경 */
-    color: #fff;
-    border: none;
-    border-radius: 4px; /* 모서리 둥글게 */
-  }
-  
-  .buttonContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .button {
-    margin-right: 5px;
-    padding: 5px;
-  }
-  
-  .button:last-child {
-    margin-right: 0;
-  }
-  
-  /* Content adjustments to accommodate sidebar */
-  .content {
-    margin-left: 220px; /* Add space to the left for the sidebar */
-    padding: 20px;
-    width: calc(100% - 220px); /* 사이드바를 고려한 너비 */
-  }
+  position: relative; /* 수정: absolute에서 relative로 변경 */
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 800px; /* 수정: max-width를 800px로 변경 */
+  padding: 0 20px;
+  margin: 0 auto; /* 가운데 정렬을 위해 추가 */
+
+  background-color: #f7f7f7;
+
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  margin-top: 2rem;
+  background-color: #def3d6;
+  padding: 1rem; /* 패딩 추가 */
+  border-radius: 8px; /* 모서리 둥글게 */
+}
+
+.container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center; /* 텍스트 가운데 정렬 */
+  background-color:#c6f0a4;
+}
+
+.container select, .container input[type="text"], .container button {
+  height: 2.5rem;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 4px; /* 모서리 둥글게 */
+}
+
+.container button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: #ffffff; /* 테이블 배경색 변경 */
+  border-radius: 8px; /* 테두리 둥글게 */
+  overflow: hidden; /* 둥근 모서리 유지 */
+}
+
+.table th, .table td {
+  border: 1px solid #dddddd; /* 테두리 색상 변경 */
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.table th {
+  background-color: #007bff; /* 헤더 배경색 변경 */
+  color: #fff;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #cde6ff;
+}
+
+.table tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+.table td button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: #28a745; /* 버튼 배경색 변경 */
+  color: #fff;
+  border: none;
+  border-radius: 4px; /* 모서리 둥글게 */
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  margin-right: 5px;
+  padding: 5px;
+}
+
+.button:last-child {
+  margin-right: 0;
+}
+
+/* Content adjustments to accommodate sidebar */
+.content {
+  margin-left: 220px; /* Add space to the left for the sidebar */
+  padding: 20px;
+  width: calc(100% - 220px); /* 사이드바를 고려한 너비 */
+}

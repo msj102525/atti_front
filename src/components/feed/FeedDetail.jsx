@@ -15,12 +15,13 @@ let user = {
     userProfileUrl: "#"
 }
 
-export default function FeedDetail({ data }) {
+export default function FeedDetail({ data, user }) {
     const router = useRouter();
 
     const [editorData, setEditorData] = useState(data.feedContent);
     const [likeCount, setLikeCount] = useState(data.likeCount);
     const [loginUserIsLiked, setLoginUserIsLiked] = useState(data.loginUserIsLiked);
+
 
     const modFormData = {
         userId: data.feedWriterId,

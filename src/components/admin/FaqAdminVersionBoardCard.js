@@ -28,7 +28,7 @@ const NoticeAdminVersionBoardCard = observer(({ user, handleDelete }) => {
     return (
         <tr>
             <td style={{ width: "8vw", textAlign: "center" }}>{user.faqWriter}</td>
-            <td style={{ textAlign: "center" }}>{user.faqTitle}</td>
+            <td style={{ width: "15vw",textAlign: "center" }}>{user.faqTitle}</td>
             <td style={{ width: "30vw", textAlign: "center" }}>{user.faqContent}</td>
             <td style={{ width: "20vw", textAlign: "center" }}>
                     <button className={styles.button} onClick={() => handleDelete(user.faqNum)}>삭제</button>
