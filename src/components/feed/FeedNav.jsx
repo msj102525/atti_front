@@ -19,11 +19,18 @@ const SUBCATEGORIES = [
     "공감순"
 ];
 
-export default function FeedNav({ getData }) {
+export default function FeedNav({ getData, user }) {
     const path = usePathname();
     const [category, setCategory] = useState("");
     const [subCategory, setSubCategory] = useState("");
     const show = path !== "/feed/create";
+
+
+    let loginUser = {
+        userId: user.userId,
+        userProfileUrl: user.userProfileUrl
+    }
+    
 
     const handleCategoryClick = (event) => {
         const clickedCategory = event.target.textContent;
@@ -67,7 +74,7 @@ export default function FeedNav({ getData }) {
                                     {categoryItem}
                                 </li>
                             ))}
-                            <li className="pl-96 cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1">
+                            <li className={`${loginUser.userId !== "" ? "" : "hidden"} pl-96 cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1`}>
                                 <Link href="/feed/create">글쓰기</Link>
                             </li>
                         </ul>

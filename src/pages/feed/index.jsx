@@ -3,11 +3,15 @@ import FeedNav from "@/components/feed/FeedNav";
 import FeedSideBar from "@/components/feed/FeedSideBar";
 import FeedList from "@/components/feed/FeedList";
 import { useState } from "react";
+import { authStore } from "../stores/authStore";
 
 export default function Feed() {
     const [data, setData] = useState({});
 
-    console.log(data);
+    const user = {
+        userId: authStore.userId,
+        userProfileUrl: authStore.userProfileUrl
+    }
 
     const getData = ({ category, subCategory }) => {
         setData({ category, subCategory });
@@ -24,8 +28,8 @@ export default function Feed() {
                         <FeedSideBar />
                     </div>
                     <div className="border-solid border flex-1">
-                        <FeedNav getData={getData} />
-                        <FeedList category={data.category} subCategory={data.subCategory} />
+                        <FeedNav user={user} getData={getData} />
+                        <FeedList user={user} category={data.category} subCategory={data.subCategory} />
                     </div>
                 </div>
             </div>
