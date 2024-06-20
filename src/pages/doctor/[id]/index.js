@@ -29,6 +29,8 @@ export default function DoctorDetail() {
 
   const handleConsult = () => {
     console.log("hello");
+    localStorage.setItem('consultDoctorId', id);
+    router.push('/pay/pay');
   };
 
   const moreReview = () => {

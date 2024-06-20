@@ -10,8 +10,14 @@ const Chat = () => {
   const [userType, setUserType] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [chatIdState, setChatIdState] = useState(null);
+  const [senderIdState, setSenderIdState] = useState(null);
   const router = useRouter();
-  const { chatId } = router.query;
+  const { senderId, chatId } = router.query;
+  const a = router.query;
+
+  console.log(a, 'zxc')
+  
+  
 
   useEffect(() => {
     // 클라이언트 측에서만 실행
@@ -23,10 +29,14 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    if (chatId) {
+    
+      setSenderIdState(senderId);
       setChatIdState(chatId);
-    }
-  }, [chatId]);
+
+      console.log(senderId, "as")
+      console.log(chatId, "as")
+      
+  }, [senderId, chatId]);
 
   if (isLoading) {
     return null; // 로딩 중에는 아무것도 렌더링하지 않습니다.
@@ -121,7 +131,7 @@ const Chat = () => {
 
         {/* 오른쪽 영역 */}
         <div className="w-1/2 flex flex-col ">
-        <User chatId={chatIdState} userType={userType} />
+        <User chatId={chatIdState} userType={userType} senderId={senderIdState} />
         </div>
       </div>
       <Footer />
