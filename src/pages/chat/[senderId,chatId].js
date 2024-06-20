@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
-import User from './user';
+import User from './chatSpace';
 import { useRouter } from 'next/router';
 
 const Chat = () => {

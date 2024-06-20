@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../common/Header';
-import RegularUser from './auser';
 import DoctorUser from './adoctor';
-import Atest from './atest';
+import NormalUser from './auser';
 
 const UserProfilePage = () => {
   const [userId, setUserId] = useState(null);
@@ -29,14 +28,14 @@ const UserProfilePage = () => {
   return (
     <div className="container mx-auto p-4">
       <Header />
-      <h1 className="text-2xl font-bold mb-4">로그인한 사용자 정보</h1>
+      <h1 className="text-2xl font-bold mt-8 mb-4">채팅 리스트</h1>
       {userId && userType ? (
         userType === 'U' ? (
-          <Atest userId={userId} userType={userType} />
+          <NormalUser userId={userId} userType={userType} />
         ) : (
           <DoctorUser userId={userId} userType={userType} />
         )
-      ) : (
+      ) : ( 
         <p className="text-lg">로그인 해주세요</p>
       )}
     </div>

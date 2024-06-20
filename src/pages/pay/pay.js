@@ -22,6 +22,8 @@ function App() {
 
   // 유저 ID 가져오기
   useEffect(() => {
+
+
     const fetchUserId = async () => {
       try {
         const userIdFromStorage = localStorage.getItem('userId'); // 로컬 스토리지에서 userId를 가져옵니다.
