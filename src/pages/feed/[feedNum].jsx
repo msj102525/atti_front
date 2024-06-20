@@ -6,10 +6,16 @@ import FeedDetail from "@/components/feed/FeedDetail";
 import { getFeedByFeedNum } from "@/api/feed/feed";
 import ReplyWriteForm from "@/components/reply/ReplyWriteForm";
 import ReplyList from "@/components/reply/ReplyList";
+import { authStore } from "../stores/authStore";
 
 export default function Feed() {
     const [data, setData] = useState(null);
     const path = usePathname();
+
+    const user = {
+        userId: authStore.userId,
+        userProfileUrl: authStore.userProfileUrl
+    }
 
     const fetchData = async () => {
         if (!path) return;
@@ -42,9 +48,9 @@ export default function Feed() {
                         <FeedSideBar />
                     </div>
                     <div className="border-solid border flex-1  relative z-[0]">
-                        <FeedDetail data={data} />
-                        <ReplyWriteForm data={data} fetchData={fetchData} />
-                        <ReplyList data={data} fetchData={fetchData} />
+                        <FeedDetail user={user} data={data} />
+                        <ReplyWriteForm user={user} data={data} fetchData={fetchData} />
+                        <ReplyList user={user} data={data} fetchData={fetchData} />
                     </div>
                 </div>
             </div>

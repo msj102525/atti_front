@@ -57,6 +57,10 @@ const AuthStatus = observer(() => {
     }
   };
 
+  const handleMove = async () => {
+    router.push('/chat/chatList');
+  };
+
 
   return (
     <div>
@@ -66,8 +70,13 @@ const AuthStatus = observer(() => {
       <br/>
       {(authStore.loggedIn || authStore.socialLoggedIn) && (
         <>
+          <div>
           <button onClick={handleMyPageClick}>
             MyPage
+          </button>
+          </div>
+          <button onClick={handleMove}>
+            채팅 리스트
           </button>
           <p>{authStore.userName}님</p>
         </>

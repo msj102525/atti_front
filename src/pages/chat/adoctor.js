@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/router'; 
-import Chat from '../chat/user';
+import Chat from './chatSpace';
 
 const RegularUser = ({ userId, userType }) => {
-  const [userSession, setUserSession] = useState(null);
+  const [userSession, setUserSession] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showChat, setShowChat] = useState(false);
   const [selectedSession, setSelectedSession] = useState(null);
@@ -16,6 +15,7 @@ const RegularUser = ({ userId, userType }) => {
           params: { type: 'receiver' }
         });
         const sessions = response.data;
+        console.log(sessions);
         const uniqueSessions = processSessions(sessions);
         setUserSession(uniqueSessions.map(session => ({ ...session, visible: true })));
       } catch (error) {
@@ -29,10 +29,10 @@ const RegularUser = ({ userId, userType }) => {
   }, [userId]);
 
   const processSessions = (sessions) => {
-    // 중복된 receiverId 제거 및 chatId가 가장 높은 항목 추출
+    // 중복된 senderId 제거 및 chatId가 가장 높은 항목 추출
     const sessionMap = sessions.reduce((map, session) => {
-      if (!map[session.receiverId] || map[session.receiverId].chatId < session.chatId) {
-        map[session.receiverId] = session;
+      if (!map[session.senderId] || map[session.senderId].chatId < session.chatId) {
+        map[session.senderId] = session;
       }
       return map;
     }, {});

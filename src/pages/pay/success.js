@@ -9,6 +9,7 @@ const SuccessPage = () => {
   const [timeLeft, setTimeLeft] = useState(3);
   const [selectedTime, setSelectedTime] = useState(null); // 초기 상태를 null로 설정
   const [userId, setUserId] = useState(null);
+  const [getId, setGetId] = useState(null);
 
   useEffect(() => {
     // 클라이언트 측에서만 실행
@@ -19,6 +20,9 @@ const SuccessPage = () => {
 
       const storedUserId = localStorage.getItem("userId");
       setUserId(storedUserId)
+
+      const getId = localStorage.getItem("consultDoctorId");
+      setGetId(getId)
 
     }
   }, []);
@@ -54,7 +58,7 @@ const SuccessPage = () => {
           console.log(json);
           await savePayment(orderId, amount); // 결제 정보 저장 로직 추가
           setTimeout(() => {
-            router.push('/chat/chat');
+            router.push('/chat/chatList');
           }, 3000);
         }
       } catch (error) {
@@ -66,34 +70,83 @@ const SuccessPage = () => {
     confirmPayment();
   }, [paymentKey, orderId, amount, selectedTime]);
 
+
+  
+  const now = new Date();
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Seoul'
+  };
+  
+  const formattedDate = new Intl.DateTimeFormat('ko-KR', options).format(now);
+  const formattedDateWithMilliseconds = formattedDate.replace(/\. /g, '-').replace(/ /g, 'T');
+  const milliseconds = now.getMilliseconds().toString().padStart(3, '0');
+
   const savePayment = async (orderId, amount) => {
     const paymentData = {
-      payNum: orderId,
-      userId: userId, // 예시 사용자 아이디
-      payAmount: amount,
-      payMethod: '토스',
-      payDate: new Date().toISOString()
+        payNum: orderId,
+        userId: userId, 
+        payAmount: amount,
+        payMethod: '토스',
+        payDate : `${formattedDateWithMilliseconds}.${milliseconds}`,
+        toDoctor : localStorage.getItem('consultDoctorId'),
     };
-  
+
     try {
-      const response = await fetch('http://localhost:8080/pay/save', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(paymentData),
-      });
-  
-      const json = await response.json();
-      if (response.ok && json === 1) {
-        console.log('Payment saved successfully');
-      } else {
-        console.error('Failed to save payment');
-      }
+        const response = await fetch('http://localhost:8080/pay/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(paymentData),
+        });
+
+        const json = await response.json();
+        if (response.ok && json === 1) {
+            console.log('Payment saved successfully');
+
+            // 결제 성공 시 chat_sessions 테이블에 데이터 추가
+            const storedUserId = localStorage.getItem("userId");
+            const getId = localStorage.getItem("consultDoctorId");
+            const chatSessionData = {
+                senderId: storedUserId,
+                receiverId: getId,
+                startTime: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            };
+
+            const chatResponse = await fetch('http://localhost:8080/chat/session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(chatSessionData),
+            });
+
+            if (chatResponse.ok) {
+
+                const chatSession = await chatResponse.json();
+                const chatId = chatSession.chatId;
+                console.log('Chat session created successfully with chatId:', chatId);
+
+                // Save the chatId in localStorage or state for future use
+                localStorage.setItem('currentChatId', chatId);
+            } else {
+                console.error('Failed to create chat session');
+            }
+        } else {
+            console.error('Failed to save payment');
+        }
     } catch (error) {
-      console.error('Error saving payment:', error);
+        console.error('Error saving payment:', error);
     }
-  };
+};
+
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -102,7 +155,7 @@ const SuccessPage = () => {
       }, 1000);
       return () => clearTimeout(timer);
     } else {
-      router.push('/chat/chat');
+      router.push('/chat/chatList');
     }
   }, [timeLeft, router]);
 

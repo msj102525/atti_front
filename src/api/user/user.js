@@ -9,6 +9,7 @@ export const signup = (signUpData) => {
   });
 };
 
+//로그인시 
 export const login = (loginData) => {
   return axios.post("/login", loginData)
     .then((response) => {
@@ -21,21 +22,31 @@ export const login = (loginData) => {
         window.localStorage.setItem("isAdmin", response.data.isAdmin);
         window.localStorage.setItem("refresh", response.data.refresh);
         window.localStorage.setItem("userId", response.data.userId);
-        window.localStorage.setItem("userName", response.data.userName);
+        window.localStorage.setItem("userName", decodeURIComponent(response.data.userName));
         window.localStorage.setItem("nickName", response.data.nickName);
         window.localStorage.setItem("email", response.data.email);
         window.localStorage.setItem("profileUrl", response.data.profileUrl);
         window.localStorage.setItem("userType", response.data.userType || 'U');
-        
+        window.localStorage.setItem("birthDate", response.data.birthDate);
+        window.localStorage.setItem("phone", response.data.phone);
+        window.localStorage.setItem("loginType", response.data.loginType || 'regular');
+
         // authStore에 사용자 정보를 설정
         authStore.setLoggedIn(true);
         authStore.setUserId(response.data.userId);
-        authStore.setUserName(response.data.userName);
+        authStore.setUserName(decodeURIComponent(response.data.userName));
         authStore.setNickName(response.data.nickName);
         authStore.setProfileUrl(response.data.profileUrl);
         authStore.setEmail(response.data.email);
         authStore.setGender(response.data.gender);
         authStore.setUserType(response.data.userType || 'U');
+        authStore.setBirthDate(response.data.birthDate);
+        authStore.setPhone(response.data.phone);
+        authStore.setLoginType(response.data.loginType || 'regular');
+
+        if (response.data.birthDate) {
+          authStore.setBirthDate(response.data.birthDate);
+        }
       }
       return response;
     })
@@ -44,6 +55,7 @@ export const login = (loginData) => {
       throw error;
     });
 };
+
 
 const logoutCommon = (url) => {
   const token = localStorage.getItem('token');
@@ -61,4 +73,3 @@ export const logout = () => logoutCommon("/logout");
 export const logoutSocial = () => logoutCommon("/logoutSocial");
 export const logoutKakao = () => logoutCommon("/kakao/logout");
 export const logoutNaver = () => logoutCommon("/naver/logout");
-

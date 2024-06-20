@@ -10,8 +10,9 @@ const Chat = ({ chatId, senderId, receiverId, userType }) => {
   const client = useRef(null);
   const clientId = useRef(`client_${Math.random().toString(16).substr(2, 8)}`);
   const [isLoading, setIsLoading] = useState(true);
+  const [payInfo, setPayInfo] = useState([]);
 
-  console.log(chatId, senderId, receiverId, userType)
+  console.log(chatId, senderId, receiverId, userType);
 
   useEffect(() => {
     const fetchChatSession = async () => {
@@ -42,8 +43,8 @@ const Chat = ({ chatId, senderId, receiverId, userType }) => {
   const fetchMessages = async () => {
     try {
       const response = await axios.get('http://localhost:8080/chat/messages', {
-      params: { chatId, senderId }
-    });
+        params: { chatId, senderId }
+      });
       setMessages(response.data);
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -85,8 +86,42 @@ const Chat = ({ chatId, senderId, receiverId, userType }) => {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      sendMessage();
+      handleSendMessage();
     }
+  };
+
+  const fetchUserPayTime = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/pay/recent`, {
+        params: { userId: senderId }
+      });
+      console.log(response.data);  // 요청 결과를 로그에 출력
+  
+      const filteredPayInfo = response.data
+        .filter(payment => payment.toDoctor !== null)  // toDoctor가 null이 아닌 항목만 필터링
+        .reduce((acc, current) => {
+          const existingPayment = acc.find(item => item.toDoctor === current.toDoctor);
+          if (!existingPayment || new Date(current.payDate) > new Date(existingPayment.payDate)) {
+            return acc.filter(item => item.toDoctor !== current.toDoctor).concat([current]);
+          } else {
+            return acc;
+          }
+        }, []);
+  
+      setPayInfo(filteredPayInfo);
+      return filteredPayInfo;  // 결과를 반환
+    } catch (error) {
+      console.error('Error fetching user pay time:', error);
+      return null;
+    }
+  };
+
+  const handleSendMessage = async () => {
+    const payTimeData = await fetchUserPayTime();
+    console.log(payTimeData); // Optional: fetched pay time data log for verification
+    console.log(payTimeData[0]); 
+    console.log(payTimeData[1]); 
+    sendMessage();
   };
 
   const sendMessage = async () => {
@@ -117,7 +152,6 @@ const Chat = ({ chatId, senderId, receiverId, userType }) => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -155,7 +189,7 @@ const Chat = ({ chatId, senderId, receiverId, userType }) => {
             />
             <div className="absolute right-0 flex flex-col space-y-2 p-2">
               <button
-                onClick={sendMessage}
+                onClick={handleSendMessage}
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 shadow-md"
               >
                 전송
