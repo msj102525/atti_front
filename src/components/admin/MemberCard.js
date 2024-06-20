@@ -52,7 +52,7 @@ const MemberCard = observer(({ user, handleEdit, handleSuspend, handleDelete }) 
     return (
         <tr>
             <td style={{ width: "8vw", textAlign: "center" }}>{user.userId}</td>
-            <td style={{ textAlign: "center" }}>{user.userName}</td>
+            <td style={{ width: "8vw", textAlign: "center" }}>{user.userName}</td>
             <td style={{ width: "10vw", textAlign: "center" }}>{user.nickName}</td>
             <td style={{ width: "7vw", textAlign: "center" }}>{user.email}</td>
             <td style={{ width: "20vw", textAlign: "center" }}>

@@ -51,7 +51,7 @@ const CommunityAdminVersionBoardCard = observer(({ user, handleEdit, handleSuspe
     return (
         <tr>
             <td style={{ width: "8vw", textAlign: "center" }}>{user.userId}</td>
-            <td style={{ textAlign: "center" }}>{user.feedContent}</td>
+            <td style={{  width: "20vw",textAlign: "center" }}>{user.feedContent}</td>
             <td style={{ width: "20vw", textAlign: "center" }}>
                     <button className={styles.button} onClick={() => handleDelete(user.feedNum)}>삭제</button>
             </td>

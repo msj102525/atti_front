@@ -335,7 +335,7 @@ const MemberListComponent = observer(() => {
 
 
     return (
-        <div className="max-w-screen-2xl mx-auto p-4">
+        <div style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
             <Header />
 
             <div style={{ display: 'flex' }}>
@@ -364,8 +364,8 @@ const MemberListComponent = observer(() => {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: "8vw", textAlign: "center" }}>회원아이디</th>
-                                    <th style={{ width: "8vw",textAlign: "center" }}>회원이름</th>
+                                    <th style={{ width: "5vw", textAlign: "center" }}>회원아이디</th>
+                                    <th style={{ textAlign: "center" }}>회원이름</th>
                                     <th style={{ width: "10vw", textAlign: "center" }}>닉네임</th>
                                     <th style={{ width: "7vw", textAlign: "center" }}>이메일</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
