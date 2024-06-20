@@ -6,9 +6,12 @@ class AuthStore {
   logoutkakao = false;
   userId = '';
   userName = '';
+  email = '';
   nickName = '';
   profileUrl = '';
   userType = '';
+  gender = '';
+
 
   constructor() {
     makeAutoObservable(this);
@@ -20,9 +23,11 @@ class AuthStore {
       this.logoutkakao = JSON.parse(localStorage.getItem("logoutkakao")) || false;
       this.userId = localStorage.getItem("userId") || '';
       this.userName = localStorage.getItem("userName") || '';
+      this.email = localStorage.getItem("email") || '';
       this.nickName = localStorage.getItem("nickName") || '';
       this.profileUrl = localStorage.getItem("profileUrl") || '';
       this.userType = localStorage.getItem("userType") || '';
+      this.gender = localStorage.getItem("gender") || '';
     }
   }
 
@@ -56,6 +61,10 @@ class AuthStore {
     this.userName = userName;
     localStorage.setItem("userName", userName);
   }
+  setEmail(email){
+    this.email = email;
+    localStorage.setItem("email", email);
+  }
 
   setNickName(nickname) {
     this.nickName = nickname;
@@ -76,6 +85,17 @@ class AuthStore {
       throw new Error(`Invalid userType: ${type}. Valid values are 'U', 'A', 'D'.`);
     }
   }
+
+  setGender(type) {
+    const validTypes = ['F', 'M'];
+    if (validTypes.includes(type)) {
+        this.gender = type;
+        localStorage.setItem("gender", type);
+    } else {
+        throw new Error("Invalid gender type. Must be 'F' or 'M'.");
+    }
+}
+
 }
 
 export const authStore = new AuthStore();

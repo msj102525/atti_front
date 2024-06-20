@@ -3,21 +3,20 @@ import 'tailwindcss/tailwind.css';
 import mqtt from 'mqtt';
 import axios from 'axios';
 
-const Chat = ({ chatId, userType }) => {
+const Chat = ({ chatId, senderId, receiverId, userType }) => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
   const client = useRef(null);
   const clientId = useRef(`client_${Math.random().toString(16).substr(2, 8)}`);
-  const [sendId, setSendId] = useState(null);
-  const [getId, setGetId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  console.log(chatId, senderId, receiverId, userType)
 
   useEffect(() => {
-    const fetchChatSession = async (userId) => {
+    const fetchChatSession = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/chat/session/${userId}`, {
+        const response = await axios.get(`http://localhost:8080/chat/session/${senderId}`, {
           params: { type: userType === 'U' ? 'sender' : 'receiver' }
         });
         return response.data;
@@ -27,47 +26,38 @@ const Chat = ({ chatId, userType }) => {
       }
     };
 
+    const initializeChat = async () => {
+      const chatSession = await fetchChatSession();
+      if (chatSession) {
+        setIsLoading(false);
+        fetchMessages(chatId);
+      }
+    };
+
     if (typeof window !== 'undefined') {
-      const storedSendId = localStorage.getItem('userId');
-      setSendId(storedSendId);
-
-      fetchChatSession(storedSendId).then((chatSession) => {
-        if (chatSession) {
-          const receiverId = userType === 'U' ? chatSession.receiverId : chatSession.senderId;
-          setGetId(receiverId);
-          setIsLoading(false);
-
-          fetchMessages(chatSession.chatId);
-        }
-      });
-
-      console.log(storedSendId, '보내기');
-      console.log(getId, '받기');
+      initializeChat();
     }
   }, [chatId, userType]);
 
-  const fetchMessages = async (chatId) => {
+  const fetchMessages = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/chat/messages/${chatId}`);
-      console.log('Fetched Messages:', response.data);
-      
-
+      const response = await axios.get('http://localhost:8080/chat/messages', {
+      params: { chatId, senderId }
+    });
       setMessages(response.data);
-      console.log(response.data, 'Fetched Messages');
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
   };
 
   useEffect(() => {
-    if (!isLoading && sendId) {
+    if (!isLoading) {
       client.current = mqtt.connect('ws://broker.hivemq.com:8000/mqtt', { clientId: clientId.current });
 
       client.current.on('connect', () => {
-        console.log('MQTT connected');
-        client.current.subscribe(`chat/${sendId}`, (err) => {
+        client.current.subscribe(`chat/${senderId}`, (err) => {
           if (!err) {
-            console.log(`Subscribed to chat/${sendId}`);
+            console.log(`Subscribed to chat/${senderId}`);
           }
         });
       });
@@ -75,11 +65,8 @@ const Chat = ({ chatId, userType }) => {
       client.current.on('message', (topic, message) => {
         const receivedMessage = JSON.parse(message.toString());
         if (receivedMessage.clientId !== clientId.current) {
-          const newMessage = { messageContent: receivedMessage.messageContent, sender: receivedMessage.sender, timestamp: receivedMessage.timestamp };
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, newMessage];
-            return updatedMessages;
-          });
+          const newMessage = { messageContent: receivedMessage.messageContent, senderId: receivedMessage.senderId, timestamp: receivedMessage.timestamp };
+          setMessages((prevMessages) => [...prevMessages, newMessage]);
         }
       });
 
@@ -89,7 +76,7 @@ const Chat = ({ chatId, userType }) => {
         }
       };
     }
-  }, [isLoading, sendId, getId]);
+  }, [isLoading, senderId, receiverId]);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -105,24 +92,12 @@ const Chat = ({ chatId, userType }) => {
   const sendMessage = async () => {
     if (inputValue.trim()) {
       const timestamp = new Date().toISOString();
-      const sendId = localStorage.getItem('userId');
-
-      
-
-      const message = { messageContent: inputValue, senderId: sendId, clientId: clientId.current, timestamp: timestamp, chatId: chatId };
-      // 대상 사용자 ID의 채널에 메시지를 발행
-      client.current.publish(`chat/${getId}`, JSON.stringify(message));
-
-      console.log(message);
+      const message = { messageContent: inputValue, senderId, receiverId, clientId: clientId.current, timestamp, chatId };
+      client.current.publish(`chat/${receiverId}`, JSON.stringify(message));
 
       try {
-        const response = await axios.post('http://localhost:8080/chat/message', message);
-          
-        setMessages((prevMessages) => {
-          const updatedMessages = [...prevMessages, message];
-          return updatedMessages;
-        });
-
+        await axios.post('http://localhost:8080/chat/message', message);
+        setMessages((prevMessages) => [...prevMessages, message]);
       } catch (error) {
         console.error('Failed to save message:', error);
       }
@@ -143,9 +118,6 @@ const Chat = ({ chatId, userType }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -161,8 +133,8 @@ const Chat = ({ chatId, userType }) => {
       <div className="w-full max-w-2xl p-4 bg-gray-50 border rounded-lg shadow-lg flex flex-col h-[80vh]">
         <div className="flex-1 overflow-y-auto space-y-4 p-2">
           {messages.map((message, index) => (
-            <div key={index} className={`flex ${message.senderId === sendId ? 'justify-end' : 'justify-start'}`}>
-              <div className="relative">
+            <div key={index} className={`flex ${message.senderId === senderId ? 'justify-end' : 'justify-start'}`}>
+              <div className="relative">{message.senderId}
                 <div className="bg-white text-black p-3 rounded-lg max-w-xs shadow-lg">
                   {message.messageContent}
                 </div>

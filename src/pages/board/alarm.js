@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../common/Header';
 import RegularUser from './auser';
 import DoctorUser from './adoctor';
+import Atest from './atest';
 
 const UserProfilePage = () => {
   const [userId, setUserId] = useState(null);
@@ -31,7 +32,7 @@ const UserProfilePage = () => {
       <h1 className="text-2xl font-bold mb-4">로그인한 사용자 정보</h1>
       {userId && userType ? (
         userType === 'U' ? (
-          <RegularUser userId={userId} userType={userType} />
+          <Atest userId={userId} userType={userType} />
         ) : (
           <DoctorUser userId={userId} userType={userType} />
         )

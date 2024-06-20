@@ -48,8 +48,8 @@ const RegularUser = ({ userId, userType }) => {
         );
       };
 
-      const handleNavigate = (chatId) => {
-        router.push(`http://localhost:3000/chat/${chatId}`);
+      const handleNavigate = (senderId, chatId) => {
+        router.push(`/chat/${senderId},${chatId}`);
       };
 
       const formatDate = (dateString) => {
@@ -85,7 +85,7 @@ const RegularUser = ({ userId, userType }) => {
                         <li>
                             <div className="text-lg">시간 : {formatDate(session.startTime)}</div>
                         <div>
-                            <button className="text-blue-500" onClick={() => handleNavigate(session.chatId)}>이동</button>
+                            <button className="text-blue-500" onClick={() => handleNavigate(session.receiverId, session.chatId)}>이동</button>
                             <button className="ml-8 text-red-500" onClick={() => handleDismiss(index)}>확인</button>
                         </div>
                         </li>

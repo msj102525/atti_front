@@ -1,4 +1,5 @@
 import instance from "../axiosApi";
+import { authStore } from "@/pages/stores/authStore";
 
 const baseUrl = "/users";
 
@@ -7,18 +8,18 @@ export const getUserData = async (token) => {
   try {
     let userId = localStorage.getItem("userId");
     console.log(userId);
-    const response = await instance.get(`${baseUrl}/current/${userId}`, {
+    const response = await instance.get(baseUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     const userData = response.data;
-        // authStore 및 localStorage 업데이트
-        // authStore.setUserId(userData.userId);
-        // authStore.setUserName(userData.userName);
-        // authStore.setNickName(userData.nickName);
-        // authStore.setProfileUrl(userData.profileUrl);
-        // authStore.setUserType(userData.userType);
+        //authStore 및 localStorage 업데이트
+        authStore.setUserId(userData.userId);
+        authStore.setUserName(userData.userName);
+        authStore.setNickName(userData.nickName);
+        authStore.setProfileUrl(userData.profileUrl);
+        authStore.setUserType(userData.userType);
     
 
 

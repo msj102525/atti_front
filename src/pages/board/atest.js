@@ -13,7 +13,7 @@ const RegularUser = ({ userId, userType }) => {
     const fetchUserSession = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/chat/session/alarm/${userId}`, {
-          params: { type: 'receiver' }
+          params: { type: 'sender' }
         });
         const sessions = response.data;
         const uniqueSessions = processSessions(sessions);
@@ -79,7 +79,7 @@ const RegularUser = ({ userId, userType }) => {
         {userSession.map((session, index) => (
           session.visible ? (
             <div key={index} className="border-b border-gray-300 p-4">
-              <h3 className="text-lg">발신인 : {session.senderId}</h3>
+              <h3 className="text-lg">발신인 : {session.receiverId}</h3>
               <ul>
                 <li>
                   <div className="text-lg">시간 : {formatDate(session.startTime)}</div>
@@ -99,8 +99,8 @@ const RegularUser = ({ userId, userType }) => {
           <div className="ml-4">
             <Chat 
               chatId={selectedSession.chatId} 
-              senderId={selectedSession.receiverId} 
-              receiverId={userId}
+              senderId={userId} 
+              receiverId={selectedSession.receiverId} 
               userType={userType} 
             />
           </div>

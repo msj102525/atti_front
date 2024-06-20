@@ -23,6 +23,7 @@ export const login = (loginData) => {
         window.localStorage.setItem("userId", response.data.userId);
         window.localStorage.setItem("userName", response.data.userName);
         window.localStorage.setItem("nickName", response.data.nickName);
+        window.localStorage.setItem("email", response.data.email);
         window.localStorage.setItem("profileUrl", response.data.profileUrl);
         window.localStorage.setItem("userType", response.data.userType || 'U');
         
@@ -32,6 +33,8 @@ export const login = (loginData) => {
         authStore.setUserName(response.data.userName);
         authStore.setNickName(response.data.nickName);
         authStore.setProfileUrl(response.data.profileUrl);
+        authStore.setEmail(response.data.email);
+        authStore.setGender(response.data.gender);
         authStore.setUserType(response.data.userType || 'U');
       }
       return response;
@@ -42,9 +45,9 @@ export const login = (loginData) => {
     });
 };
 
-export const logout = () => {
+const logoutCommon = (url) => {
   const token = localStorage.getItem('token');
-  return axios.post("/logout", {}, {
+  return axios.post(url, {}, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -54,38 +57,8 @@ export const logout = () => {
   });
 };
 
-export const logoutSocial = () => {
-  const token = localStorage.getItem('token');
-  return axios.post("/logoutSocial", {}, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  }).then((res) => {
-    window.localStorage.clear();
-    return res;
-  });
-};
+export const logout = () => logoutCommon("/logout");
+export const logoutSocial = () => logoutCommon("/logoutSocial");
+export const logoutKakao = () => logoutCommon("/kakao/logout");
+export const logoutNaver = () => logoutCommon("/naver/logout");
 
-export const logoutkakao = () => {
-  const token = localStorage.getItem('token');
-  return axios.post("/kakao/logout", {}, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  }).then((res) => {
-    window.localStorage.clear();
-    return res;
-  });
-};
-
-export const logoutNaver = () => {
-  const token = localStorage.getItem('token');
-  return axios.post("/naver/logout", {}, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  }).then((res) => {
-    window.localStorage.clear();
-    return res;
-  });
-};
