@@ -4,6 +4,7 @@ import { getReplyList } from "@/api/reply/reply";
 import dynamic from 'next/dynamic';
 import Button from '../common/Button';
 import { postReply } from '@/api/reply/reply';
+import { authStore } from "@/pages/stores/authStore";
 
 const CustomEditorReply = dynamic(() => {
     return import('@/components/common/custom-editorReply');
@@ -22,6 +23,11 @@ export default function ReplyList({ data, fetchData }) {
 
     const [editorDataReply, setEditorDataReply] = useState("");
     const [key, setKey] = useState(0);
+
+    useEffect(()=> {
+        const userId = localStorage.getItem("userId");
+        console.log(userId);
+    },[])
 
     useEffect(() => {
         const fetchReplyList = async () => {

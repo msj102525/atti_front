@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { formatDate } from "@/api/feed/feed";
 
-export default function FeedList({ category }) {
+export default function FeedList({ category, subCategory }) {
     const [feedData, setFeedData] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(0);
@@ -11,35 +11,28 @@ export default function FeedList({ category }) {
     const size = 10;
 
     useEffect(() => {
-        if (page === 0) return;
-
-        const fetchMoreData = async () => {
-            await getFeedListByCategory(category, page, size)
-                .then(res => {
-                    setFeedData(prevFeedData => [...prevFeedData, ...res]);
-                    setHasMore(res.length === size);
-                })
-                .catch(error => {
-                    console.error("Error fetching more data:", error);
-                })
-        };
-        fetchMoreData();
-    }, [page]);
+        setPage(0);
+    }, [category, subCategory]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const firstData = await getFeedListByCategory(category, 0, 10);
-                setPage(0);
-                setFeedData(firstData);
-                setHasMore(firstData.length === size);
+                const newData = await getFeedListByCategory(category, page, size, subCategory);
+    
+                if (page === 0) {
+                    setFeedData(newData);
+                } else {
+                    setFeedData(prevFeedData => [...prevFeedData, ...newData]);
+                }
+    
+                setHasMore(newData.length === size);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
-
+    
         fetchData();
-    }, [category]);
+    }, [category, page, size, subCategory]);
 
     const fetchMoreItems = async () => {
         console.log("page", page)
@@ -78,7 +71,7 @@ export default function FeedList({ category }) {
             <div className="flex justify-center">
                 <div className="gap-24 columns-2">
                     {feedData.map((feed, idx) => (
-                        <div key={idx} className="flex flex-col border max-w-md p-4 rounded-[40px] mb-4 cursor-pointer">
+                        <div key={idx} className="flex flex-col border max-w-md p-4 rounded-[40px] mb-4 cursor-pointer transition-all">
                             <Link href={`feed/${feed.feedNum}`}>
                                 <div className="flex gap-2 text-m items-center text-gray-500 pb-2 min-w-96">
                                     <p>{feed.category}</p>

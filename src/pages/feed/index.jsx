@@ -5,9 +5,12 @@ import FeedList from "@/components/feed/FeedList";
 import { useState } from "react";
 
 export default function Feed() {
-    const [data, setData] = useState("");
-    const getData = childData => {
-        setData(childData);
+    const [data, setData] = useState({});
+
+    console.log(data);
+
+    const getData = ({ category, subCategory }) => {
+        setData({ category, subCategory });
     }
 
     return (
@@ -22,7 +25,7 @@ export default function Feed() {
                     </div>
                     <div className="border-solid border flex-1">
                         <FeedNav getData={getData} />
-                        <FeedList category={data} />
+                        <FeedList category={data.category} subCategory={data.subCategory} />
                     </div>
                 </div>
             </div>

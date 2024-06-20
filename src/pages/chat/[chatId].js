@@ -1,12 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
-import Test from '../chat/test';
+import User from './user';
+import { useRouter } from 'next/router';
 
 const Chat = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
-  
+  const [userType, setUserType] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [chatIdState, setChatIdState] = useState(null);
+  const router = useRouter();
+  const { chatId } = router.query;
+
+  useEffect(() => {
+    // 클라이언트 측에서만 실행
+    if (typeof window !== 'undefined') {
+      const storedUserType = localStorage.getItem('userType');
+      setUserType(storedUserType);
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (chatId) {
+      setChatIdState(chatId);
+    }
+  }, [chatId]);
+
+  if (isLoading) {
+    return null; // 로딩 중에는 아무것도 렌더링하지 않습니다.
+  }
 
   const handleStarClick = (value) => {
     setSelectedRating(value);
@@ -28,10 +52,6 @@ const Chat = () => {
     }
   };
 
-  
-
-  
-  
   return (
     <div>
       <Header />
@@ -101,7 +121,7 @@ const Chat = () => {
 
         {/* 오른쪽 영역 */}
         <div className="w-1/2 flex flex-col ">
-          <Test/>
+        <User chatId={chatIdState} userType={userType} />
         </div>
       </div>
       <Footer />
