@@ -11,8 +11,9 @@ class AuthStore {
   profileUrl = '';
   userType = '';
   gender = '';
-
-
+  birthDate = '';
+  phone = ''; 
+  
   constructor() {
     makeAutoObservable(this);
 
@@ -28,6 +29,8 @@ class AuthStore {
       this.profileUrl = localStorage.getItem("profileUrl") || '';
       this.userType = localStorage.getItem("userType") || '';
       this.gender = localStorage.getItem("gender") || '';
+      this.birthDate = localStorage.getItem("birthDate") || '';
+      this.phone = localStorage.getItem("phone") || '';
     }
   }
 
@@ -61,7 +64,8 @@ class AuthStore {
     this.userName = userName;
     localStorage.setItem("userName", userName);
   }
-  setEmail(email){
+
+  setEmail(email) {
     this.email = email;
     localStorage.setItem("email", email);
   }
@@ -89,13 +93,43 @@ class AuthStore {
   setGender(type) {
     const validTypes = ['F', 'M'];
     if (validTypes.includes(type)) {
-        this.gender = type;
-        localStorage.setItem("gender", type);
+      this.gender = type;
+      localStorage.setItem("gender", type);
     } else {
-        throw new Error("Invalid gender type. Must be 'F' or 'M'.");
+      throw new Error("Invalid gender type. Must be 'F' or 'M'.");
     }
-}
+  }
 
+  setBirthDate(date) {
+    if (date instanceof Date) {
+      // Date 객체를 YYYY-MM-DD 형식의 문자열로 변환
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 두 자리로 맞춤
+      const day = String(date.getDate()).padStart(2, '0'); // 일을 두 자리로 맞춤
+      date = `${year}-${month}-${day}`;
+    } else if (typeof date === 'string' && date.includes('T')) {
+      // ISO 8601 형식의 문자열을 Date 객체로 변환
+      date = new Date(date);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 두 자리로 맞춤
+      const day = String(date.getDate()).padStart(2, '0'); // 일을 두 자리로 맞춤
+      date = `${year}-${month}-${day}`;
+    }
+
+    // 변환 후 날짜 형식 검증 (예: YYYY-MM-DD)
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if (datePattern.test(date)) {
+      this.birthDate = date;
+      localStorage.setItem("birthDate", date);
+    } else {
+      throw new Error("Invalid date format. The date must be in YYYY-MM-DD format.");
+    }
+  }
+
+  setPhone(phone) {
+    this.phone = phone;
+    localStorage.setItem("phone", phone);
+  }
 }
 
 export const authStore = new AuthStore();

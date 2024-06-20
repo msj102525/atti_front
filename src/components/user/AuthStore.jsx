@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { authStore } from '@/pages/stores/authStore';
 import { logout, logoutkakao } from '@/api/user/user';
-import { getUserData  } from '@/api/user/userApi';
+// import { getUserData  } from '@/api/user/userApi';
 
 const AuthStatus = observer(() => {
   const router = useRouter();
@@ -44,17 +44,8 @@ const AuthStatus = observer(() => {
     }
   };
 
-  const handleMyPageClick = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const userData = await getUserData(token);
-      router.push({
-        pathname: '/user/mypage', // mypage 페이지로 이동
-        query: { userId: JSON.stringify(userData) },
-      });
-    } catch (error) {
-      console.error('사용자 데이터 요청 실패:', error);
-    }
+  const handleMyPageClick = () => {
+    router.push('/user/mypage'); // mypage 페이지로 이동
   };
 
 
@@ -69,7 +60,7 @@ const AuthStatus = observer(() => {
           <button onClick={handleMyPageClick}>
             MyPage
           </button>
-          <p>{authStore.userName}님</p>
+          <p>{authStore.userName} 님</p>
         </>
       )}
       {!authStore.loggedIn && !authStore.socialLoggedIn && (
