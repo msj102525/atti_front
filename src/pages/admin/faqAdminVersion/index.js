@@ -137,13 +137,13 @@ const FaqAdminVersionListComponent = observer(() => {
 
 
     return (
-        <div className="max-w-screen-2xl mx-auto p-4">
+        <div>
             <Header />
             <div style={{ display: 'flex' }}>
                 <AdminSidebar />
                 <div className={styles.content}>
                     <div className={styles.container}>
-                        <h2 className={styles.centeredText}>FAQ(Admin ver.)</h2>
+                        <h2 className={styles.centeredText}>공지사항(Admin ver.)</h2>
                         <button className={styles.mkbutton} onClick={() => handleNavigation('/faq/faq')}>글쓰기</button>
 
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
@@ -157,8 +157,8 @@ const FaqAdminVersionListComponent = observer(() => {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: "8vw", textAlign: "center" }}>회원아이디</th>
-                                    <th style={{ width: "15vw", textAlign: "center" }}>제목</th>
+                                    <th style={{ width: "5vw", textAlign: "center" }}>회원아이디</th>
+                                    <th style={{ textAlign: "center" }}>제목</th>
                                     <th style={{ width: "30vw", textAlign: "center" }}>내용</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
                                 </tr>

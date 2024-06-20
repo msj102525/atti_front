@@ -328,7 +328,7 @@ const SuspensionMemberListComponent = observer(() => {
 
 
     return (
-        <div className="max-w-screen-2xl mx-auto p-4">
+        <div>
             <Header />
 
             <div style={{ display: 'flex' }}>
@@ -355,9 +355,9 @@ const SuspensionMemberListComponent = observer(() => {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: "8vw", textAlign: "center" }}>회원아이디</th>
-                                    <th style={{ width: "8vw", textAlign: "center" }}>정지사유</th>
-                                    <th style={{ width: "15vw", textAlign: "center" }}>정지상세내용</th>
+                                    <th style={{ width: "5vw", textAlign: "center" }}>회원아이디</th>
+                                    <th style={{ textAlign: "center" }}>정지사유</th>
+                                    <th style={{ width: "10vw", textAlign: "center" }}>정지상세내용</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
                                 </tr>
                             </thead>

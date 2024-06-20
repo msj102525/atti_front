@@ -137,7 +137,7 @@ const NoticeAdminVersionListComponent = observer(() => {
 
 
     return (
-        <div className="max-w-screen-2xl mx-auto p-4">
+        <div>
             <Header />
             <div style={{ display: 'flex' }}>
                 <AdminSidebar />
@@ -157,8 +157,8 @@ const NoticeAdminVersionListComponent = observer(() => {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: "8vw", textAlign: "center" }}>회원아이디</th>
-                                    <th style={{ width: "15vw",textAlign: "center" }}>제목</th>
+                                    <th style={{ width: "5vw", textAlign: "center" }}>회원아이디</th>
+                                    <th style={{ textAlign: "center" }}>제목</th>
                                     <th style={{ width: "30vw", textAlign: "center" }}>내용</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
                                 </tr>
