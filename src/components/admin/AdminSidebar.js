@@ -34,7 +34,7 @@ const Sidebar = () => {
                         <ul className={`${openMenu === 'post' ? styles.open : ''}`}>
                             <li onClick={() => handleNavigation('/admin/communityAdminVersion')}>커뮤니티</li>
                             <li onClick={() => handleNavigation('/admin/noticeAdminVersion')}>공지사항</li>
-                            <li onClick={() => handleNavigation('/admin/faqs')}>FAQ</li>
+                            <li onClick={() => handleNavigation('/admin/faqAdminVersion')}>FAQ</li>
                             <li onClick={() => handleNavigation('/admin/inquiries')}>문의하기</li>
                             <li onClick={() => handleNavigation('/admin/todayLine')}>오늘 한 줄</li>
                         </ul>
