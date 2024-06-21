@@ -81,17 +81,7 @@ const SearchForm = ({ onSubmit }) => {
           fontSize="text-lg"
         />
       </form>
-      {isAdmin && (
-        <div>
-          <MintButton
-            onClick={moveWrite}
-            text="작성"
-            sizeW="w-24"
-            sizeH="h-12"
-            fontSize="text-lg"
-          />
-        </div>
-      )}
+      
     </div>
   );
 };
