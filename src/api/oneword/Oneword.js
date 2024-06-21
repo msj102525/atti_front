@@ -15,3 +15,31 @@ export const getOnewordList = ({ keyword, page, size }) => {
             return res.data;
         });
 }
+
+
+// 등록
+export const insertOneword = (onewordData) =>{
+    console.log("onewordData : ", onewordData);
+    return axios.post("/oneword", onewordData).then(res =>{
+        console.log("res :", res);
+        return res;
+    })
+}
+
+// 수정
+export const updateOneword = (onewordData) =>{
+    console.log("postData : ", onewordData);
+    return axios.put(`/oneword/${onewordData.owNum}`, onewordData).then(res =>{
+        console.log("res :", res);
+        return res;
+    })
+}
+
+// 삭제
+export const deleteOneword = (owsjNum) =>{
+    console.log("owsjNum : ", owsjNum);
+    return axios.delete(`/oneword/${owsjNum}`, owsjNum).then(res =>{
+        console.log("res :", res);
+        return res;
+    })
+}
