@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { getOnewordList, insertOneword } from "../../api/oneword/OnewordSubject";
+import { handleAxiosError } from "../../api/errorAxiosHandle";
 
 const OnewordSJDeatilComponent = observer((data) => {
     const router = useRouter();
