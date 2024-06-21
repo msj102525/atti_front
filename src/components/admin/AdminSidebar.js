@@ -38,6 +38,14 @@ const Sidebar = () => {
                             <li onClick={() => handleNavigation('/admin/inquiryAdminVersion')}>문의하기</li>
                             <li onClick={() => handleNavigation('/admin/todayLine')}>오늘 한 줄</li>
                         </ul>
+                    <li onClick={() => toggleMenu('pay')}>
+                        <span>결제관리</span>
+                        <span className={styles.arrow}>{openMenu === 'pay' ? '▲' : '▼'}</span>
+                    </li>
+                        <ul className={`${openMenu === 'pay' ? styles.open : ''}`}>
+                            <li onClick={() => handleNavigation('')}>결제내역</li>
+                            <li onClick={() => handleNavigation('')}>매출보기</li>
+                        </ul>
                 </ul>
             </div>
         </div>
