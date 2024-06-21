@@ -24,7 +24,7 @@ export default function FeedDetail({ data, user }) {
 
 
     const modFormData = {
-        userId: data.feedWriterId,
+        // userId: data.feedWriterId,
         feedNum: data.feedNum,
         category: data.category,
         inPublic: data.inPublic,
