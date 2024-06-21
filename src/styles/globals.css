@@ -32,6 +32,14 @@ html {
   font-weight: 600;
 }
 
+#__next > div > div.flex.justify-center > div > div.border-solid.border.flex-1.p-2 > div.flex.w-full.justify-center.p-8.z-\[0\] > div > div.py-8 > div.ck.ck-reset.ck-editor.ck-rounded-corners > div.ck.ck-editor__main > div {
+  min-height: 300px;
+}
+
+#__next > div > div.flex.justify-center > div > div.border-solid.border.flex-1.relative.z-\[0\] > div:nth-child(1) > div.w-full.p-4.shadow-xl > div.py-8 > div.ck.ck-reset.ck-editor.ck-rounded-corners > div.ck.ck-editor__main > div {
+  min-height: 150px;
+}
+
 @layer utilities {
   .hover-grow {
     @apply transform transition-transform duration-200 hover:scale-105;

@@ -10,7 +10,7 @@ const CustomEditor = dynamic(() => {
 
 
 
-export default function FeedWriteForm({user, category}) {
+export default function FeedWriteForm({ user, category }) {
     const router = useRouter();
 
     const [editorData, setEditorData] = useState("");
@@ -40,7 +40,7 @@ export default function FeedWriteForm({user, category}) {
             postFeed(formData)
                 .then(res => {
                     if (res.status === 201) {
-                        router.push("/feed"); 
+                        router.push("/feed");
                     }
                 })
                 .catch(err => {
@@ -51,18 +51,27 @@ export default function FeedWriteForm({user, category}) {
 
     const publicHandleSubmit = (e) => {
         e.preventDefault();
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            inPublic: "Y"
-        }));
+        if (formData.feedContent.length > 10) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                inPublic: "Y"
+            }));
+        } else {
+            alert("고민을 10자 이상 적어주세요!");
+        }
+
     };
 
     const privateHandleSubmit = (e) => {
         e.preventDefault();
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            inPublic: "N"
-        }));
+        if (formData.feedContent.length > 10) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                inPublic: "N"
+            }));
+        } else {
+            alert("고민을 10자 이상 적어주세요!");
+        }
     };
 
 
@@ -82,7 +91,7 @@ export default function FeedWriteForm({user, category}) {
                 </div>
             </div>
             <div className="py-8">
-                <CustomEditor placeholder={"글 작성"} value={editorData} setData={setEditorData} onChange={handleEditorChange} readOnly={false} />
+                <CustomEditor placeholder={"고민 작성"} value={editorData} setData={setEditorData} onChange={handleEditorChange} readOnly={false} />
             </div>
             <span className='p-1 border text-gray-500'>#{formData.category != "" ? formData.category : "일반 고민"}</span>
         </div>

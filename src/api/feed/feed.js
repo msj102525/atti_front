@@ -2,6 +2,7 @@ import axios from '../axiosApi';
 
 export const postFeed = (postData) => {
     if (postData.category == "") postData.category = "일반 고민";
+    
 
     console.log("AxiosPostData : ", postData);
     return axios.post("/feed", postData)
