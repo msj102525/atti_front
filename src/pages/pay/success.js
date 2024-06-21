@@ -114,11 +114,19 @@ const SuccessPage = () => {
             // 결제 성공 시 chat_sessions 테이블에 데이터 추가
             const storedUserId = localStorage.getItem("userId");
             const getId = localStorage.getItem("consultDoctorId");
+
+            console.log('Amount123:', amount, typeof(amount));
+            const limitTime = amount == 110000 ? 60 : amount == 55000 ? 30 : null;
+            console.log('Limit time123:', limitTime, typeof(limitTime) );
+
             const chatSessionData = {
                 senderId: storedUserId,
                 receiverId: getId,
+                limitTime: limitTime,
                 startTime: new Date().toISOString().slice(0, 19).replace('T', ' ')
             };
+
+            console.log(chatSessionData);
 
             const chatResponse = await fetch('http://localhost:8080/chat/session', {
                 method: 'POST',
