@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { authStore } from "@/pages/stores/authStore";
-import { logout, logoutkakao } from "@/api/user/user";
-import { getUserData } from "@/api/user/userApi";
+import { logout } from "@/api/user/user";
 import NavButton from "../doctor/NavButton";
+import KakaoLogin from "./kakaoLogin";
+import NaverLogin from "./naverLogin";
 
 const AuthStatus = observer(() => {
   const router = useRouter();
@@ -18,24 +19,13 @@ const AuthStatus = observer(() => {
     setIsClient(true); // 클라이언트에서만 true로 설정
   }, []);
 
-  const redirectToUserTypePage = () => {
-    if (userType === "A") {
-      router.push("/admin/memberList");
-    } else if (userType === "U") {
-      router.push("/");
-    } else if (userType === "D") {
-      router.push("/");
-    } else {
-      router.push("/");
-    }
-  };
-
   const handleLoginClick = async () => {
     try {
       if (!authStore.loggedIn && !authStore.socialLoggedIn) {
         router.push("/login"); // 로그인 페이지로 이동
       } else if (authStore.socialLoggedIn) {
-        await logoutkakao();
+        await KakaoLogin();
+        await NaverLogin();
         authStore.setSocialLoggedIn(false); // 소셜 로그아웃 처리
         router.push("/");
       } else {
