@@ -3,45 +3,38 @@ import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { formatDate } from "@/api/feed/feed";
 
-export default function FeedList({ category, subCategory, user }) {
+export default function FeedList({ category, subCategory, user, searchData }) {
     const [feedData, setFeedData] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(0);
     const elementRef = useRef(null);
     const size = 10;
 
-    console.log(user);
-
-    let loginUser = {
-        userId: user.userId
-    }
-
     useEffect(() => {
         setPage(0);
-    }, [category, subCategory]);
+    }, [category, subCategory, searchData]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const newData = await getFeedListByCategory(category, page, size, subCategory);
-    
+                const newData = await getFeedListByCategory(category, page, size, subCategory, searchData);
+
                 if (page === 0) {
                     setFeedData(newData);
                 } else {
                     setFeedData(prevFeedData => [...prevFeedData, ...newData]);
                 }
-    
+
                 setHasMore(newData.length === size);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
-    
+
         fetchData();
-    }, [category, page, size, subCategory]);
+    }, [category, page, size, subCategory, searchData]);
 
     const fetchMoreItems = async () => {
-        console.log("page", page)
         setPage(value => value + 1);
     };
 
@@ -57,12 +50,10 @@ export default function FeedList({ category, subCategory, user }) {
     useEffect(() => {
         const observer = new IntersectionObserver(onIntersection);
 
-        //elementRef가 현재 존재하면 observer로 해당 요소를 관찰.
         if (elementRef.current) {
             observer.observe(elementRef.current);
         }
 
-        // 컴포넌트가 언마운트되거나 더 이상 관찰할 필요가 없을 때(observer를 해제할 때)반환.
         return () => {
             if (elementRef.current) {
                 observer.unobserve(elementRef.current);
