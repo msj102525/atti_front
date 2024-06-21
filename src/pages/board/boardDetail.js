@@ -14,7 +14,7 @@ function NoticeDetail() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const router = useRouter();
     const { boardNum } = router.query;
-    const [userType, setUserType] = useState(''); // 유저 타입 상태 추가
+    const userType = localStorage.getItem('userType'); // 유저 타입 상태 추가
 
     useEffect(() => {
         if (boardNum) {
