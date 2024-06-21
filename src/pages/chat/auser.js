@@ -85,7 +85,7 @@ const RegularUser = ({ userId, userType }) => {
       </p>
         
         
-        {userSession.length === 0 ? (
+        {userSession === null ? (
           <p className="text-center text-gray-500 mt-8 p-4 bg-gray-100 rounded-md">
             활성화된 채팅방이 존재하지 않습니다.
           </p>
@@ -94,9 +94,10 @@ const RegularUser = ({ userId, userType }) => {
           session.visible ? (
             <div key={index} className="border-b border-gray-300 p-4">
               <h3 className="text-lg">채팅 상대 : {session.receiverId}</h3>
+              <h3 className="text-lg">시간 : {session.limitTime}분</h3>
               <ul>
                 <li>
-                  <div className="text-lg">시작 시간 : {formatDate(session.startTime)}</div>
+                  <div className="text-lg">결제 시간 : {formatDate(session.startTime)}</div>
                   <div>
                     <button className="text-blue-500" onClick={() => handleNavigate(session)}>이동</button>
                     <button className="ml-8 text-red-500" onClick={() => handleDismiss(index)}>확인</button>
@@ -117,6 +118,7 @@ const RegularUser = ({ userId, userType }) => {
               senderId={userId} 
               receiverId={selectedSession.receiverId} 
               userType={userType} 
+              limitTime={selectedSession.limitTime}
             />
           </div>
         )}

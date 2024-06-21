@@ -30,6 +30,9 @@ export const login = (loginData) => {
         window.localStorage.setItem("birthDate", response.data.birthDate);
         window.localStorage.setItem("phone", response.data.phone);
         window.localStorage.setItem("loginType", response.data.loginType || 'regular');
+        window.localStorage.setItem("password", response.data.password || '');
+        window.localStorage.getItem("connfigPassword", response.data.configPassword || '');
+
 
         // authStore에 사용자 정보를 설정
         authStore.setLoggedIn(true);

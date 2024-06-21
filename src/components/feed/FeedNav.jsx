@@ -19,7 +19,7 @@ const SUBCATEGORIES = [
     "공감순"
 ];
 
-export default function FeedNav({ getData, user }) {
+export default function FeedNav({ getData, user, getSearchData }) {
     const path = usePathname();
     const [category, setCategory] = useState("");
     const [subCategory, setSubCategory] = useState("");
@@ -35,6 +35,7 @@ export default function FeedNav({ getData, user }) {
     const handleCategoryClick = (event) => {
         const clickedCategory = event.target.textContent;
         setCategory(clickedCategory);
+        getSearchData("");
     };
 
     const subHandleCategoryClick = (event) => {

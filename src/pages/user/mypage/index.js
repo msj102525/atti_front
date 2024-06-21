@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import Head from 'next/head';
 import Header from '@/pages/common/header';
 import styles from '@/styles/user/mypage.module.css';
-// import Modal from "@/components/common/Modal";
+import Modal from "@/components/common/Modal";
 import Footer from '@/pages/common/Footer';
 import { getUserData, updateUser, deleteUser } from '@/api/user/userApi';
 import { uploadProfilePhoto, updateProfilePhoto, deleteProfilePhoto } from '@/components/user/profilePhotoManager';
@@ -14,7 +14,6 @@ const Mypage = observer(() => {
   const fileInput = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const [seletedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +29,7 @@ const Mypage = observer(() => {
         authStore.setUserType(data.userType);
         authStore.setGender(data.gender);
         authStore.setPhone(data.phone);
-        authStore.setLoginType(data.loginType); // 로그인 유형 설정
+        authStore.setLoginType(data.loginType);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -40,6 +39,12 @@ const Mypage = observer(() => {
   }, []);
 
   const handleUpdate = async () => {
+    if (authStore.password !== authStore.confirmPassword) {
+      setModalMessage('비밀번호가 일치하지 않습니다.');
+      setIsModalOpen(true);
+      return;
+    }
+
     try {
       const updatedUser = {
         userId: authStore.userId, 
@@ -52,9 +57,6 @@ const Mypage = observer(() => {
         birthDate: authStore.birthDate,
         profileUrl: authStore.profileUrl
       };
-      const formData =new FormData();
-      formData 
-    
       await updateUser(updatedUser);
       setModalMessage('수정 완료!');
       setIsModalOpen(true);
@@ -79,9 +81,9 @@ const Mypage = observer(() => {
     }
   };
 
-  // const closeModal = () => {
-  //   setIsModalOpen(false);
-  // };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -130,12 +132,12 @@ const Mypage = observer(() => {
       </div>
       <div className="flex flex-col w-full max-w-md p-6 mt-5 overflow-y-auto bg-white rounded-lg shadow-md max-h-[70vh]">
         <div className="mb-4">
-          <label htmlFor="profileImage" className="block mb-1 text-sm font-semibold text-gray-800">프로필 사진:</label>
+          <label htmlFor="profileUrl" className="block mb-1 text-sm font-semibold text-gray-800">프로필 사진:</label>
           <img src={authStore.profileUrl || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="Profile" className="w-32 h-32 mb-2 rounded-full" />
           <input
             type="file"
-            id="profileImage"
-            name="profileImage"
+            id="profileUrl"
+            name="profileUrl"
             style={{ display: 'none' }}
             accept="image/jpg,image/png,image/jpeg"
             onChange={handleFileChange}
@@ -158,13 +160,19 @@ const Mypage = observer(() => {
           </div>
           <div className="mb-4">
             <label htmlFor="nickName" className="block mb-1 text-sm font-semibold text-gray-800">닉네임:</label>
-            <input type="text" id="nickName" name="nickName" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.nickName} />
+            <input type="text" id="nickName" name="nickName" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.nickName}/>
           </div>
           {authStore.loginType === 'regular' && (
-            <div className="mb-4">
-              <label htmlFor="password" className="block mb-1 text-sm font-semibold text-gray-800">비밀번호:</label>
-              <input type="password" id="password" name="password" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.password} />
-            </div>
+            <>
+              <div className="mb-4">
+                <label htmlFor="password" className="block mb-1 text-sm font-semibold text-gray-800">비밀번호:</label>
+                <input type="password" id="password" name="password" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.password} onChange={(e) => authStore.setPassword(e.target.value)} />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="confirmPassword" className="block mb-1 text-sm font-semibold text-gray-800">비밀번호 확인:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.confirmPassword} onChange={(e) => authStore.setConfirmPassword(e.target.value)} />
+              </div>
+            </>
           )}
           <div className="mb-4">
             <label htmlFor="email" className="block mb-1 text-sm font-semibold text-gray-800">이메일:</label>
@@ -194,7 +202,7 @@ const Mypage = observer(() => {
         </form>
       </div>
       <Footer />
-      {/* <Modal isOpen={isModalOpen} onClose={closeModal} title="알림" content={modalMessage} /> */}
+      <Modal isOpen={isModalOpen} onClose={closeModal} title="알림" content={modalMessage} />
     </div>
   );
 });

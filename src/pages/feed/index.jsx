@@ -7,6 +7,7 @@ import { authStore } from "../stores/authStore";
 
 export default function Feed() {
     const [data, setData] = useState({});
+    const [searchData, setSearchData] = useState("");
 
     const user = {
         userId: authStore.userId,
@@ -17,6 +18,12 @@ export default function Feed() {
         setData({ category, subCategory });
     }
 
+    const getSearchData = (searchData) => {
+        setSearchData(searchData);
+    }
+
+    console.log(`searchData: ${searchData}`);
+
     return (
         <div>
             <div className="sticky top-0 z-50">
@@ -25,11 +32,15 @@ export default function Feed() {
             <div className="flex justify-center">
                 <div className="border-solid border flex justify-between  w-[1536px]">
                     <div className="border-solid border flex-2 p-2">
-                        <FeedSideBar />
+                        <FeedSideBar getSearchData={getSearchData} />
                     </div>
                     <div className="border-solid border flex-1">
-                        <FeedNav user={user} getData={getData} />
-                        <FeedList user={user} category={data.category} subCategory={data.subCategory} />
+                        <FeedNav user={user} getData={getData} getSearchData={getSearchData} />
+                        <FeedList
+                            user={user}
+                            category={data.category}
+                            subCategory={data.subCategory}
+                            searchData={searchData} />
                     </div>
                 </div>
             </div>
