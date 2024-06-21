@@ -4,6 +4,7 @@ class AuthStore {
   loggedIn = false;
   isAdmin = false;
   logoutkakao = false;
+  logoutnaver = false;
   userId = '';
   userName = '';
   email = '';
@@ -14,6 +15,8 @@ class AuthStore {
   birthDate = '';
   phone = ''; 
   loginType = 'regular';  //일반 유저일때는 regular ,소셜은 각 이름들로 보임
+  password = '';
+  confirmPassword = '';
 
   constructor() {
     makeAutoObservable(this);
@@ -23,6 +26,7 @@ class AuthStore {
       this.loggedIn = JSON.parse(localStorage.getItem("loggedIn")) || false;
       this.isAdmin = JSON.parse(localStorage.getItem("isAdmin")) || false;
       this.logoutkakao = JSON.parse(localStorage.getItem("logoutkakao")) || false;
+      this.logoutnaver = JSON.parse(localStorage.getItem("logoutnaver")) || false;
       this.userId = localStorage.getItem("userId") || '';
       this.userName = localStorage.getItem("userName") || '';
       this.email = localStorage.getItem("email") || '';
@@ -33,7 +37,9 @@ class AuthStore {
       this.birthDate = localStorage.getItem("birthDate") || '';
       this.phone = localStorage.getItem("phone") || '';
       this.loginType = localStorage.getItem("loginType") || 'regular';  
-    }
+      this.password = localStorage.getItem("password") || ''; 
+      this.confirmPassword = '';
+      }
   }
 
   setLoggedIn(status) {
@@ -55,6 +61,7 @@ class AuthStore {
   setSocialLoggedIn(status) {
     this.logoutkakao = status;
     localStorage.setItem("logoutkakao", JSON.stringify(status));
+    localStorage.setItem("logoutnaver", JSON.stringify(status));
   }
 
   setUserId(userId) {
@@ -137,6 +144,15 @@ class AuthStore {
     this.loginType = type || 'regular';
     localStorage.setItem("loginType", this.loginType);
   } 
+
+  setPassword(password) {
+    this.password = password;
+    localStorage.setItem("password", password);
+  }
+
+  setConfirmPassword(confirmPassword) {
+    this.confirmPassword = confirmPassword;
+  }
 
 }
 export const authStore = new AuthStore();

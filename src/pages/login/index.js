@@ -3,6 +3,7 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { login } from "@/api/user/user"; 
 import KakaoLogin from "@/components/user/kakaoLogin";
+import NaverLogin from "@/components/user/naverLogin";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
 import { authStore } from '@/pages/stores/authStore';
 import Modal2 from "@/components/common/Modal2"; // 모달 컴포넌트 import 추가
@@ -54,6 +55,8 @@ export default function LoginForm() {
 
     const loginMutation = useMutation(loginData => login(loginData), {
         onSuccess: (data) => {
+
+            
             handleLoginSuccess(data);
         },
         onError: (error) => {
@@ -122,8 +125,13 @@ export default function LoginForm() {
                             로그인
                         </button>
                     </div>
+                    <div className="snsLogin">
                     <div className="mt-4">
                         <KakaoLogin className="transform scale-50" />
+                    </div>
+                    <div className="mt-4">
+                        <NaverLogin className="transform scale-50" />
+                    </div>
                     </div>
                     <div className="mt-4 flex justify-between text-sm text-gray-600">
                         <button type="button" onClick={() => router.push('/password-find')}>비밀번호 찾기</button>

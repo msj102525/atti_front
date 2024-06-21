@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { authStore } from '@/pages/stores/authStore';
 import { logout, logoutkakao } from '@/api/user/user';
-import { getUserData  } from '@/api/user/userApi';
 
 const AuthStatus = observer(() => {
   const router = useRouter();
@@ -13,18 +12,6 @@ const AuthStatus = observer(() => {
     authStore.checkLoggedIn();
   }, []);
 
-  const redirectToUserTypePage = () => {
-    const userType = authStore.userType;
-    if (userType === 'A') {
-      router.push('/admin/memberList');
-    } else if (userType === 'U') {
-      router.push('/');
-    } else if (userType === 'D') {
-      router.push('/');
-    } else {
-      router.push('/');
-    }
-  };
 
   const handleLoginClick = async () => {
     try {
