@@ -110,7 +110,7 @@ export default function DoctorDetail() {
           <div className="w-full p-5 md:w-1/2 md:p-10">
             <p className="text-xl md:text-2xl">{doctorComment}</p>
             <hr className="w-2/6 my-5 border-gray-800 border-3 md:my-10 md:border-4" />
-            <p className="my-5 text-xl font-extrabold md:text-2xl">
+            <p className="my-5 text-base font-extrabold md:text-xl">
               {userName} 상담사님의 간단한 소개
             </p>
             <ListView

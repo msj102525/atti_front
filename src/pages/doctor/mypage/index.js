@@ -4,11 +4,12 @@ import Header from "@/pages/common/header";
 import Footer from "@/pages/common/footer";
 import MintButton from "@/components/common/MintButton";
 import KakaoAddress from "@/components/doctor/KakaoAddress";
-import { getDoctorMypageData, updateDoctorProfile } from "@/api/doctor/doctor"; // 업데이트 API 임포트
+import { getDoctorMypageData } from "@/api/doctor/doctor";
 import { useRouter } from "next/router";
 import FileUploadButton from "@/components/doctor/fileUploadButton";
 import Modal from "@/components/common/Modal";
 import { getCoordinatesFromAddress } from "../../../hooks/getCoordinates";
+import { updateDoctorProfile } from "@/api/doctor/doctorUpdate"; // 업데이트 API 임포트
 
 export default function DoctorUpdate() {
   const [userId, setUserId] = useState("");
@@ -264,7 +265,7 @@ export default function DoctorUpdate() {
   return (
     <div>
       <Header />
-      <div className="w-[900px] mx-auto">
+      <div className="max-w-screen-lg mx-auto">
         <div>
           <div className="mt-8 ml-8 text-3xl">병원정보</div>
           <div className="flex flex-wrap mt-8">

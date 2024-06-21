@@ -9,7 +9,7 @@ export default function NavButton({ userType }) {
     if (userType == "D") {
       setButtonMessage("의사정보 수정");
     } else if (userType == "U") {
-      setButtonMessage("내가 쓴 리뷰");
+      setButtonMessage("상담 내역");
     } else {
       setButtonMessage("");
     }
@@ -18,7 +18,7 @@ export default function NavButton({ userType }) {
     if (userType == "D") {
       router.push("/doctor/mypage");
     } else if (userType == "U") {
-      router.push("/user/review");
+      router.push("/review");
     } else {
       router.push("/");
     }

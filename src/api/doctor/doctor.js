@@ -1,6 +1,7 @@
 import axios from "../axiosApi";
 
 const baseUrl = "/doctor";
+
 export const showList = (page) => {
   return axios.get(baseUrl + "?page=" + page).then((res) => res);
 };
@@ -21,10 +22,6 @@ export const showDetail = (id, page) => {
 
 export const getDoctorMypageData = () => {
   return axios.get(baseUrl + "/mypage").then((res) => res);
-};
-
-export const updateDoctorProfile = (formData) => {
-  return axios.put(baseUrl + "/mypage", formData).then((res) => res);
 };
 
 // 메일 전송 함수
