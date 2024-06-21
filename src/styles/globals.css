@@ -32,6 +32,12 @@ html {
   font-weight: 600;
 }
 
+@layer utilities {
+  .hover-grow {
+    @apply transform transition-transform duration-200 hover:scale-105;
+  }
+}
+
 @media screen and (max-width: 1380px) {
   html {
     font-size: 13px;
@@ -61,3 +67,5 @@ html {
     font-size: 7px;
   }
 }
+
+
