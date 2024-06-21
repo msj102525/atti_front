@@ -6,7 +6,6 @@ import { authStore } from "@/pages/stores/authStore";
 import { logout, logoutkakao } from "@/api/user/user";
 import MyPageNavBar from "../common/MyPageNavBar";
 import { getUserData } from "@/api/user/userApi";
-import NavButton from "../doctor/NavButton";
 import KakaoLogin from "./kakaoLogin";
 import NaverLogin from "./naverLogin";
 
