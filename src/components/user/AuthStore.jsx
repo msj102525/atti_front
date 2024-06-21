@@ -48,17 +48,8 @@ const AuthStatus = observer(() => {
     }
   };
 
-  const handleMyPageClick = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const userData = await getUserData(token);
-      router.push({
-        pathname: "/user/mypage", // mypage 페이지로 이동
-        query: { userId: JSON.stringify(userData) },
-      });
-    } catch (error) {
-      console.error("사용자 데이터 요청 실패:", error);
-    }
+  const handleMyPageClick = () => {
+    router.push("/user/mypage"); // mypage 페이지로 이동
   };
 
   const handleMove = async () => {

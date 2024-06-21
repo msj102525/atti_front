@@ -47,7 +47,7 @@ export default function FeedNav({ getData, user }) {
     }, [category, subCategory]);
 
     return (
-        <div className="text-black after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[1px] after:left-0 after-bottom-0 flex-auto sticky top-[7.65rem] bg-white">
+        <div className="z-[2] text-black after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[1px] after:left-0 after-bottom-0 flex-auto sticky top-[7.65rem] bg-white">
             <div className="">
                 <div className="container mx-auto flex-row items-center">
                     <div className="space-x-7 p-4">
@@ -56,7 +56,7 @@ export default function FeedNav({ getData, user }) {
                                 <li
                                     key={categoryItem}
                                     onClick={handleCategoryClick}
-                                    className={`cursor-pointer hover:text-customBrown transition-all duration-150 ease-in-out text-base font-semibold p-1 text-center ${path === "/feed/create" && categoryItem === "모든 사연" ? "hidden" : ""}`}
+                                    className={`cursor-pointer hover:text-customBrown transition-all duration-150 text-base font-semibold p-1 text-center ${path === "/feed/create" && categoryItem === "모든 사연" ? "hidden" : ""}`}
                                 >
                                     {categoryItem}
                                 </li>
