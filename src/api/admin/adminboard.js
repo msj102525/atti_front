@@ -90,3 +90,38 @@ export const deleteFaqAdminVersion = async (faqNum) => {
 
 
 // **************************************************
+
+// Inquiry(Admin ver.) ***********************************************
+
+
+export const getInquiryAdminVersionList = ({ searchField , searchInput, page, size }) => {
+    // 쿼리 파라미터를 사용하여 URL 생성
+    // if (!searchField) {
+    //     searchField = 'userId';
+    // }
+    const params = new URLSearchParams({
+            searchField,
+            searchInput,
+            page,
+            size
+    }).toString();
+
+    return axios.get(`/admin/inquiryAdminVersionList?${params}`)
+        .then(response => {
+            return response.data;
+        });
+}
+
+
+export const deleteInquiryAdminVersion = async (inquiryNo) => {
+    const response = await axios.delete(`/admin/api/deleteinquiryAdminVersion/${inquiryNo}`);
+    return response.data;
+};
+
+
+
+
+
+
+
+// *******************************************************
