@@ -6,7 +6,7 @@ import styles from '@/styles/user/mypage.module.css';
 import Modal from "@/components/common/Modal";
 import Footer from '@/pages/common/Footer';
 import { getUserData, updateUser, deleteUser } from '@/api/user/userApi';
-import { uploadProfilePhoto, updateProfilePhoto, deleteProfilePhoto } from '@/components/user/profilePhotoManager';
+import { uploadProfilePhoto, deleteProfilePhoto } from '@/components/user/profilePhotoManager';
 import { authStore } from "@/pages/stores/authStore";
 
 const Mypage = observer(() => {
@@ -98,7 +98,7 @@ const Mypage = observer(() => {
       reader.readAsDataURL(file);
 
       try {
-        const userId = localStorage.getItem('userId'); // userId 가져오기
+        const userId = authStore.userId; // authStore에서 userId 가져오기
         const response = await uploadProfilePhoto(file, userId);
         authStore.setProfileUrl(response.filePath);  // 서버에서 받은 파일 경로로 프로필 이미지 설정
         setModalMessage('프로필 사진 업로드 완료!');
@@ -112,10 +112,12 @@ const Mypage = observer(() => {
 
   const handleImageDelete = async () => {
     try {
-      await deleteProfilePhoto();
+      const userId = authStore.userId; // authStore에서 userId 가져오기
+      await deleteProfilePhoto(userId);
       authStore.setProfileUrl("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
       setModalMessage('프로필 사진 삭제 완료!');
     } catch (error) {
+      console.error('프로필 사진 삭제 오류:', error);
       setModalMessage('프로필 사진 삭제 실패!');
     }
     setIsModalOpen(true);
@@ -160,7 +162,7 @@ const Mypage = observer(() => {
           </div>
           <div className="mb-4">
             <label htmlFor="nickName" className="block mb-1 text-sm font-semibold text-gray-800">닉네임:</label>
-            <input type="text" id="nickName" name="nickName" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.nickName}/>
+            <input type="text" id="nickName" name="nickName" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.nickName} onChange={(e) => authStore.setNickName(e.target.value)} />
           </div>
           {authStore.loginType === 'regular' && (
             <>

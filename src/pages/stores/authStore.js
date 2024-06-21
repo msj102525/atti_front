@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 
 class AuthStore {
   loggedIn = false;
+  socialLoggedIn = false;
   isAdmin = false;
   logoutkakao = false;
   logoutnaver = false;
@@ -24,6 +25,7 @@ class AuthStore {
     // 클라이언트 사이드에서만 LocalStorage에서 상태를 초기화
     if (typeof window !== "undefined") {
       this.loggedIn = JSON.parse(localStorage.getItem("loggedIn")) || false;
+      this.socialLoggedIn = JSON.parse(localStorage.getItem("socialLoggedIn")) || false;
       this.isAdmin = JSON.parse(localStorage.getItem("isAdmin")) || false;
       this.logoutkakao = JSON.parse(localStorage.getItem("logoutkakao")) || false;
       this.logoutnaver = JSON.parse(localStorage.getItem("logoutnaver")) || false;
@@ -45,6 +47,11 @@ class AuthStore {
   setLoggedIn(status) {
     this.loggedIn = status;
     localStorage.setItem("loggedIn", JSON.stringify(status));
+  }
+
+  setSocialLoggedIn(status){
+    this.socialLoggedIn = status;
+    localStorage.setItem()
   }
 
   checkLoggedIn() {

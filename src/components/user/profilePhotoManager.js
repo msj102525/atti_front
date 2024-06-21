@@ -1,18 +1,17 @@
+const baseUrl = "/file";
 
-const baseUrl = "/api";
-
-export const uploadProfilePhoto = async (file) => {
+export const uploadProfilePhoto = async (file, userId) => {
     try {
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('userId', userId);
 
-        const response = await fetch('/api/upload', {
+        const response = await fetch(baseUrl + '/upload', {
             method: 'POST',
             body: formData,
         });
 
         if (!response.ok) {
-
             throw new Error('파일 업로드 실패');
         }
 
@@ -23,31 +22,14 @@ export const uploadProfilePhoto = async (file) => {
     }
 };
 
-export const updateProfilePhoto = async (file) => {
+export const deleteProfilePhoto = async (userId) => {
     try {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        const response = await fetch(baseUrl+'/update', {
-            method: 'POST',
-            body: formData,
-        });
-
-        if (!response.ok) {
-            throw new Error('파일 업데이트 실패');
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('업데이트 오류:', error);
-        throw error;
-    }
-};
-
-export const deleteProfilePhoto = async () => {
-    try {
-        const response = await fetch(baseUrl+'/delete/', {
+        const response = await fetch(baseUrl + '/delete', {
             method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId })
         });
 
         if (!response.ok) {

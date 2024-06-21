@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { signup } from "@/api/user/user.js";
 import KakaoSignup from "@/components/user/kakaoSignup";
+import naverSignup from "@/components/user/naverSignup";
 import Modal from "@/components/common/Modal";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
+import { authStore } from "@/pages/stores/authStore";
 
 export default function NormalSignUp() {
   //-----------------------------모달
@@ -254,8 +256,8 @@ export default function NormalSignUp() {
           <div className="mt-6">
         <KakaoSignup />
       </div>
-      <div>
-        <nanerSingup/>
+      <div className="mt-6">
+        <naverSignup />
       </div>
         </form>
         {successMessage && (
@@ -268,9 +270,9 @@ export default function NormalSignUp() {
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        title="타이틀입니다."
-        content="내용 첫째줄입니다."
-        content2="내용 둘째줄 입니다."
+        title="회원 가입 완료."
+        content="{authStore.userName} 님"
+        content2="가입을 축하합니다."
         imgUrl="signUp"
       />
     </div>
