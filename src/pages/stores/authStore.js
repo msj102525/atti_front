@@ -91,9 +91,9 @@ class AuthStore {
     localStorage.setItem("nickName", nickname);
   }
 
-  setProfileUrl(url) {
-    this.profileUrl = url;
-    localStorage.setItem("profileUrl", url);
+  setProfileUrl(profileUrl) {
+    this.profileUrl = profileUrl;
+    localStorage.setItem("profileUrl", profileUrl);
   }
 
   setUserType(type) {

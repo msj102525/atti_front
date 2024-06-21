@@ -1,6 +1,6 @@
 const baseUrl = "/file";
 
-export const uploadProfilePhoto = async (file, userId) => {
+export const uploadProfile = async (file, userId) => {
     try {
         const formData = new FormData();
         formData.append('file', file);
