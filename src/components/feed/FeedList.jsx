@@ -77,7 +77,7 @@ export default function FeedList({ category, subCategory, user }) {
             <div className="flex justify-center">
                 <div className="gap-24 columns-2">
                     {feedData.map((feed, idx) => (
-                        <div key={idx} className="flex flex-col border max-w-md p-4 rounded-[40px] mb-4 cursor-pointer transition-all">
+                        <div key={idx} className="flex flex-col border max-w-md p-4 rounded-[40px] mb-4 cursor-pointer hover-grow">
                             <Link href={`feed/${feed.feedNum}`}>
                                 <div className="flex gap-2 text-m items-center text-gray-500 pb-2 min-w-96">
                                     <p>{feed.category}</p>
