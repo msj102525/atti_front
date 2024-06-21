@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 import OnewordSubjectListComponent from "./OnewordSubjectListComponent";
 import { handleAxiosError } from "../../api/errorAxiosHandle";
 import { getOnewordSubjectList } from "../../api/oneword/OnewordSubject";
+import Link from 'next/link';
 
 const OnewordListFormComponent = observer(() => {
   const [keyword, setKeyword] = React.useState("");
@@ -40,6 +41,7 @@ const OnewordListFormComponent = observer(() => {
   //     } ${colIndex === 0 ? 'ml-0' : 'ml-4'}`;
   // };
 
+  // 미사용(2024.06.21)
   // return (
   //   <div className="grid grid-cols-3 gap-4"> {/* Changed grid-cols-4 to grid-cols-3 */}
   //     {data.slice(0, displayCount).map((onewordsubject, index) => (
@@ -53,19 +55,36 @@ const OnewordListFormComponent = observer(() => {
   //   </div>
   // );
 
+  // 사용(2024.06.21)
+  // return (
+  //   <div className="grid grid-cols-3 gap-4">
+  //     {data.slice(0, displayCount).map((onewordsubject) => (
+  //       <div key={onewordsubject.owsjNum} className="border p-4 rounded">
+  //         <h2 className="text-lg font-bold">{onewordsubject.owsjNum}</h2>
+  //         <h2 className="text-lg font-bold">{onewordsubject.owsjSubject}</h2>
+  //         <p className="mt-2 text-sm text-gray-600">{onewordsubject.owsjWriter}</p>
+  //         {/* 추가적인 카드 내용 */}
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
+
   return (
     <div className="grid grid-cols-3 gap-4">
       {data.slice(0, displayCount).map((onewordsubject) => (
         <div key={onewordsubject.owsjNum} className="border p-4 rounded">
-          <h2 className="text-lg font-bold">{onewordsubject.owsjNum}</h2>
-          <h2 className="text-lg font-bold">{onewordsubject.owsjSubject}</h2>
-          <p className="mt-2 text-sm text-gray-600">{onewordsubject.owsjWriter}</p>
-          {/* 추가적인 카드 내용 */}
+          <Link href={`/oneword/${onewordsubject.owsjNum}`}>
+            <div className="cursor-pointer">
+              <h2 className="text-lg font-bold">{onewordsubject.owsjNum}</h2>
+              <h2 className="text-lg font-bold">{onewordsubject.owsjSubject}</h2>
+              <p className="mt-2 text-sm text-gray-600">{onewordsubject.owsjWriter}</p>
+              {/* 추가적인 카드 내용 */}
+            </div>
+          </Link>
         </div>
       ))}
     </div>
   );
-
 
 });
 
