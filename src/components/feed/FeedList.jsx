@@ -100,9 +100,9 @@ export default function FeedList({ category, subCategory, user, searchData }) {
                                         </div>
                                         <p>{feed.docterName}님의 전문답변</p>
                                     </div>
-                                    <div className="text-lg max-h-60 overflow-hidden line-clamp-[3] mb-4">
-                                        {feed.docterComment}
-                                    </div>
+
+                                    <div className="text-lg max-h-60 overflow-hidden line-clamp-[3] mb-4" dangerouslySetInnerHTML={{ __html: feed.docterComent }} />
+                                        
                                 </div>
                             </Link>
                         </div>
