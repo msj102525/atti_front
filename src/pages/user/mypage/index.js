@@ -23,7 +23,6 @@ const Mypage = observer(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        console.log('Token from localStorage:', token);
         const data = await getUserData(token);
 
         authStore.setUserId(data.userId);

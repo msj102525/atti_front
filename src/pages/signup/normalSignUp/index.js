@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { signup } from "@/api/user/user.js";
 import KakaoSignup from "@/components/user/kakaoSignup";
-import naverSignup from "@/components/user/naverSignup";
-import Modal from "@/components/common/Modal";
+import NaverSignup from "@/components/user/naverSignup";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
+import Modal from "@/components/common/Modal";
 import { authStore } from "@/pages/stores/authStore";
 
 export default function NormalSignUp() {
@@ -18,7 +18,6 @@ export default function NormalSignUp() {
     window.location.href = "/login";
   };
   //----------------------------
-
   const [formData, setFormData] = useState({
     userId: "",
     password: "",
@@ -92,11 +91,10 @@ export default function NormalSignUp() {
         birthDate: "",
         gender: "",
         userType: "",
-        
       });
       setErrorMessage("");
       setGenderErrorMessage("");
-      window.location.href = '/login';
+      openModal();
     } catch (error) {
       setErrorMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
     }
@@ -254,11 +252,9 @@ export default function NormalSignUp() {
             </button>
           </div>
           <div className="mt-6">
-        <KakaoSignup />
-      </div>
-      <div className="mt-6">
-        <naverSignup />
-      </div>
+            <KakaoSignup />
+            <NaverSignup />
+          </div>
         </form>
         {successMessage && (
           <p className="mt-4 text-green-600">{successMessage}</p>
@@ -271,7 +267,7 @@ export default function NormalSignUp() {
         isOpen={isModalOpen}
         onClose={closeModal}
         title="회원 가입 완료."
-        content="{authStore.userName} 님"
+        content={authStore.userName}
         content2="가입을 축하합니다."
         imgUrl="signUp"
       />
