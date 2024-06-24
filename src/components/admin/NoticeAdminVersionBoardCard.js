@@ -36,7 +36,9 @@ const NoticeAdminVersionBoardCard = observer(({ user, handleDelete }) => {
     return (
         <tr key={user.boardNum}  >
             <td style={{ width: "8vw", textAlign: "center" }} onClick={() => handleRowClick(user.boardNum)}>{user.boardWriter}</td>
-            <td style={{ width: "15vw", textAlign: "center" }} onClick={() => handleRowClick(user.boardNum)}>{user.boardTitle}</td>
+            <td style={{ width: "15vw", textAlign: "center" }}>
+                <span  className={styles.truncatedText2} onClick={() => handleRowClick(user.boardNum)}>{user.boardTitle}</span>
+            </td>
             {/* <td style={{ width: "30vw", textAlign: "center" }}>{user.boardContent}</td> */}
             <td style={{ width: "30vw", textAlign: "center" }}>
                 <span className={styles.truncatedText} onClick={() => handleRowClick(user.boardNum)}>{user.boardContent}</span>

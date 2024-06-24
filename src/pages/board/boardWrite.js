@@ -32,7 +32,7 @@ const BoardWrite = () => {
       .then(response => {
         console.log(formData);
         // 서버로 데이터 전송 후, 리스트 페이지로 리디렉션
-        router.push('/board/boardList');
+        router.push('/admin/noticeAdminVersion');
       })
       .catch(error => {
         console.error('There was an error!', error);

@@ -28,8 +28,12 @@ const InquiryAdminVersionBoardCard = observer(({ user, handleDelete }) => {
     return (
         <tr>
             <td style={{ width: "8vw", textAlign: "center" }}>{user.userId}</td>
-            <td style={{ width: "15vw",textAlign: "center" }}>{user.title}</td>
-            <td style={{ width: "30vw", textAlign: "center" }}>{user.content}</td>
+            <td style={{ width: "15vw",textAlign: "center" }}>
+            <span className={styles.truncatedText}>{user.title}</span>
+            </td>
+            <td style={{ width: "30vw", textAlign: "center" }}>
+            <span className={styles.truncatedText2}>{user.content}</span>
+            </td>
             <td style={{ width: "20vw", textAlign: "center" }}>
                     <button className={styles.button} onClick={() => handleDelete(user.inquiryNo)}>삭제</button>
             </td>

@@ -34,9 +34,9 @@ export default function ReplyWriteForm({ data, fetchData, user }) {
     }
 
     return (
-        <div className="border max-w-screen-lg p-4 mx-auto">
-            <div className="border flex gap-4 p-2 justify-between text-gray-400">
-                <div className="border flex items-center gap-2 ">
+        <div className="max-w-screen-lg p-4 mx-auto">
+            <div className=" flex gap-4 p-2 justify-between text-gray-400">
+                <div className=" flex items-center gap-2 ">
                     <div className="border w-10 h-10 rounded-full overflow-hidden">
                         <img className="block w-full" src={`${user.userProfileUrl}`} alt="userImg" />
                     </div>

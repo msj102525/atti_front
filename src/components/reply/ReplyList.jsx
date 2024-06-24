@@ -44,17 +44,17 @@ export default function ReplyList({ data, fetchData }) {
 
     const handleToggleReplyForm = (parentReply) => {
         if (selectedReply && selectedReply.feedNum === parentReply.feedNum && selectedReply.replyNum === parentReply.replyNum) {
-            setShowReplyForm(false); // 클릭한 댓글이 이미 선택된 상태일 경우 닫기
+            setShowReplyForm(false); 
             setSelectedReply(null);
         } else {
             setFeedNumReplyNum(parentReply);
-            setShowReplyForm(true); // 클릭한 댓글 열기
+            setShowReplyForm(true); 
             setSelectedReply(parentReply);
-            console.log("클릭된 댓글 정보:", parentReply); // 클릭된 댓글 정보 콘솔 출력
+            console.log("클릭된 댓글 정보:", parentReply);
         }
     }
 
-    // 대댓글 등록
+    
     const submitReply = async () => {
         const replyForm = {
             feedNum: feedNumReplyNum.feedNum,
@@ -93,7 +93,7 @@ export default function ReplyList({ data, fetchData }) {
                                         <p>{reply.replyWriter}</p>
                                         <p>{formatDate(reply.replyDate)}</p>
                                     </div>
-                                    <div className="text-lg max-h-60 overflow-hidden line-clamp-[8] mb-4 after:content-[''] after:bg-black after:block after:w-full after:h-[1px] after:left-0 after-bottom-0"
+                                    <div className="text-lg max-h-60 overflow-hidden line-clamp-[8] mb-4 after:content-[''] after:bg-slate-500 after:block after:w-full after:h-[2px] after:left-0 after-bottom-0"
                                         dangerouslySetInnerHTML={{ __html: reply.replyContent }}
                                     />
                                     <div>
@@ -119,10 +119,10 @@ export default function ReplyList({ data, fetchData }) {
                                     </div>
                                 </div>
                                 {selectedReply && selectedReply.feedNum === reply.feedNum && selectedReply.replyNum === reply.replyNum && showReplyForm && (
-                                    <div className="border max-w-screen-lg p-4 mx-auto">
+                                    <div className=" max-w-screen-lg p-4 mx-auto">
                                         <div className="border flex gap-4 p-2 justify-between text-gray-400">
-                                            <div className="border flex items-center gap-2 ">
-                                                <div className="border w-10 h-10 rounded-full overflow-hidden">
+                                            <div className=" flex items-center gap-2 ">
+                                                <div className=" w-10 h-10 rounded-full overflow-hidden">
                                                     <img className="block w-full" src={"#"} alt="userImg" />
                                                 </div>
                                                 <p>{user.userId}</p>
