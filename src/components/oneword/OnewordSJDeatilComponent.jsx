@@ -2,16 +2,20 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { getOnewordList, insertOneword } from "../../api/oneword/OnewordSubject";
+import { getOnewordList, insertOneword, updateOneword, deleteOneword } from "../../api/oneword/Oneword";
 import { handleAxiosError } from "../../api/errorAxiosHandle";
 
 const OnewordSJDeatilComponent = observer((data) => {
     const router = useRouter();
+    const queryClient = useQueryClient();
 
-    const [keyword, setKeyword] = React.useState("");
+    // const [keyword, setKeyword] = React.useState("");
+    // Initialize keyword state with data.data.owsjNum
+    const [keyword, setKeyword] = React.useState(data.data.owsjNum.toString());
+
     const [page, setPage] = React.useState(1);
     const [size, setSize] = React.useState(10);
-    
+
     // State for owComment
     const [owComment, setOwComment] = useState([]);
 
@@ -23,20 +27,12 @@ const OnewordSJDeatilComponent = observer((data) => {
     const [addingOwComment, setAddingOwComment] = useState(false);
     const [newOwCommentContent, setNewOwCommentContent] = useState('');
 
-    const { data: owCommentData, isLoading } = useQuery(['onewordList', { keyword, page, size }], () => getOnewordList({
+    const { data: owCommentData, isLoading, refetch } = useQuery(['onewordList', { keyword, page, size }], () => getOnewordList({
         keyword: keyword,
         page: page,
         size: size,
-      }), {
+    }), {
         keepPreviousData: true,
-      });
-
-    // 등록
-    const insertOnewordMutation = useMutation(insertOneword, {
-        onSuccess: () => {
-            // queryClient.invalidateQueries('onewordSubjectList').then();
-        },
-        onError: handleAxiosError,
     });
 
     // Function to toggle add comment mode
@@ -62,11 +58,14 @@ const OnewordSJDeatilComponent = observer((data) => {
         };
 
         // Update state with new comment
-        setOwComment([...owCommentData, newComment]);
+        setOwComment([...(owCommentData || []), newComment]);
+
+        // console.log("newComment : " + newComment);
 
         ////////////////////////////////////////////
         //// database에 저장 logic 추가
         ////////////////////////////////////////////
+        // Call mutation to insert new comment
         insertOnewordMutation.mutate(newComment);
 
         // Exit add comment mode
@@ -89,15 +88,64 @@ const OnewordSJDeatilComponent = observer((data) => {
         // Update state with edited owComment
         setOwComment(editedComments);
 
+        // add
+        const newComment = {
+            owNum: editCommentId,
+            owsjNum: keyword,
+            owContent: editOwCommentContent
+        };
+
+        // Update state with new comment
+        // setOwComment([...(owCommentData || []), newComment]);
+
+        //database update(2024.06.24)
+        updateOnewordMutation.mutate(newComment);
+
         // Clear edit mode
         setEditCommentId(null);
         setEditOwCommentContent('');
     };
 
+    // insert
+    const insertOnewordMutation = useMutation(insertOneword, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('onewordList').then();
+        },
+        onError: handleAxiosError,
+    });
+
+    // update
+    const updateOnewordMutation = useMutation(updateOneword, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('onewordList').then();
+        },
+        onError: handleAxiosError,
+    });
+
+    // delete
+    const deleteOnewordMutation = useMutation(deleteOneword, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('onewordList').then();
+        },
+        onError: handleAxiosError,
+    });
+
+
+    //// 삭제
     // Function to delete a comment
-    const deleteComment = (commentId) => {
-        const updatedComments = owComment.filter(comment => comment.id !== commentId);
-        setOwComment(updatedComments);
+    const deleteComment = (owNum) => {
+        // Confirm deletion
+        if (window.confirm("정말로 삭제히시겠습니까?")) {
+            // User clicked OK, proceed with deletion
+            const updatedComments = owComment.filter(comment => comment.owNum !== owNum);
+            setOwComment(updatedComments);
+    
+            //// 삭제 처리
+            deleteOnewordMutation.mutate(owNum);
+        } else {
+            // User clicked Cancel, do nothing
+            return;
+        }
     };
 
     // Function to toggle edit mode
@@ -120,6 +168,11 @@ const OnewordSJDeatilComponent = observer((data) => {
     const goBack = () => {
         router.back(); // Navigate back to previous page
     };
+
+    useEffect(() => {
+        // Update keyword when data.data.owsjNum changes
+        setKeyword(data.data.owsjNum.toString());
+    }, [data.data.owsjNum]);
 
     return (
         <div className="border max-w-screen-lg p-4 mx-auto">
@@ -154,51 +207,57 @@ const OnewordSJDeatilComponent = observer((data) => {
                         placeholder="새 댓글을 입력하세요..."
                         className="border p-2 mb-2 w-full"
                     />
-                    <button onClick={addComment(data.data.owsjNum)} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                    <button onClick={() => addComment(data.data.owsjNum)} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
                         저장
                     </button>
                 </div>
             )}
 
             {/* Comments list */}
-            <div className="mt-4">
-                <h3 className="text-lg font-bold mb-2">댓글</h3>
-                {owCommentData && owCommentData.length === 0 ? (
-                    <p>댓글이 없습니다.</p>
-                ) : (
-                    <ul>
-                        {owCommentData && owCommentData.map(comment => (
-                            <li key={comment.owNum} className="border p-2 mb-2">
-                                {editCommentId === comment.owNum ? (
-                                    <>
-                                        <textarea value={editOwCommentContent} onChange={handleEditInputChange} className="border p-2 mb-2" />
-                                        <button onClick={() => editComment(comment.id)} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2">
-                                            저장
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p>{comment.content}</p>
-                                        <div>
-                                            <button onClick={() => toggleEditMode(comment.owNum, comment.owContent)} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded mr-2">
-                                                수정
+            {owCommentData && (
+                <div className="mt-4">
+                    <h3 className="text-lg font-bold mb-2">댓글</h3>
+                    {owCommentData.length === 0 ? (
+                        <p>댓글이 없습니다.</p>
+                    ) : (
+                        <ul>
+                            {owCommentData.map(comment => (
+                                <li key={comment.owNum} className="border p-2 mb-2">
+                                    {editCommentId === comment.owNum ? (
+                                        <>
+                                            <textarea value={editOwCommentContent} onChange={handleEditInputChange} className="border p-2 mb-2" />
+                                            <button onClick={() => editComment(comment.id)} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2">
+                                                저장
                                             </button>
-                                            <button onClick={() => deleteComment(comment.owNum)} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
-                                                삭제
-                                            </button>
-                                        </div>
-                                    </>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p>{comment.owContent}</p>
+                                            <p>{comment.owNum}</p>
+                                            <div>
+                                                <button onClick={() => toggleEditMode(comment.owNum, comment.owContent)} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded mr-2">
+                                                    수정
+                                                </button>
+                                                <button onClick={() => deleteComment(comment.owNum)} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
+                                                    삭제
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            )}
+
 
             {/* Go back button */}
             <button onClick={goBack}>돌아가기</button>
         </div>
     );
+
+
 });
 
 export default OnewordSJDeatilComponent;
