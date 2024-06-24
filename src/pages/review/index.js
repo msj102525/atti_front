@@ -1,42 +1,66 @@
 import React from "react";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
-import ReviewCard from "@/components/doctor/ReviewCard";
+import ConsultCard from "@/components/review/ConsultCard";
 
 export default function ConsultationHistory() {
   const consultations = [
     {
-      id: 1,
-      date: "2024-06-21",
+      doctorId: 1,
       doctor: "Dr. John Doe",
-      duration: 30,
+      profileUrl: "/doctor.png",
       review: {
-        userName: "김철수",
+        reviewId: 1,
+        date: "2024-06-23",
         starPoint: 5,
         content:
           "상담이 매우 유익했습니다. 의사분께서 친절하게 설명해주셨어요.",
       },
     },
     {
-      id: 2,
-      date: "2024-05-15",
+      doctorId: 2,
       doctor: "Dr. Jane Smith",
-      duration: 45,
+      profileUrl: "doctor.png",
       review: {
-        userName: "박영희",
+        reviewId: 2,
+        date: "2024-06-24",
         starPoint: 4,
-        content: "상담 내용이 구체적이고 도움이 많이 되었습니다.",
+        content:
+          "상담이 매우 유익했어요. 친절하게 설명해주셨고, 많은 도움이 되었습니다.",
       },
     },
     {
-      id: 3,
-      date: "2024-04-10",
-      doctor: "Dr. Sam Wilson",
-      duration: 60,
+      doctorId: 3,
+      doctor: "Dr. Emily Johnson",
+      profileUrl: "doctor.png",
       review: {
-        userName: null, // 탈퇴한 회원
+        reviewId: 3,
+        date: "2024-06-22",
         starPoint: 3,
-        content: "의사분이 친절하고 이해하기 쉽게 설명해주셨습니다.",
+        content: "상담은 괜찮았지만, 시간이 조금 부족했던 것 같아요.",
+      },
+    },
+    {
+      doctorId: 4,
+      doctor: "Dr. Michael Brown",
+      profileUrl: "doctor.png",
+      review: {
+        reviewId: 4,
+        date: "2024-06-21",
+        starPoint: 5,
+        content:
+          "의사분께서 매우 친절하고 전문가답게 상담해주셔서 만족스러웠습니다.",
+      },
+    },
+    {
+      doctorId: 5,
+      doctor: "Dr. Lisa White",
+      profileUrl: "doctor.png",
+      review: {
+        reviewId: 5,
+        date: "2024-06-20",
+        starPoint: 4,
+        content: "전문적이고 유익한 상담이었습니다. 다음에 또 방문하고 싶어요.",
       },
     },
   ];
@@ -45,32 +69,18 @@ export default function ConsultationHistory() {
     <div>
       <Header />
       <div className="max-w-screen-lg p-4 mx-auto">
-        <h1 className="mb-6 text-2xl font-bold">상담 내역</h1>
-        <div className="space-y-6">
-          {consultations.map((consultation) => (
-            <div
-              key={consultation.id}
-              className="flex flex-col p-4 border rounded-lg shadow-md md:flex-row md:justify-between"
-            >
-              <ReviewCard
-                userName={consultation.review.userName}
-                starPoint={consultation.review.starPoint}
-                content={consultation.review.content}
-              />
-              <div className="flex flex-col items-start justify-center mt-4 md:ml-6 md:mt-0">
-                <div className="mb-2 text-sm text-gray-500">
-                  <strong>상담 날짜:</strong> {consultation.date}
-                </div>
-                <div className="mb-2 text-sm text-gray-500">
-                  <strong>상담 시간:</strong> {consultation.duration} 분
-                </div>
-                <div className="text-sm text-gray-500">
-                  <strong>상담한 의사:</strong> {consultation.doctor}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <h1 className="m-8 text-4xl font-bold">내가 쓴 리뷰</h1>
+        {consultations.map((consult, i) => (
+          <ConsultCard
+            doctorId={consult.doctorId}
+            doctor={consult.doctor}
+            profileUrl={consult.profileUrl}
+            writeDate={consult.review.date}
+            starPoint={consult.review.starPoint}
+            content={consult.review.content}
+            reviewId={consult.review.reviewId}
+          />
+        ))}
       </div>
       <Footer />
     </div>

@@ -14,9 +14,11 @@ const MyPageNavBar = ({ userType }) => {
             <Link href="/doctor/mypage">병원정보 등록</Link>
           </li>
         )}
-        <li className="py-1">
-          <Link href="/review">리뷰정보</Link>
-        </li>
+        {userType == "U" && (
+          <li className="py-1">
+            <Link href="/review">내가 쓴 리뷰</Link>
+          </li>
+        )}
       </ul>
     </div>
   );
