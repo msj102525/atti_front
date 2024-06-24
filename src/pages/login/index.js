@@ -1,12 +1,15 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { login } from "@/api/user/user"; 
-import KakaoLogin from "@/components/user/kakaoLogin";
-import NaverLogin from "@/components/user/naverLogin";
 import styles from "@/styles/login/normalLogin.module.css";
-import Modal from "@/components/common/Modal"; 
+import Modal2 from "@/components/common/Modal2"; 
+
+// Dynamic import for client-side only components
+const KakaoLogin = dynamic(() => import("@/components/user/kakaoLogin"), { ssr: false });
+const NaverLogin = dynamic(() => import("@/components/user/naverLogin"), { ssr: false });
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({
@@ -120,7 +123,7 @@ export default function LoginForm() {
                     </div>
                 </form>
             </div>
-            <Modal
+            <Modal2
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 title="로그인 실패"

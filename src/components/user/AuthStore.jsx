@@ -1,13 +1,9 @@
-/*src/components/user/AuthStatus.js*/
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { authStore } from "@/pages/stores/authStore";
-import { logout, logoutkakao } from "@/api/user/user";
+import { logout, logoutKakao, logoutNaver } from "@/api/user/user";
 import MyPageNavBar from "../common/MyPageNavBar";
-import { getUserData } from "@/api/user/userApi";
-import KakaoLogin from "./kakaoLogin";
-import NaverLogin from "./naverLogin";
 
 const AuthStatus = observer(() => {
   const router = useRouter();
@@ -20,18 +16,31 @@ const AuthStatus = observer(() => {
     setIsClient(true); // 클라이언트에서만 true로 설정
   }, []);
 
+  useEffect(() => {
+    const loginType = localStorage.getItem("loginType");
+    if (loginType) {
+      authStore.setLoginType(loginType);
+    }
+  }, []);
+
   const handleLoginClick = async () => {
     try {
       if (!authStore.loggedIn && !authStore.socialLoggedIn) {
         router.push("/login"); // 로그인 페이지로 이동
       } else if (authStore.socialLoggedIn) {
-        await KakaoLogin();
-        await NaverLogin();
+        const loginType = authStore.loginType;
+        if (loginType === "kakao") {
+          await logoutKakao();
+        } else if (loginType === "naver") {
+          await logoutNaver();
+        }
         authStore.setSocialLoggedIn(false); // 소셜 로그아웃 처리
+        localStorage.removeItem("loginType");
         router.push("/");
       } else {
         await logout();
         authStore.setLoggedIn(false); // 일반 로그아웃 처리
+        localStorage.removeItem("loginType");
         router.push("/");
       }
     } catch (error) {
@@ -40,12 +49,17 @@ const AuthStatus = observer(() => {
   };
 
   const handleMyPageClick = () => {
-    router.push("/user/mypage"); // mypage 페이지로 이동
+    const loginType = localStorage.getItem("loginType");
+    if (loginType === "regular") {
+      router.push("/user/mypage"); // 일반 유저 마이페이지
+    } else if (loginType === "kakao") {
+      router.push("/user/snsInfo"); // 카카오 유저 마이페이지
+    } else if (loginType === "naver") {
+      router.push("/user/snsInfo"); // 네이버 유저 마이페이지
+    } else {
+      router.push("/user/snsInfo"); 
+    }
   };
-
-  // const onMouseEnter = () =>{
-
-  // }
 
   if (!isClient) {
     // 클라이언트에서 렌더링하기 전까지는 아무것도 렌더링하지 않음
@@ -56,17 +70,12 @@ const AuthStatus = observer(() => {
     <div className="flex">
       <div className="flex flex-col items-center justify-center">
         <button onClick={handleLoginClick}>
-          {authStore.loggedIn || authStore.socialLoggedIn
-            ? "로그아웃"
-            : "로그인"}
+          {authStore.loggedIn || authStore.socialLoggedIn ? "로그아웃" : "로그인"}
         </button>
         {(authStore.loggedIn || authStore.socialLoggedIn) && (
           <>
             <div className="relative inline-block group">
-              <button
-                onClick={handleMyPageClick}
-                className="text-black rounded "
-              >
+              <button onClick={handleMyPageClick} className="text-black rounded">
                 MyPage
               </button>
               <MyPageNavBar userType={userType} />
@@ -81,13 +90,5 @@ const AuthStatus = observer(() => {
     </div>
   );
 });
-
-export const sendTempPassword = (data) => {
-  return axios.post("/send-temp-password", data).then((res) => res);
-};
-
-export const verifyTempPassword = (data) => {
-  return axios.post("/verify-temp-password", data).then((res) => res);
-};
 
 export default AuthStatus;
