@@ -93,6 +93,11 @@ const FAQ = () => {
         newFAQ.faqCategory = currentFAQ.newCategory;
       }
 
+      delete newFAQ.newCategory;
+
+      console.log(currentFAQ, "프로젝트");
+      console.log('Sending FAQ data:', newFAQ);
+
       axios.post('http://localhost:8080/faq/faq', newFAQ)
         .then(response => {
           fetchFAQs(currentPage);
