@@ -1,22 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { signup } from "@/api/user/user.js";
-import KakaoSignup from "@/components/user/kakaoSignup";
-import NaverSignup from "@/components/user/naverSignup";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
-import Modal from "@/components/common/Modal";
 import { authStore } from "@/pages/stores/authStore";
 
+// Dynamic import for client-side only components
+const KakaoSignup = dynamic(() => import("@/components/user/kakaoSignup"), { ssr: false });
+const NaverSignup = dynamic(() => import("@/components/user/naverSignup"), { ssr: false });
+const Modal = dynamic(() => import("@/components/common/Modal"), { ssr: false });
+
 export default function NormalSignUp() {
+  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   //-----------------------------모달
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => {
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalContent, setModalContent] = useState('');
+  const [modalContent2, setModalContent2] = useState('');
+
+  const openModal = (title, content, content2) => {
+    setModalTitle(title);
+    setModalContent(content);
+    setModalContent2(content2);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    window.location.href = "/login";
+    router.push('/');
   };
+
   //----------------------------
   const [formData, setFormData] = useState({
     userId: "",
@@ -79,9 +98,7 @@ export default function NormalSignUp() {
     try {
       signUpData.userType = "U";
       await signup(signUpData);
-      setSuccessMessage(
-        "회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동해주세요."
-      );
+      setSuccessMessage("회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동해주세요.");
       setFormData({
         userId: "",
         password: "",
@@ -94,11 +111,20 @@ export default function NormalSignUp() {
       });
       setErrorMessage("");
       setGenderErrorMessage("");
-      openModal();
+      openModal("회원 가입 완료.", authStore.userName, "가입을 축하합니다.");
     } catch (error) {
-      setErrorMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
+      if (error.response && error.response.status === 409) {
+        openModal("회원 가입 실패", "이미 등록된 사용자입니다.", "다른 이메일을 사용하세요.");
+      } else {
+        setErrorMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
+      }
     }
   };
+
+  if (!isClient) {
+    // 클라이언트에서 렌더링하기 전까지는 아무것도 렌더링하지 않음
+    return null;
+  }
 
   return (
     <div className="flex flex-col items-center h-screen p-4 bg-gray-100">
@@ -266,9 +292,9 @@ export default function NormalSignUp() {
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        title="회원 가입 완료."
-        content={authStore.userName}
-        content2="가입을 축하합니다."
+        title={modalTitle}
+        content={modalContent}
+        content2={modalContent2}
         imgUrl="signUp"
       />
     </div>

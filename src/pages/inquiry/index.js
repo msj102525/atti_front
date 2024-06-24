@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { observer } from "mobx-react-lite";
 import Pagination from "@/components/common/page";
 import styles from "@/styles/inquiry/inquiryList.module.css";
 import Header from '../common/Header';
 import InquirySearchForm from "@/components/inquiry/inquirySearchForm";
 import MintButton from "@/components/common/MintButton";
 import { getInquiryList, searchInquiries } from "@/api/inquiry/inquiry";
+import { authStore } from "../stores/authStore";
 
-const InquiryList = () => {
+const InquiryList = observer(() => {
   const [inquiries, setInquiries] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const router = useRouter();
+  const loggedIn = authStore.loggedIn; // 로그인 상태 확인
 
   const fetchData = async (page = 0, formData = null) => {
     try {
@@ -51,22 +54,24 @@ const InquiryList = () => {
   };
 
   const handleCreateInquiryClick = () => {
-    router.push('/inquiry/inquiryWrite');  // 문의사항 작성 페이지로 이동
+    router.push('/inquiry/inquiryWrite'); // 문의사항 작성 페이지로 이동
   };
 
   return (
     <div>
       <Header />
       <h1 className={styles.h1}>문의사항</h1>
-      <div className={styles.btnGroup}>
-        <MintButton
-          onClick={handleCreateInquiryClick} 
-          text="작성하기"
-          sizeW="w-24"
-          sizeH="h-12"
-          fontSize="text-lg"
-        />
-      </div>
+      {loggedIn && ( // 로그인 상태일 때만 버튼 표시
+        <div className={styles.btnGroup}>
+          <MintButton
+            onClick={handleCreateInquiryClick} 
+            text="작성하기"
+            sizeW="w-24"
+            sizeH="h-12"
+            fontSize="text-lg"
+          />
+        </div>
+      )}
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr>
@@ -93,6 +98,6 @@ const InquiryList = () => {
       <Pagination pageCount={pageCount} onPageChange={handlePageChange} currentPage={currentPage} />
     </div>
   );
-};
+});
 
 export default InquiryList;
