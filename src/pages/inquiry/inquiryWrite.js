@@ -34,7 +34,7 @@ const InquiryWrite = () => {
   };
 
   const moveBack = () => {
-    router.push('/inquiry/inquiryList');
+    router.push('/inquiry');
   };
 
   return (

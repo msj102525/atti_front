@@ -5,7 +5,7 @@ const LoginSuccess = () => {
     const router = useRouter();
 
     useEffect(() => {
-        const { access, refresh, isAdmin, userId, userName, nickName, profileUrl, userType } = router.query;
+        const { access, refresh, isAdmin, userId, userName, nickName, profileUrl, userType, email } = router.query;
 
         if (access && refresh) {
             // JWT 토큰과 사용자 정보를 로컬 스토리지에 저장합니다.
@@ -13,12 +13,14 @@ const LoginSuccess = () => {
             window.localStorage.setItem("isAdmin", JSON.stringify(isAdmin === 'true'));
             window.localStorage.setItem("refresh", refresh);
             window.localStorage.setItem("userId", userId || '');
+            window.localStorage.setItem("email", email || '' );
             window.localStorage.setItem("userName", userName || '');
             window.localStorage.setItem("nickName", nickName || '');
             window.localStorage.setItem("profileUrl", profileUrl || '');
             window.localStorage.setItem("userType", userType || 'U');
             authStore.checkLoggedIn();
             
+            authStore.setEmail(email);
         
             // 원하는 페이지로 리다이렉트합니다.
             router.push('/');

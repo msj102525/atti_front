@@ -26,27 +26,24 @@ export async function updateUser(userData) {
     throw new Error('Failed to update user information.');
   }
 }
-// 소셜 회원 유저 추가정보 등록
 export const snsUserUpdate = async (authStore) => {
-  console.log(authStore.userName,'fewegw');
+  console.log(authStore.userName, 'fewegw');
   try {
     // authStore에서 userData를 생성하고 loggedIn 필드를 삭제
-    let userData = new FormData();
-
-    userData = {
-      // userId: authStore.userId,
+    const userData = {
+      userId: authStore.userId,
+      email: authStore.email,
       userName: authStore.userName,
       nickName: authStore.nickName,
       phone: authStore.phone,
       gender: authStore.gender,
       birthDate: authStore.birthDate,
       profileUrl: authStore.profileUrl,
-      // email: authStore.email,
     };
 
     console.log(userData);
 
-    const response = await instance.put(baseUrl2 + '/update', userData, {
+    const response = await instance.put(baseUrl2 + '/update', JSON.stringify(userData), {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json', // Content-Type을 명시적으로 지정

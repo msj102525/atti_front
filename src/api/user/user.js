@@ -32,7 +32,7 @@ export const login = (loginData) => {
         window.localStorage.setItem("loginType", response.data.loginType || 'regular');
         window.localStorage.setItem("password", response.data.password || '');
         window.localStorage.getItem("connfigPassword", response.data.configPassword || '');
-
+        console.log(response.data);
 
         // authStore에 사용자 정보를 설정
         authStore.setLoggedIn(true);

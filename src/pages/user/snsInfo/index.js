@@ -6,7 +6,9 @@ import { snsUserUpdate, getUserData, deleteUser } from '@/api/user/userApi';
 import Modal2 from "@/components/common/Modal2";
 import MoveMainLogo from '@/components/common/MoveMainLogo';
 import styles from '@/styles/user/snsInfo.module.css';
+import unlinkKakaoAccount from '@/components/user/kakkaoDelet';
 import { uploadProfilePhoto, deleteProfilePhoto } from '@/api/doctor/doctorUpdate';
+
 
 const SnsInfoUP = observer(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,15 +64,21 @@ const SnsInfoUP = observer(() => {
 
   const handleCancel = async () => {
     if (confirm('탈퇴 하시겠습니까?')) {
-      try {
-        await deleteUser(authStore.userId); 
-        window.localStorage.clear();
-        setModalMessage('탈퇴 완료!');
-        setIsModalOpen(true);
-        router.push('/'); // 탈퇴 성공 시 메인 페이지로 이동
-      } catch (error) {
-        console.error(error);
-        setModalMessage('탈퇴 실패!');
+      const unlinkSuccess = await unlinkKakaoAccount(authStore.userId); // userId를 전달
+      if (unlinkSuccess) {
+        try {
+          await deleteUser(authStore.userId);
+          window.localStorage.clear();
+          setModalMessage('탈퇴 완료!');
+          setIsModalOpen(true);
+          router.push('/'); // 탈퇴 성공 시 메인 페이지로 이동
+        } catch (error) {
+          console.error(error);
+          setModalMessage('탈퇴 실패!');
+          setIsModalOpen(true);
+        }
+      } else {
+        setModalMessage('카카오 연결 끊기 실패!');
         setIsModalOpen(true);
       }
     }
