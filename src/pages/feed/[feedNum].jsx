@@ -7,6 +7,7 @@ import { getFeedByFeedNum } from "@/api/feed/feed";
 import ReplyWriteForm from "@/components/reply/ReplyWriteForm";
 import ReplyList from "@/components/reply/ReplyList";
 import { authStore } from "../stores/authStore";
+import SimilarFeedList from "@/components/feed/SimilarFeedList";
 
 export default function Feed() {
     const [data, setData] = useState(null);
@@ -51,6 +52,10 @@ export default function Feed() {
                         <FeedDetail user={user} data={data} />
                         <ReplyWriteForm user={user} data={data} fetchData={fetchData} />
                         <ReplyList user={user} data={data} fetchData={fetchData} />
+                        <SimilarFeedList
+                            data={data}
+                        />
+
                     </div>
                 </div>
             </div>

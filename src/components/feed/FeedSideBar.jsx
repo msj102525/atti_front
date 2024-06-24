@@ -43,7 +43,7 @@ export default function FeedSideBar({getSearchData}) {
                 <p className="py-2">지금 주목 받는 사연</p>
                 <ul>
                     {top5FeedContentResult.map((feed, idx) => {
-                        const sanitizedContent = feed.feedContent.replace(/<\/?[^>]+(>|$)/g, " ");
+                        const sanitizedContent = feed.feedContent.replace(/<\/?[^>]+(>|$)/g, " ").replace(/&nbsp;/g, " ");
                         return (
                             <li
                                 key={idx}
