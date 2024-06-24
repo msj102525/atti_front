@@ -125,3 +125,33 @@ export const deleteInquiryAdminVersion = async (inquiryNo) => {
 
 
 // *******************************************************
+
+// 오늘 한 줄(admin ver.) ************************************
+
+
+export const getOnewordAdminVersionList = ({ searchField , searchInput, page, size }) => {
+    // 쿼리 파라미터를 사용하여 URL 생성
+    // if (!searchField) {
+    //     searchField = 'userId';
+    // }
+    const params = new URLSearchParams({
+            searchField,
+            searchInput,
+            page,
+            size
+    }).toString();
+
+    return axios.get(`/admin/onewordAdminVersionList?${params}`)
+        .then(response => {
+            return response.data;
+        });
+}
+
+
+export const deleteOnewordAdminVersion = async (owsjNum) => {
+    const response = await axios.delete(`/admin/api/deleteonewordAdminVersion/${owsjNum}`);
+    return response.data;
+};
+
+
+// *******************************************************

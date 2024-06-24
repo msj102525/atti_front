@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from 'react-query';
-import FaqAdminVersionBoardCard from "@/components/admin/FaqAdminVersionBoardCard"; // MemberCard 컴포넌트 가져오기
-import styles from "@/styles/admin/faqAdminVersion.module.css";
-import { getFaqAdminVersionList, deleteFaqAdminVersion } from "@/api/admin/adminboard"; // 회원 관련 API 함수 가져오기
+import OnewordAdminVersionBoardCard from "@/components/admin/OnewordAdminVersionBoardCard"; // MemberCard 컴포넌트 가져오기
+import styles from "@/styles/admin/onewordAdminVersion.module.css";
+import { getOnewordAdminVersionList, deleteOnewordAdminVersion } from "@/api/admin/adminboard"; // 회원 관련 API 함수 가져오기
 import { handleAxiosError } from "@/api/errorAxiosHandle"; // 오류 처리 함수 가져오기
 import Header from "@/pages/common/Header";
 import Footer from "@/pages/common/Footer";
 import AdminSidebar from "@/components/admin/AdminSidebar"
 import { useRouter } from 'next/router';
 
-import SuspendModal from '@/components/admin/SuspendModal'; // SuspendModal 컴포넌트 가져오기
-
 
 // QueryClient 생성
 const queryClient = new QueryClient();
 
 
-const FaqAdminVersionListComponent = observer(() => {
+const OnewordAdminVersionListComponent = observer(() => {
     //const [searchField, setSearchField] = useState("id"); // 검색 필드 상태
     const [searchInput, setSearchInput] = useState(""); // 검색 입력 상태
     const [page, setPage] = useState(1); // 현재 페이지 상태
@@ -28,21 +26,19 @@ const FaqAdminVersionListComponent = observer(() => {
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
     const [selectedUser, setSelectedUser] = useState(null); // 선택된 회원 정보
 
-    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false); // 정지 모달 열림 상태
-
     const [searchType, setSearchType] = useState('id'); // 'id' 또는 'name' 값을 가질 수 있는 상태
 
     const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
 
-    const searchField = searchType === 'id' ? 'faqTitle' : 'faqContent';
+    const searchField = searchType === 'id' ? 'owsjWriter' : 'owsjSubject';
 
     const router = useRouter();
 
 
 
     const { data, isLoading, error, refetch } = useQuery(
-        ['faqAdminVersionList', { searchField: searchParams.searchField, searchInput: searchParams.searchInput, page, size }],
-        () => getFaqAdminVersionList({ searchField: searchParams.searchField, searchInput: searchParams.searchInput, page: page - 1, size }),
+        ['onewordAdminVersionList', { searchField: searchParams.searchField, searchInput: searchParams.searchInput, page, size }],
+        () => getOnewordAdminVersionList({ searchField: searchParams.searchField, searchInput: searchParams.searchInput, page: page - 1, size }),
         {
             keepPreviousData: true,
         }
@@ -55,9 +51,9 @@ const FaqAdminVersionListComponent = observer(() => {
 
 
     // 회원 삭제 뮤테이션
-    const deleteFaqAdminVersionMutation = useMutation(deleteFaqAdminVersion, {
+    const deleteOnewordAdminVersionMutation = useMutation(deleteOnewordAdminVersion, {
         onSuccess: () => {
-            queryClient.invalidateQueries('faqAdminVersionList'); // 회원 리스트 쿼리 무효화
+            queryClient.invalidateQueries('onewordAdminVersionList'); // 회원 리스트 쿼리 무효화
         },
         onError: handleAxiosError, // 오류 처리
 
@@ -107,9 +103,9 @@ const FaqAdminVersionListComponent = observer(() => {
 
 
     // 회원 삭제 핸들러
-    const handleDelete = (faqNum) => {
-        console.log(`Delete member with ID: ${faqNum}`);
-        deleteFaqAdminVersionMutation.mutate(faqNum);
+    const handleDelete = (owsjNum) => {
+        console.log(`Delete member with ID: ${owsjNum}`);
+        deleteOnewordAdminVersionMutation.mutate(owsjNum);
     };
 
     //수정모달 작업중 ***************************
@@ -143,12 +139,12 @@ const FaqAdminVersionListComponent = observer(() => {
                 <AdminSidebar />
                 <div className={styles.content}>
                     <div className={styles.container}>
-                        <h2 className={styles.centeredText}>FAQ(Admin ver.)</h2>
-                        <button className={styles.mkbutton} onClick={() => handleNavigation('/faq/faq')}>글쓰기</button>
+                        <h2 className={styles.centeredText}>오늘 한 줄(Admin ver.)</h2>
+                        <button className={styles.mkbutton} onClick={() => handleNavigation('/oneword')}>글쓰기</button>
 
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                             <select value={searchType} onChange={handleSearchTypeChange}>
-                                <option value="id">제목</option>
+                                <option value="id">아이디</option>
                                 <option value="name">내용</option>
                             </select>
                             <input type="text" placeholder="검색..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
@@ -157,7 +153,7 @@ const FaqAdminVersionListComponent = observer(() => {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: "15vw", textAlign: "center" }}>제목</th>
+                                    <th style={{ width: "8vw", textAlign: "center" }}>회원아이디</th>
                                     <th style={{ width: "30vw", textAlign: "center" }}>내용</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
                                 </tr>
@@ -177,8 +173,8 @@ const FaqAdminVersionListComponent = observer(() => {
 
                                 {data && Array.isArray(data) ? (
                                     data.map(user => (
-                                        <FaqAdminVersionBoardCard
-                                            key={user.faqNum}
+                                        <OnewordAdminVersionBoardCard
+                                            key={user.owsjNum}
                                             user={user}
                                             handleDelete={handleDelete}
                                         />
@@ -206,12 +202,12 @@ const FaqAdminVersionListComponent = observer(() => {
 
 
 // QueryClientProvider로 감싸기
-const FaqAdminVersionListPage = () => {
+const OnewordAdminVersionListPage = () => {
     return (
         <QueryClientProvider client={queryClient}>
-            <FaqAdminVersionListComponent />
+            <OnewordAdminVersionListComponent />
         </QueryClientProvider>
     );
 };
 
-export default FaqAdminVersionListPage;
+export default OnewordAdminVersionListPage;
