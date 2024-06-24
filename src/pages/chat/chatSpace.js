@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
 import mqtt from 'mqtt';
 import axios from 'axios';
+import { FaStar } from 'react-icons/fa';
 
 const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
   const [messages, setMessages] = useState([]);
@@ -16,6 +17,9 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lt, setLt] = useState('');
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   console.log(chatId, senderId, receiverId, userType, limitTime);
 
@@ -223,13 +227,56 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
     return `${period} ${formattedHours}:${minutes < 10 ? `0${minutes}` : minutes}`;
   };
 
+
+  const handleSubmit = async () => {
+    // 리뷰 제출 로직 추가
+    console.log('Rating:', rating);
+    console.log('Review:', review);
+  
+    const date = new Date();
+    const writeDate = date.toISOString().split('T')[0];
+  
+    console.log(writeDate);
+    console.log(typeof(writeDate));
+    console.log(senderId);
+    console.log(receiverId);
+  
+    // 서버로 보낼 데이터 객체 생성
+    const reviewData = {
+      rating,
+      review,
+      writeDate,
+      senderId,
+      receiverId
+    };
+  
+    try {
+      // POST 요청으로 데이터 전송
+      const response = await axios.post(`http://localhost:8080/review`, reviewData);
+  
+      if (response.status === 200) {
+        console.log('Review submitted successfully:', response.data);
+        // 추가적으로 성공 시 수행할 로직이 있다면 여기에 추가
+      } else {
+        console.error('Failed to submit review:', response.status);
+      }
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    }
+  
+    setIsReviewModalOpen(false); // 모달 창 닫기
+  };
+  
+
+
+
   return (
     <div className="h-screen flex flex-col items-center bg-white p-4 pr-6">
     {isDisabled && (
       <div className="w-full flex justify-center items-center max-w-2xl p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-lg flex flex-col text-center mb-4">
         비활성화된 채팅방입니다. 메시지를 입력하실 수 없습니다.
         <button
-          onClick={() => { /* 리뷰 쓰기 버튼 클릭 핸들러 추가 */ }}
+          onClick={() => setIsReviewModalOpen(true)}
           className="w-1/3 mt-4 px-4 py-2 text-black rounded-lg bg-blue-200 hover:bg-blue-200"
         >
         리뷰 쓰기
@@ -301,6 +348,58 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
         </div>
       </div>
       )}
+
+
+
+      {/*모달 창 영역*/}
+      {isReviewModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <p className="mb-4">상담은 어떠셨나요? 후기를 남겨주세요</p>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">별점</label>
+              <div className="flex justify-center">
+                {[...Array(5)].map((_, index) => {
+                  const starValue = index + 1;
+                  return (
+                    <FaStar
+                      key={starValue}
+                      size={30}
+                      className="cursor-pointer"
+                      color={starValue <= rating ? '#ffc107' : '#e4e5e9'}
+                      onClick={() => setRating(starValue)}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">리뷰</label>
+              <textarea
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                className="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={handleSubmit}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              >
+                확인
+              </button>
+              <button
+                onClick={() => setIsReviewModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
 </div>
 
   );
