@@ -34,4 +34,24 @@ export const updateDoctorProfile = (formData) => {
   return fileUploadInstance.put("/doctor/mypage", formData).then((res) => res);
 };
 
+
+// export const uploadProfilePhoto = (file, userId) =>{
+//   return fileUploadInstance.put("/file/upload", file, userId).then((res) => res);
+// }
+
+
+
+export const uploadProfilePhoto = async (file, userId) => {
+  try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('userId', userId);
+
+      return fileUploadInstance.put("/file/upload", formData).then((res) => res);
+  } catch (error) {
+      console.error('업로드 오류:', error);
+      throw error;
+  }
+};
+
 //-----------------------------------------------------------------

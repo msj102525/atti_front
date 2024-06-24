@@ -27,6 +27,19 @@ export const updateFeed = (postData) => {
         });
 }
 
+export const deleteFeedByFeedNum = (feedNum) => {
+
+    console.log("AxiosPostData : ", feedNum);
+
+    return axios.delete(`/feed/${feedNum}`)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
 export const top5FeedContent = () => {
     return axios.get("/feed/top5")
         .then(res => {

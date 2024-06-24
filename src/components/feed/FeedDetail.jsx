@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Button from "../common/Button";
-import { updateFeed } from "@/api/feed/feed";
+import { updateFeed, formatDate, deleteFeedByFeedNum, postLike } from "@/api/feed/feed";
 import { useRouter } from 'next/router';
-import { postLike } from '@/api/likeHistory/likeHistory';
-import { formatDate } from '@/api/feed/feed';
 
 const CustomEditor = dynamic(() => {
     return import('@/components/common/custom-editor');
@@ -31,19 +29,29 @@ export default function FeedDetail({ data, user }) {
         feedContent: editorData
     }
 
-    const handleModSubmit = () => {
-        updateFeed(modFormData)
-            .then(res => {
-                if (res.status === 204) {
+    const handleModSubmit = async () => {
+        const userConfirmed = confirm('게시글을 수정하시겠습니까?');
+    
+        if (userConfirmed) {
+            try {
+                const response = await updateFeed(modFormData);
+                if (response.status === 204) {
+                    alert("게시글이 성공적으로 수정되었습니다.");
                     router.push("/feed");
                 } else {
-                    console.error("Unexpected response status:", res.status);
+                    console.error("Unexpected response status:", response.status);
+                    alert("게시글 수정에 실패하였습니다.");
                 }
-            })
-            .catch(err => {
-                console.error("피드 등록 실패:", err);
-            });
+            } catch (err) {
+                console.error("피드 수정 처리 실패:", err);
+                alert("피드 수정 처리 중 오류가 발생하였습니다.");
+            }
+        } else {
+            alert('게시글 수정을 취소하였습니다.');
+        }
     };
+    
+    
 
     const handleLikeSubmit = async () => {
         try {
@@ -56,6 +64,28 @@ export default function FeedDetail({ data, user }) {
             console.error("좋아요 처리 실패:", err);
         }
     }
+
+    const handleDeleteSubmit = async () => {
+        const userConfirmed = confirm('게시글을 삭제하시겠습니까?');
+    
+        if (userConfirmed) {
+            try {
+                const response = await deleteFeedByFeedNum(data.feedNum);
+                if (response.status === 204) {
+                    alert("게시글을 삭제하였습니다.");
+                    router.push("/feed");
+                } else {
+                    alert("게시글 삭제에 실패하였습니다.");
+                }
+            } catch (err) {
+                console.error("피드삭제 처리 실패:", err);
+                alert("피드 삭제 처리 중 오류가 발생하였습니다.");
+            }
+        } else {
+            alert('게시글 삭제를 취소하였습니다.');
+        }
+    };
+    
 
     return (
         <div className="border max-w-screen-lg p-4 mx-auto">
@@ -78,7 +108,7 @@ export default function FeedDetail({ data, user }) {
                     </div>
                     <div className={data.feedWriterId == user.userId ? "flex gap-4" : "hidden"}>
                         <Button text={"수정"} onClick={handleModSubmit} />
-                        <Button text={"삭제"} />
+                        <Button text={"삭제"} onClick={handleDeleteSubmit} />
                     </div>
                 </div>
                 <div className="py-8 ">

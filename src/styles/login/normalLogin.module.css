@@ -81,7 +81,7 @@
     background-color: #F7E600;
     color: black;
     width: 100%;
-    height: 48px;
+    height: 30px;
     border: none;
     font-weight: bold;
     border-radius: 64px;
@@ -90,4 +90,67 @@
     font-size: 14px;
     text-align: center;
     line-height: 48px;
+}
+.submitButton {
+    width: 100%;
+    height: 48px;
+    border: none;
+    font-weight: bold;
+    border-radius: 64px;
+    background-color: mediumaquamarine;
+    color: white;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+
+.formGroup {
+    margin-bottom: 1rem;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.inputField {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.inputField:focus {
+    outline: none;
+    border-color: #38b2ac;
+}
+
+.submitButton {
+    width: 100%;
+    padding: 0.75rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #38b2ac;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.submitButton:hover {
+    background-color: #319795;
+}
+
+.submitButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.findInfo {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
 }

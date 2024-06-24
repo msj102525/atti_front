@@ -1,24 +1,12 @@
 import { useState } from "react";
+import MoveMainLogo from "@/components/common/MoveMainLogo";
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { login } from "@/api/user/user"; 
 import KakaoLogin from "@/components/user/kakaoLogin";
 import NaverLogin from "@/components/user/naverLogin";
-import MoveMainLogo from "@/components/common/MoveMainLogo";
-import { authStore } from '@/pages/stores/authStore';
-import Modal2 from "@/components/common/Modal2"; // 모달 컴포넌트 import 추가
-
-const redirectToUserTypePage = (userType, router) => {
-  if (userType === 'A') {
-    router.push('/admin/memberList');
-  } else if (userType === 'U') {
-    router.push('/');
-  } else if (userType === 'D') {
-    router.push('/');
-  } else {
-    router.push('/');
-  }
-};
+import styles from "@/styles/login/normalLogin.module.css";
+import Modal from "@/components/common/Modal"; 
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({
@@ -31,42 +19,17 @@ export default function LoginForm() {
 
     const router = useRouter();
 
-    const handleLoginSuccess = (data) => {
-        const token = data.headers["authorization"] || data.headers["Authorization"];
-        const pureToken = token ? token.split(" ")[1] : '';
-        window.localStorage.setItem("token", pureToken);
-        window.localStorage.setItem("refresh", data.data.refreshToken || '');
-        window.localStorage.setItem("userId", data.data.userId || '');
-        window.localStorage.setItem("userName", data.data.userName || "");
-        window.localStorage.setItem("nickName", data.data.nickName || "");
-        window.localStorage.setItem("profileUrl", data.data.profileUrl || '');
-        window.localStorage.setItem("userType", data.data.userType || 'U');
-        window.localStorage.setItem("birthDate", data.data.birthDate);
-        
-        authStore.setLoggedIn(true);
-        authStore.setUserId(data.data.userId || '');
-        authStore.setUserName(data.data.userName || "");
-        authStore.setNickName(data.data.nickName || "");
-        authStore.setProfileUrl(data.data.profileUrl || '');
-        authStore.setUserType(data.data.userType || 'U');
-    
-        redirectToUserTypePage(data.data.userType, router); // 로그인 성공 후 리다이렉션
-    };
-
     const loginMutation = useMutation(loginData => login(loginData), {
         onSuccess: (data) => {
-
-            
-            handleLoginSuccess(data);
+            router.push('/');
         },
         onError: (error) => {
-            console.error('로그인 실패:', error);
-            setModalMessage('로그인에 실패했습니다. 다시 시도해주세요.');
+            setModalMessage(error.response?.data?.message || '로그인에 실패했습니다.');
             setIsModalOpen(true);
         },
     });
 
-    const handleInputChange = (e) => {
+    const handleNormalLogin = (e) => {
         const { name, value } = e.target;
         setFormData(prevFormData => ({
             ...prevFormData,
@@ -79,69 +42,91 @@ export default function LoginForm() {
         loginMutation.mutate(formData);
     };
 
+    const handlePasswordFindClick = () => {
+        router.push('/user/password'); // 비밀번호 찾기 페이지로 라우팅
+    };
+
+    const handleIdFindClick = () => {
+        router.push('/user/idFind'); // 아이디 찾기 페이지로 라우팅
+    };
+
     const closeModal = () => {
-       
         setIsModalOpen(false);
     };
 
-    return ( 
+    return (
         <div className="flex flex-col items-center h-screen p-4 bg-gray-100">
             <MoveMainLogo />
             <div className="mt-10 text-2xl font-bold text-gray-800">
                 <h1>로그인</h1>
             </div>
-            <div className="flex flex-col w-full max-w-lg p-8 mt-8 overflow-y-auto bg-white rounded-lg shadow-md max-h-[80vh]">
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label htmlFor="userId" className="block mb-1 text-sm font-semibold text-gray-800">
+            <div className={`flex flex-col w-full max-w-md p-6 mt-5 overflow-y-auto bg-white rounded-lg shadow-md max-h-[70vh] ${styles.loginForm}`}>
+                <form onSubmit={handleSubmit} className="w-full">
+                    <div className={styles.formGroup}>
+                        <label htmlFor="userId" className={`${styles.label} block mb-1 text-sm font-semibold text-gray-800`}>
                             아이디:
                         </label>
                         <input
                             type="text"
                             id="userId"
                             name="userId"
-                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+                            className={`${styles.inputField} px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400`}
                             value={formData.userId}
-                            onChange={handleInputChange}
+                            onChange={handleNormalLogin}
                             placeholder="아이디를 입력하세요"
+                            required
                         />
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="password" className="block mb-1 text-sm font-semibold text-gray-800">
+                    <div className={styles.formGroup}>
+                        <label htmlFor="password" className={`${styles.label} block mb-1 text-sm font-semibold text-gray-800`}>
                             비밀번호:
                         </label>
                         <input
                             type="password"
                             id="password"
                             name="password"
-                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400"
+                            className={`${styles.inputField} px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400`}
                             value={formData.password}
-                            onChange={handleInputChange}
+                            onChange={handleNormalLogin}
                             placeholder="비밀번호를 입력하세요"
+                            required
                         />
                     </div>
-                    <div className="flex justify-center">
-                        <button type="submit" className="w-full px-4 py-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed">
-                            로그인
+                    <button
+                      type="submit"
+                      className="w-full px-4 py-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    >
+                      로그인
+                    </button>
+                    <div className={styles.socialLogin}>
+                        <KakaoLogin />
+                        <NaverLogin />                      
+                    </div>
+                    <div className={styles.findInfo}>
+                        <button
+                            type="button"
+                            onClick={handlePasswordFindClick}
+                            className="px-4 py-2 mt-2 font-bold text-teal-400 bg-transparent border-none cursor-pointer"
+                        >
+                            비밀번호 찾기
                         </button>
-                    </div>
-                    <div className="snsLogin">
-                    <div className="mt-4">
-                        <KakaoLogin className="transform scale-50" />
-                    </div>
-                    <div className="mt-4">
-                        <NaverLogin className="transform scale-50" />
-                    </div>
-                    </div>
-                    <div className="mt-4 flex justify-between text-sm text-gray-600">
-                        <button type="button" onClick={() => router.push('/password-find')}>비밀번호 찾기</button>
-                        <button>
-                            <a href="#">아이디 찾기</a>
+                        <button
+                            type="button"
+                            onClick={handleIdFindClick}
+                            className="px-4 py-2 mt-2 font-bold text-teal-400 bg-transparent border-none cursor-pointer"
+                        >
+                            아이디 찾기
                         </button>
                     </div>
                 </form>
             </div>
-            <Modal2 isOpen={isModalOpen} onClose={closeModal} message={"로그인에 실패했습니다. 다시 시도해주세요."} />
+            <Modal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                title="로그인 실패"
+                content1="비밀번호를 확인하세요."
+                content={modalMessage}
+            />
         </div>
     );
 }

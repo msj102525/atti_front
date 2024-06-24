@@ -1,0 +1,54 @@
+.searchdiv {
+	height: 80px;
+	width: 1600px;
+	margin: 20px auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+  }
+  
+  .dateInput {
+	height: 30px;
+	margin-left: 10px;
+  }
+  
+  .writerB {
+	margin-left: 10px;
+	width: 100px;
+	height: 40px;
+	border: none;
+	background: rgb(250, 180, 49);
+	color: #ffffff;
+	font-size: 16px;
+  }
+  
+  .form {
+	width: 600px;
+	display: flex;
+	align-items: center;
+  }
+  
+  .searchbtn {
+	width: 100px;
+	height: 40px;
+	border: none;
+	background: rgb(250, 180, 49);
+	color: #ffffff;
+	font-size: 16px;
+	margin-left: 10px;
+  }
+  
+  .searchText {
+	height: 30px;
+	width: 250px;
+	margin-left: 10px;
+	border: 1px solid black;
+  }
+  
+  .searchSelect {
+	height: 35px;
+	width: 80px;
+	margin-right: 10px;
+  }
+  

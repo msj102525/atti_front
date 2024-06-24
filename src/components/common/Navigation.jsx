@@ -13,7 +13,7 @@ export default function Navigation() {
     { href: "/ai", label: "AI 서비스" },
     { href: "/board/boardList", label: "공지사항" },
     { href: "/faq/faq", label: "FAQ" },
-    { href: "#contact", label: "문의하기" },
+    { href: "/inquiry", label: "문의하기" },
   ];
 
   return (

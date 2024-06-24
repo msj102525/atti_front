@@ -6,14 +6,18 @@ import styles from '@/styles/user/mypage.module.css';
 import Modal from "@/components/common/Modal";
 import Footer from '@/pages/common/Footer';
 import { getUserData, updateUser, deleteUser } from '@/api/user/userApi';
-import { uploadProfilePhoto, deleteProfilePhoto } from '@/components/user/profilePhotoManager';
+import { uploadProfilePhoto, deleteProfilePhoto } from '@/api/doctor/doctorUpdate';
 import { authStore } from "@/pages/stores/authStore";
+import { useRouter } from 'next/router';
 
 const Mypage = observer(() => {
   const [profileUrl, setProfileUrl] = useState(null);
   const fileInput = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const router = useRouter();
+
+  const serverImage = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +34,7 @@ const Mypage = observer(() => {
         authStore.setGender(data.gender);
         authStore.setPhone(data.phone);
         authStore.setLoginType(data.loginType);
+        setProfileUrl(data.profileUrl);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -47,7 +52,7 @@ const Mypage = observer(() => {
 
     try {
       const updatedUser = {
-        userId: authStore.userId, 
+        userId: authStore.userId,
         userName: authStore.userName,
         nickName: authStore.nickName,
         password: authStore.password,
@@ -60,6 +65,7 @@ const Mypage = observer(() => {
       await updateUser(updatedUser);
       setModalMessage('수정 완료!');
       setIsModalOpen(true);
+      router.push('/'); // 수정 완료 시 메인 페이지로 이동
     } catch (error) {
       console.error(error);
       setModalMessage('수정 실패!');
@@ -70,9 +76,11 @@ const Mypage = observer(() => {
   const handleCancel = async () => {
     if (confirm('탈퇴 하시겠습니까?')) {
       try {
-        await deleteUser(authStore.userId);
+        await deleteUser(authStore.userId); 
+        window.localStorage.clear();
         setModalMessage('탈퇴 완료!');
         setIsModalOpen(true);
+        router.push('/'); // 탈퇴 성공 시 메인 페이지로 이동
       } catch (error) {
         console.error(error);
         setModalMessage('탈퇴 실패!');
@@ -88,11 +96,10 @@ const Mypage = observer(() => {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfileUrl(file);
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.readyState === 2) {
-          authStore.setProfileUrl(reader.result);
+          setProfileUrl(reader.result);
         }
       };
       reader.readAsDataURL(file);
@@ -100,7 +107,9 @@ const Mypage = observer(() => {
       try {
         const userId = authStore.userId; // authStore에서 userId 가져오기
         const response = await uploadProfilePhoto(file, userId);
-        authStore.setProfileUrl(response.filePath);  // 서버에서 받은 파일 경로로 프로필 이미지 설정
+        const filePath = response.profileUrl; // 서버에서 profileUrl로 받기
+        authStore.setProfileUrl(filePath);
+        setProfileUrl(filePath);
         setModalMessage('프로필 사진 업로드 완료!');
       } catch (error) {
         console.error('프로필 사진 업로드 오류:', error);
@@ -115,6 +124,7 @@ const Mypage = observer(() => {
       const userId = authStore.userId; // authStore에서 userId 가져오기
       await deleteProfilePhoto(userId);
       authStore.setProfileUrl("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+      setProfileUrl(null);
       setModalMessage('프로필 사진 삭제 완료!');
     } catch (error) {
       console.error('프로필 사진 삭제 오류:', error);
@@ -135,7 +145,7 @@ const Mypage = observer(() => {
       <div className="flex flex-col w-full max-w-md p-6 mt-5 overflow-y-auto bg-white rounded-lg shadow-md max-h-[70vh]">
         <div className="mb-4">
           <label htmlFor="profileUrl" className="block mb-1 text-sm font-semibold text-gray-800">프로필 사진:</label>
-          <img src={authStore.profileUrl || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="Profile" className="w-32 h-32 mb-2 rounded-full" />
+          <img src={profileUrl ? serverImage + profileUrl : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="Profile" className="w-32 h-32 mb-2 rounded-full" />
           <input
             type="file"
             id="profileUrl"

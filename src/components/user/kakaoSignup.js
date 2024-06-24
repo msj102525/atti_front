@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '@/styles/signUp/normalSignUp.module.css';
 
 const KakaoSignup = () => {
     const handleSignup = () => {
@@ -10,8 +11,8 @@ const KakaoSignup = () => {
     };
 
     return (
-        <div className="kakao-SignUp">
-            <button onClick={handleSignup}>카카오 회원가입</button>
+        <div>
+            <button className={styles.kakaoSignUp} onClick={handleSignup}>카카오 회원가입</button>
         </div>
     );
 };

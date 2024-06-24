@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import styles from "../../styles/board/search.module.css";
+import styles from "@/styles/inquiry/inquirySearch.module.css";
 import MintButton from "@/components/common/MintButton"; 
 import { useRouter } from 'next/router';
 
-const SearchForm = ({ onSubmit }) => {
+const InquirySearchForm = ({ onSubmit }) => {
   const [action, setAction] = useState('title');
   const [beginDate, setBeginDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [keyword, setKeyword] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +27,7 @@ const SearchForm = ({ onSubmit }) => {
   };
 
   const moveWrite = () => {
-    router.push('/board/boardWrite');  // 버튼 클릭 시 이동할 페이지 경로를 지정합니다.
+    router.push('/inquiry/inquiryWrite');
   };
 
   return (
@@ -86,4 +85,4 @@ const SearchForm = ({ onSubmit }) => {
   );
 };
 
-export default SearchForm;
+export default InquirySearchForm;

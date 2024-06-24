@@ -2,7 +2,8 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { getOnewordList } from "../../api/oneword/OnewordSubject";
+import { getOnewordList, insertOneword } from "../../api/oneword/OnewordSubject";
+import { handleAxiosError } from "../../api/errorAxiosHandle";
 
 const OnewordSJDeatilComponent = observer((data) => {
     const router = useRouter();
@@ -30,6 +31,14 @@ const OnewordSJDeatilComponent = observer((data) => {
         keepPreviousData: true,
       });
 
+    // 등록
+    const insertOnewordMutation = useMutation(insertOneword, {
+        onSuccess: () => {
+            // queryClient.invalidateQueries('onewordSubjectList').then();
+        },
+        onError: handleAxiosError,
+    });
+
     // Function to toggle add comment mode
     const toggleAddCommentMode = () => {
 
@@ -46,16 +55,19 @@ const OnewordSJDeatilComponent = observer((data) => {
     };
 
     // Function to add a new comment
-    const addComment = () => {
+    const addComment = (owsjNum) => {
         const newComment = {
-            id: owComment.length + 1,
-            content: newOwCommentContent.trim() !== '' ? newOwCommentContent : `새 댓글 ${new Date().toLocaleString()}`
+            owsjNum: owsjNum,
+            owContent: newOwCommentContent.trim() !== '' ? newOwCommentContent : `새 댓글 ${new Date().toLocaleString()}`
         };
 
         // Update state with new comment
-        setOwComment([...owComment, newComment]);
+        setOwComment([...owCommentData, newComment]);
 
-        /// database에 저장 logic 추가
+        ////////////////////////////////////////////
+        //// database에 저장 logic 추가
+        ////////////////////////////////////////////
+        insertOnewordMutation.mutate(newComment);
 
         // Exit add comment mode
         setAddingOwComment(false);
@@ -142,7 +154,7 @@ const OnewordSJDeatilComponent = observer((data) => {
                         placeholder="새 댓글을 입력하세요..."
                         className="border p-2 mb-2 w-full"
                     />
-                    <button onClick={addComment} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                    <button onClick={addComment(data.data.owsjNum)} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
                         저장
                     </button>
                 </div>
