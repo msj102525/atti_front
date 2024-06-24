@@ -10,6 +10,7 @@ const SuccessPage = () => {
   const [selectedTime, setSelectedTime] = useState(null); // 초기 상태를 null로 설정
   const [userId, setUserId] = useState(null);
   const [getId, setGetId] = useState(null);
+  const [method, setMethod] = useState(null);
 
   useEffect(() => {
     // 클라이언트 측에서만 실행
@@ -50,13 +51,15 @@ const SuccessPage = () => {
         });
 
         const json = await response.json();
+        console.log(json);
 
         if (!response.ok || json === 0) {
           router.push(`/pay/fail?message=${json.message || '결제 실패'}&code=${json.code || 'ERROR'}`);
         } else {
           // 결제 성공 비즈니스 로직을 구현하세요.
           console.log(json);
-          await savePayment(orderId, amount); // 결제 정보 저장 로직 추가
+          setMethod(json.method)
+          await savePayment(orderId, amount, method); // 결제 정보 저장 로직 추가
           setTimeout(() => {
             router.push('/chat/chatList');
           }, 3000);
@@ -88,12 +91,12 @@ const SuccessPage = () => {
   const formattedDateWithMilliseconds = formattedDate.replace(/\. /g, '-').replace(/ /g, 'T');
   const milliseconds = now.getMilliseconds().toString().padStart(3, '0');
 
-  const savePayment = async (orderId, amount) => {
+  const savePayment = async (orderId, amount, method) => {
     const paymentData = {
         payNum: orderId,
         userId: userId, 
         payAmount: amount,
-        payMethod: '토스',
+        payMethod: method,
         payDate : `${formattedDateWithMilliseconds}.${milliseconds}`,
         toDoctor : localStorage.getItem('consultDoctorId'),
     };
@@ -114,7 +117,7 @@ const SuccessPage = () => {
             // 결제 성공 시 chat_sessions 테이블에 데이터 추가
             const storedUserId = localStorage.getItem("userId");
             const getId = localStorage.getItem("consultDoctorId");
-
+            const status = 'true'
             console.log('Amount123:', amount, typeof(amount));
             const limitTime = amount == 110000 ? 60 : amount == 55000 ? 30 : null;
             console.log('Limit time123:', limitTime, typeof(limitTime) );
@@ -123,7 +126,8 @@ const SuccessPage = () => {
                 senderId: storedUserId,
                 receiverId: getId,
                 limitTime: limitTime,
-                startTime: new Date().toISOString().slice(0, 19).replace('T', ' ')
+                startTime: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                status : status
             };
 
             console.log(chatSessionData);

@@ -61,6 +61,7 @@ const List = () => {
         params: formData
       });
       const data = response.data;
+      
       // 모든 중요도 2인 항목에 ⭐ 표시
       const updatedBoards = data.map(board => ({
         ...board,

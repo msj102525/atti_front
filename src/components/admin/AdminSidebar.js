@@ -43,8 +43,8 @@ const Sidebar = () => {
                         <span className={styles.arrow}>{openMenu === 'pay' ? '▲' : '▼'}</span>
                     </li>
                         <ul className={`${openMenu === 'pay' ? styles.open : ''}`}>
-                            <li onClick={() => handleNavigation('')}>결제내역</li>
-                            <li onClick={() => handleNavigation('')}>매출보기</li>
+                            <li onClick={() => handleNavigation('/pay/list')}>결제내역</li>
+                            <li onClick={() => handleNavigation('/pay/graph')}>매출보기</li>
                         </ul>
                 </ul>
             </div>

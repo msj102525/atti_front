@@ -56,7 +56,7 @@ const TossPaymentPage = () => {
       <Head>
         <script src="https://js.tosspayments.com/v1/payment-widget"></script>
       </Head>
-      <div className="w-full max-w-md p-8 border rounded-lg shadow-md">
+      <div className="w-full max-w-2xl p-8 border rounded-lg shadow-md">
         {/* 결제 UI, 이용약관 UI 영역 */}
         <div id="payment-method" ref={paymentMethodsWidgetRef} className="mb-4"></div>
         <div id="agreement" ref={agreementWidgetRef} className="mb-4"></div>

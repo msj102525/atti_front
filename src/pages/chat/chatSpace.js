@@ -4,7 +4,7 @@ import mqtt from 'mqtt';
 import axios from 'axios';
 import { FaStar } from 'react-icons/fa';
 
-const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
+const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
@@ -14,14 +14,20 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
   const [payInfo, setPayInfo] = useState([]);
   const [errorMessage, setErrorMessage] = useState(false);
   const [chatSession, setChatSession] = useState(null);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(status === false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lt, setLt] = useState('');
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  console.log(chatId, senderId, receiverId, userType, limitTime);
+  console.log(chatId, senderId, receiverId, userType, limitTime, status);
+
+  useEffect(() => {
+    // status 값에 따라 isDisabled 상태 설정
+    setIsDisabled(status === false);
+  }, [status]);
+
 
   useEffect(() => {
     const fetchChatSession = async () => {
@@ -62,13 +68,6 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
   };
 
   useEffect(() => {
-    const disabledStatus = localStorage.getItem(`chat_${chatId}_isDisabled`);
-    if (disabledStatus === 'true') {
-      setIsDisabled(true);
-    }
-  }, [chatId]);
-
-  useEffect(() => {
     if (!isLoading) {
       client.current = mqtt.connect('ws://broker.hivemq.com:8000/mqtt', { clientId: clientId.current });
 
@@ -97,7 +96,6 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
   }, [isLoading, senderId, receiverId]);
 
   useEffect(() => {
-    // Fetch chat session information when the component mounts
     const fetchChatSession = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/chat/time/${chatId}`);
@@ -157,33 +155,43 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
     sendMessage();
   };
 
+  const earliestMessage = messages.reduce((earliest, current) => {
+    return new Date(current.timestamp) < new Date(earliest.timestamp) ? current : earliest;
+  }, messages[0]);
+
   const sendMessage = async () => {
     if (!inputValue.trim()) {
-      setErrorMessage('메시지를 입력하세요');
-      return;
+        setErrorMessage('메시지를 입력하세요');
+        return;
     }
 
     // Check if there are any existing messages
     if (messages.length === 0) {
-      // Save the first message without time check
-      console.log(messages.length, '메시지 길이')
-      await saveMessage();
+        // Save the first message without time check
+        console.log(messages.length, '메시지 길이');
+        await saveMessage();
     } else {
-      // For subsequent messages, check time limit
-      const firstMessageTime = new Date(messages[0].timestamp);
-      const currentTime = new Date();
-      firstMessageTime.setMinutes(firstMessageTime.getMinutes() + limitTime);
+        // For subsequent messages, check time limit
+        console.log(messages, 'zxc');
+        const firstMessageTime = new Date(earliestMessage.timestamp);
+        console.log(firstMessageTime, '첫시간');
+        const currentTime = new Date();
+        firstMessageTime.setMinutes(firstMessageTime.getMinutes() + limitTime);
 
-      console.log(currentTime.toString(), '지금시간')
-      console.log(firstMessageTime.toString(), '제한 시간')
+        console.log(currentTime.toString(), '지금시간');
+        console.log(firstMessageTime.toString(), '제한 시간');
 
-      if (currentTime > firstMessageTime) {
-        setIsDisabled(true);
-        localStorage.setItem(`chat_${chatId}_isDisabled`, 'true');
-        return;
-      }
+        if (currentTime > firstMessageTime) {
+            try {
+                await axios.post(`http://localhost:8080/chat/end/${chatId}`);
+                setIsDisabled(true);
+            } catch (error) {
+                console.error('Failed to update chat status:', error);
+            }
+            return;
+        }
 
-      await saveMessage();
+        await saveMessage();
     }
   };
 
@@ -208,10 +216,18 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
     setIsModalOpen(true);
   };
 
-  const handleConfirmEndChat = () => {
-    localStorage.setItem(`chat_${chatId}_isDisabled`, 'true');
-    setIsDisabled(true);
-    setIsModalOpen(false);
+  const handleConfirmEndChat = async () => {
+    try {
+      // 서버에 종료 요청을 보냄
+      await axios.post(`http://localhost:8080/chat/end/${chatId}`);
+      
+      // 로컬 스토리지 업데이트
+      setIsDisabled(true);
+      
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Failed to end chat session:', error);
+    }
   };
 
   useEffect(() => {
@@ -227,6 +243,10 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
     return `${period} ${formattedHours}:${minutes < 10 ? `0${minutes}` : minutes}`;
   };
 
+  const resetReviewState = () => {
+    setRating(0);
+    setReview('');
+  };
 
   const handleSubmit = async () => {
     // 리뷰 제출 로직 추가
@@ -252,6 +272,23 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
   
     try {
       // POST 요청으로 데이터 전송
+      // 먼저 GET 요청을 보내서 기존 리뷰를 확인합니다.
+    const checkResponse = await axios.get('http://localhost:8080/review/check', {
+      params: {
+        writeDate,
+        senderId,
+        receiverId
+      }
+    });
+
+    if (checkResponse.data.length > 0) {
+      // 조건에 맞는 리뷰가 이미 있는 경우
+      console.log('You have already submitted a review for this session today.');
+      alert('한 의사에 대해서 하루에 하나만 리뷰 작성이 가능합니다.');
+      return; // 리뷰 작성 중단
+    }
+
+
       const response = await axios.post(`http://localhost:8080/review`, reviewData);
   
       if (response.status === 200) {
@@ -265,93 +302,86 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
     }
   
     setIsReviewModalOpen(false); // 모달 창 닫기
+    resetReviewState()
   };
-  
-
-
 
   return (
     <div className="h-screen flex flex-col items-center bg-white p-4 pr-6">
-    {isDisabled && (
-      <div className="w-full flex justify-center items-center max-w-2xl p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-lg flex flex-col text-center mb-4">
-        비활성화된 채팅방입니다. 메시지를 입력하실 수 없습니다.
-        <button
-          onClick={() => setIsReviewModalOpen(true)}
-          className="w-1/3 mt-4 px-4 py-2 text-black rounded-lg bg-blue-200 hover:bg-blue-200"
-        >
-        리뷰 쓰기
-        </button>
-      </div>
-      
-    )}
-  <div className="w-full max-w-2xl p-4 bg-gray-50 border rounded-lg shadow-lg flex flex-col h-[80vh]">
-    <div className="flex-1 overflow-y-auto space-y-4 p-2">
-      {messages.map((message, index) => (
-        <div key={index} className={`flex ${message.senderId === senderId ? 'justify-end' : 'justify-start'}`}>
-          <div className="relative">
-            <div className="bg-white text-black p-3 rounded-lg max-w-xs shadow-lg">
-              {message.messageContent}
+      {isDisabled && (
+        <div className="w-full flex justify-center items-center max-w-2xl p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-lg flex flex-col text-center mb-4">
+          비활성화된 채팅방입니다. 메시지를 입력하실 수 없습니다.
+          <button
+            onClick={() => setIsReviewModalOpen(true)}
+            className="w-1/3 mt-4 px-4 py-2 text-black rounded-lg bg-blue-200 hover:bg-blue-200"
+          >
+          리뷰 쓰기
+          </button>
+        </div>
+      )}
+      <div className="w-full max-w-2xl p-4 bg-gray-50 border rounded-lg shadow-lg flex flex-col h-[80vh]">
+        <div className="flex-1 overflow-y-auto space-y-4 p-2">
+          {messages.map((message, index) => (
+            <div key={index} className={`flex ${message.senderId === senderId ? 'justify-end' : 'justify-start'}`}>
+              <div className="relative">
+                <div className="bg-white text-black p-3 rounded-lg max-w-xs shadow-lg">
+                  {message.messageContent}
+                </div>
+                <span className="text-xs text-gray-400 mt-1 block text-right">{formatTimestamp(message.timestamp)}</span>
+              </div>
             </div>
-            <span className="text-xs text-gray-400 mt-1 block text-right">{formatTimestamp(message.timestamp)}</span>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+        <div className="mt-4">
+          <div className="relative flex items-center">
+            <textarea
+              className="w-full h-24 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              placeholder={errorMessage ? '빈 메시지를 전송할 수 없습니다.' : '메시지를 입력하세요...'}
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              disabled={isDisabled} // Disable textarea if chat is disabled
+            />
+            <div className="absolute right-0 flex flex-col space-y-2 p-2">
+              <button
+                onClick={handleSendMessage}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 shadow-md"
+                disabled={isDisabled} // Disable button if chat is disabled
+              >
+                전송
+              </button>
+              <button
+                onClick={handleEndChat}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 shadow-md"
+              >
+                종료
+              </button>
+            </div>
           </div>
         </div>
-      ))}
-      <div ref={messagesEndRef} />
-    </div>
-    <div className="mt-4">
-      <div className="relative flex items-center">
-        <textarea
-          className="w-full h-24 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-          placeholder={errorMessage ? '빈 메시지를 전송할 수 없습니다.' : '메시지를 입력하세요...'}
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          disabled={isDisabled} // Disable textarea if chat is disabled
-        />
-        <div className="absolute right-0 flex flex-col space-y-2 p-2">
-          <button
-            onClick={handleSendMessage}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 shadow-md"
-            disabled={isDisabled} // Disable button if chat is disabled
-          >
-            전송
-          </button>
-          <button
-            onClick={handleEndChat}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 shadow-md"
-          >
-            종료
-          </button>
-        </div>
       </div>
-    </div>
-  </div>
       {/*모달 창 영역*/}
       {isModalOpen && (
-      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <p className="mb-4">정말로 종료하시겠습니까? 해당 채팅은 비활성화 됩니다.</p>
-          <div className="flex justify-center space-x-4">
-            <button
-              onClick={handleConfirmEndChat}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              확인
-            </button>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
-            >
-              취소
-            </button>
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <p className="mb-4">정말로 종료하시겠습니까? 해당 채팅은 비활성화 됩니다.</p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={handleConfirmEndChat}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              >
+                확인
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
+              >
+                취소
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       )}
-
-
-
-      {/*모달 창 영역*/}
       {isReviewModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
@@ -389,7 +419,10 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
                 확인
               </button>
               <button
-                onClick={() => setIsReviewModalOpen(false)}
+                onClick={() => {
+                  setIsReviewModalOpen(false)
+                  resetReviewState(); // 상태 초기화
+                }}
                 className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
               >
                 취소
@@ -398,10 +431,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime }) => {
           </div>
         </div>
       )}
-
-
-</div>
-
+    </div>
   );
 };
 

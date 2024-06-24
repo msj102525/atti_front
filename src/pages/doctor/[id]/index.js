@@ -30,10 +30,17 @@ export default function DoctorDetail() {
   const [hasMoreReviews, setHasMoreReviews] = useState(false);
 
   const handleConsult = () => {
-    console.log("hello");
-    localStorage.setItem("consultDoctorId", id);
-    router.push("/pay/pay");
-  };
+    const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+    
+    if (!isLoggedIn) {
+        alert("로그인을 먼저 진행해주세요");
+        router.push("/login");
+    } else {
+        console.log("hello");
+        localStorage.setItem("consultDoctorId", id);
+        router.push("/pay/pay");
+    }
+};
 
   const moreReview = () => {
     if (!hasMoreReviews) {
