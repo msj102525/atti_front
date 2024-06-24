@@ -1,4 +1,5 @@
 import axios from '../axiosApi';
+import flaskAxios from "axios";
 
 export const postFeed = (postData) => {
     if (postData.category == "") postData.category = "일반 고민";
@@ -87,15 +88,15 @@ export const getFeedByFeedNum = async (feedNum) => {
 
 export const searchSimilarFeeds = async (feedNum) => {
     console.log("Axios flask", feedNum);
-    // try {
-    //     const response = await axios.get(`/feed/${feedNum}`);
-    //     console.log(response.data);
+    try {
+        const response = await flaskAxios.get(`http://127.0.0.1:5000/feed/similar/${feedNum}`);
+        console.log(response);
 
-    //     return response.data;
-    // } catch (error) {
-    //     console.error(error);
-    //     throw error;
-    // }
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 
 

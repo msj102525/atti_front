@@ -177,28 +177,28 @@ export default function SimilarFeedList({ data }) {
         }
     ]
     const [similarFeeds, setSimilarFeeds] = useState([]);
-    
+
     // const [feedContent, setFeedContent] = useState(data.feedContent.replace(/<\/?[^>]+(>|$)/g, " ").replace(/&nbsp;/g, " "));
 
     console.log(data);
     // console.log(feedContent);
 
-    
-    useEffect(() => {
-        const fetchData = async() => {
-            try {
-                const res = await searchSimilarFeeds(data.feedNum);
-                // if(res.data.length > 0) {
-                //     // setSimilarFeeds(res.data);
-                // }
 
-            } catch(error) {
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const resData = await searchSimilarFeeds(data.feedNum);
+                if (resData.length > 0) {
+                    setSimilarFeeds(resData);
+                }
+
+            } catch (error) {
                 console.error(error);
             }
         }
 
         fetchData();
-        
+
     }, [data]);
 
 
@@ -207,9 +207,9 @@ export default function SimilarFeedList({ data }) {
             <div className="flex justify-center">
                 <div className="gap-24 columns-1 w-full">
                     <p className="pb-10 px-10 w-2/5 text-customBrown text-3xl relative after:content-[''] after:absolute after:bg-slate-500 after:block after:w-full after:h-[2px] after:left-10 after:bottom-[15px]">이 글과 유사한 글 보기</p>
-                    {feedData.map((feed, idx) => (
+                    {similarFeeds.map((feed, idx) => (
                         <div key={idx} className="flex flex-col border min-w-full p-4 rounded-[40px] mb-4 cursor-pointer hover-grow">
-                            <Link href={`feed/${feed.feedNum}`}>
+                            <Link href={`/feed/${feed.feedNum}`}>
                                 <div className="flex gap-2 text-m items-center text-gray-500 pb-2 min-w-96">
                                     <p>{feed.category}</p>
                                     <p>|</p>
