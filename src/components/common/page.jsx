@@ -13,6 +13,7 @@ const Pagination = ({ pageCount, onPageChange, currentPage }) => {
       containerClassName={styles.pagination}
       pageLinkClassName={styles.pagination__link}
       activeLinkClassName={styles.pagination__link__active}
+      forcePage={currentPage}
     />
   );
 };

@@ -3,8 +3,18 @@ import ReactDOM from "react-dom";
 import MintButton from "./MintButton";
 import LottieAnimation from "./animation/LottieAnimation";
 import fireworkAnimation from "@/components/animationData/firework.json";
+import styles from "@/styles/common/mintButton.module.css";
 
-const Modal = ({ isOpen, onClose, title, content, content2, imgUrl }) => {
+const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  content,
+  content2,
+  imgUrl,
+  cancleButton = false,
+  onClickCancle = () => {},
+}) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
@@ -15,11 +25,7 @@ const Modal = ({ isOpen, onClose, title, content, content2, imgUrl }) => {
             imgUrl === "signUp" ? (
               <LottieAnimation animationData={fireworkAnimation} />
             ) : (
-              <img
-                src={imgUrl}
-                alt="Modal Image"
-                className="object-cover w-24 h-24 rounded-lg shadow-lg"
-              />
+              <img src={imgUrl} alt="Modal Image" className="w-24 h-24" />
             )
           ) : null}
         </div>
@@ -39,6 +45,14 @@ const Modal = ({ isOpen, onClose, title, content, content2, imgUrl }) => {
             sizeH="h-10"
             fontSize="text-lg"
           />
+          {cancleButton && (
+            <button
+              className={`ml-8 w-24 h-10 text-lg font-bold text-white bg-red-500 hover:bg-red-600 ${styles.roundedBetween} `}
+              onClick={onClickCancle}
+            >
+              취소
+            </button>
+          )}
         </div>
       </div>
     </div>,
