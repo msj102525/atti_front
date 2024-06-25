@@ -19,6 +19,8 @@
   background-color: #def3d6;
   padding: 1rem; /* 패딩 추가 */
   border-radius: 8px; /* 모서리 둥글게 */
+
+  min-height: calc(100% - 60px);
 }
 
 .container h2 {
