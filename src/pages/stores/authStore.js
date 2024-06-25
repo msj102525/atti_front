@@ -155,7 +155,7 @@ class AuthStore {
   // }
   setBirthDate(date) {
     let formattedDate = '';
-console
+    console.log(formattedDate);
     if (date instanceof Date) {
       // Date 객체를 YYYY-MM-DD 형식의 문자열로 변환
       const year = date.getFullYear();

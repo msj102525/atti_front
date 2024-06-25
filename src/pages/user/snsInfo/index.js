@@ -7,6 +7,7 @@ import Modal2 from "@/components/common/Modal2";
 import MoveMainLogo from '@/components/common/MoveMainLogo';
 import styles from '@/styles/user/snsInfo.module.css';
 import unlinkKakaoAccount from '@/components/user/kakkaoDelet';
+import unlinkNaverAccount from '@/components/user/naverDelet';
 import { uploadProfilePhoto, deleteProfilePhoto } from '@/api/doctor/doctorUpdate';
 
 
@@ -65,7 +66,16 @@ const SnsInfoUP = observer(() => {
 
   const handleCancel = async () => {
     if (confirm('탈퇴 하시겠습니까?')) {
-      const unlinkSuccess = await unlinkKakaoAccount(authStore.userId); // userId를 전달
+      let unlinkSuccess = false;
+      if (authStore.loginType === 'kakao') {
+        console.log(authStore.loginType === 'kakao');
+        unlinkSuccess = await unlinkKakaoAccount(authStore.userId);
+      } else if (authStore.loginType === 'naver') {
+        console.log(authStore.loginType === 'naver');
+        unlinkSuccess = await unlinkNaverAccount(authStore.userId); 
+        console.log(unlinkNaverAccount,'26+4816849+');
+      }
+
       if (unlinkSuccess) {
         try {
           await deleteUser(authStore.userId);
@@ -79,12 +89,11 @@ const SnsInfoUP = observer(() => {
           setIsModalOpen(true);
         }
       } else {
-        setModalMessage('카카오 연결 끊기 실패!');
+        setModalMessage(`${authStore.loginType === 'kakao' ? '카카오' : '네이버'} 연결 끊기 실패!`);
         setIsModalOpen(true);
       }
     }
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -190,7 +199,7 @@ const SnsInfoUP = observer(() => {
           </div>
         </form>
       </div>
-      <Modal2 isOpen={isModalOpen} onClose={closeModal} title="알림" content={modalMessage} />
+      <Modal2 isOpen={isModalOpen} onClose={closeModal} title="알림" content={modalMessage} content1={setModalMessage} />
     </div>
   );
 });

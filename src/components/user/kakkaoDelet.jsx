@@ -1,33 +1,46 @@
-const KAKAO_API_HOST = "https://kapi.kakao.com"; // Kakao API Host
-const ADMIN_KEY = process.env.NEXT_PUBLIC_KAKAO_ADMIN_KEY; // '관리자 키'
+import React from 'react';
+import axios from '../../api/axiosApi';
+import { logoutKakao } from '@/api/user/user';
 
-const unlinkKakaoAccount = async (userId) => {
-  try {
-    const response = await fetch(`${KAKAO_API_HOST}/v1/user/unlink`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `KakaoAK ${ADMIN_KEY}`,
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-      },
-      body: new URLSearchParams({
-        target_id_type: 'user_id',
-        target_id: userId
-      })
-    });
+const KakaoUnlink = () => {
+  const handleUnlink = async () => {
+    const accessToken = localStorage.getItem('token'); 
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log('연결 끊기 성공:', data);
-      return true;
-    } else {
-      const errorData = await response.json();
-      console.error('연결 끊기 실패:', errorData);
-      return false;
+    if (!accessToken) {
+      console.error('No access token found');
+      return;
     }
-  } catch (error) {
-    console.error('연결 끊기 오류:', error);
-    return false;
-  }
+
+    try {
+      const response = await axios.post(
+        'https://kapi.kakao.com/v1/user/unlink',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+          }
+        }
+      );
+
+      console.log('연결 끊기 성공:', response.data);
+      
+      // 카카오 로그아웃 처리
+      await logoutKakao();
+
+      // 로그아웃 후 로컬 스토리지 초기화 및 리다이렉트
+      window.localStorage.clear();
+      window.location.href = "/"; // 홈 페이지로 리다이렉트
+    } catch (error) {
+      console.error('연결 끊기 실패:', error.response ? error.response.data : error.message);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleUnlink}>카카오 계정 연결 끊기</button>
+    </div>
+  );
 };
 
-export default unlinkKakaoAccount;
+export default KakaoUnlink;
