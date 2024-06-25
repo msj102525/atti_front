@@ -53,6 +53,19 @@ const GraphComponent = () => {
           }
           return acc;
         }, []);
+
+        // 전체 월 목록 생성
+        const allMonths = Array.from({ length: 12 }, (_, i) => {
+          const month = (i + 1).toString().padStart(2, '0');
+          return `${selectedYear}-${month}`;
+        });
+
+        // 누락된 월에 대해 0으로 채움
+        result = allMonths.map(month => {
+          const existing = result.find(item => item.date === month);
+          return existing ? existing : { date: month, amount: 0 };
+        });
+
       } else {
         // 년도와 월의 일별 데이터 그룹화
         result = data.reduce((acc, curr) => {
@@ -69,6 +82,17 @@ const GraphComponent = () => {
           }
           return acc;
         }, []);
+        // 전체 일자 목록 생성
+        const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+        const allDays = Array.from({ length: daysInMonth }, (_, i) => {
+          const day = (i + 1).toString().padStart(2, '0');
+          return `${selectedYear}-${selectedMonth.padStart(2, '0')}-${day}`;
+        });
+        // 누락된 일자에 대해 0으로 채움
+        result = allDays.map(day => {
+          const existing = result.find(item => item.date === day);
+          return existing ? existing : { date: day, amount: 0 };
+        });
       }
       // 날짜 기준으로 정렬
       result.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -108,7 +132,7 @@ const GraphComponent = () => {
         <AdminSidebar />
         <div className={styles.content}>
           <div className={styles.container}>
-            <h2 className={styles.centeredText}>그래프</h2>
+            <h2 className={styles.centeredText}>매출</h2>
             <div>
               <label htmlFor="year">년도: </label>
               <select id="year" value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>

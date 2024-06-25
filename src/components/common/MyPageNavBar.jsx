@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const MyPageNavBar = ({ userType }) => {
   return (
-    <div className="absolute top-0 hidden w-40 p-4 bg-white shadow-lg group-hover:block left-8">
+    <div className="absolute z-[999] top-0 hidden w-40 p-4 bg-white shadow-lg group-hover:block left-8">
       <ul>
         <li className="py-1">
           <Link href="/chat/chatList">채팅리스트</Link>
