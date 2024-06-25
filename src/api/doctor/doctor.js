@@ -24,6 +24,10 @@ export const getDoctorMypageData = () => {
   return axios.get(baseUrl + "/mypage").then((res) => res);
 };
 
+export const showMainTop10 = () => {
+  return axios.get(baseUrl + "/main").then((res) => res);
+};
+
 // 메일 전송 함수
 export const sendCodeToEmail = async (email, code, name) => {
   try {

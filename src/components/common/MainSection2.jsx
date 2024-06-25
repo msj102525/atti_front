@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import MainDoctorCard from "@/components/doctor/MainDoctorCard";
+import { showMainTop10 } from "@/api/doctor/doctor";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
@@ -12,59 +13,20 @@ import { Pagination, Navigation } from "swiper/modules";
 
 export default function MainSection2() {
   const [swiperRef, setSwiperRef] = useState(null);
+  const [doctors, setDoctors] = useState([]);
 
-  const doctors = [
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-    {
-      profileUrl: "/doctor.png",
-      name: "김철수",
-      introduce: "밝은 에너지와 편안한 삶을",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await showMainTop10();
+        setDoctors(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="relative bg-white">
@@ -96,7 +58,9 @@ export default function MainSection2() {
                 <MainDoctorCard
                   profileUrl={doctor.profileUrl}
                   introduce={doctor.introduce}
-                  name={doctor.name}
+                  name={doctor.userName}
+                  averageStarPoint={doctor.averageStarPoint}
+                  doctorId={doctor.doctorId}
                 />
               </SwiperSlide>
             ))}

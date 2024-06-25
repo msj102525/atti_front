@@ -1,6 +1,12 @@
 import StarRating from "./StarRating";
 
-export default function MainDoctorCard({ profileUrl, name, introduce }) {
+export default function MainDoctorCard({
+  profileUrl,
+  name,
+  introduce,
+  doctorId,
+  averageStarPoint,
+}) {
   return (
     <div className="w-48 p-8 mx-2 my-12 bg-white border border-gray-200 rounded-lg shadow-2xl">
       <div className="m-2">
@@ -12,7 +18,7 @@ export default function MainDoctorCard({ profileUrl, name, introduce }) {
       <div className="m-2 text-xl font-semibold">{name}</div>
       <div className="m-2 text-sm text-gray-600">{introduce}</div>
       <div className="pl-1">
-        <StarRating starRating={5} />
+        <StarRating starRating={averageStarPoint} />
       </div>
     </div>
   );
