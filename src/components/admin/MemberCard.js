@@ -51,10 +51,18 @@ const MemberCard = observer(({ user, handleEdit, handleSuspend, handleDelete }) 
 
     return (
         <tr>
-            <td style={{ width: "8vw", textAlign: "center" }}>{user.userId}</td>
-            <td style={{ width: "8vw", textAlign: "center" }}>{user.userName}</td>
-            <td style={{ width: "10vw", textAlign: "center" }}>{user.nickName}</td>
-            <td style={{ width: "7vw", textAlign: "center" }}>{user.email}</td>
+            <td style={{ width: "8vw", textAlign: "center" }}>
+            <span className={styles.truncatedText}>{user.userId}</span>
+            </td>
+            <td style={{ width: "8vw", textAlign: "center" }}>
+            <span className={styles.truncatedText2}>{user.userName}</span>
+            </td>
+            <td style={{ width: "8vw", textAlign: "center" }}>
+            <span className={styles.truncatedText3}>{user.nickName}</span>
+            </td>
+            <td style={{ width: "15vw", textAlign: "center" }}>
+            <span className={styles.truncatedText4}>{user.email}</span>
+            </td>
             <td style={{ width: "20vw", textAlign: "center" }}>
                     {/* <button className={styles.button} onClick={() => handleEdit(user.userId)}>수정</button> */}
                     <button className={styles.button} onClick={openEditModal}>수정</button>
