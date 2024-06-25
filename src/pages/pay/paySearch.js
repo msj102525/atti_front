@@ -24,6 +24,7 @@ const SearchForm = ({ onSubmit }) => {
       beginDate: action === 'date' ? beginDate : '',
       endDate: action === 'date' ? endDate : '',
     };
+    console.log(formData, "zxczxc");
     onSubmit(formData);
   };
 

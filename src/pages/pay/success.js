@@ -59,10 +59,7 @@ const SuccessPage = () => {
           // 결제 성공 비즈니스 로직을 구현하세요.
           console.log(json);
           setMethod(json.method)
-          await savePayment(orderId, amount, method); // 결제 정보 저장 로직 추가
-          setTimeout(() => {
-            router.push('/chat/chatList');
-          }, 3000);
+          
         }
       } catch (error) {
         console.error('Error confirming payment:', error);
@@ -73,7 +70,18 @@ const SuccessPage = () => {
     confirmPayment();
   }, [paymentKey, orderId, amount, selectedTime]);
 
-
+  useEffect(() => {
+    if (method !== null) {
+      async function handleSavePayment() {
+        await savePayment(orderId, amount, method);
+        setTimeout(() => {
+          router.push('/chat/chatList');
+        }, 3000);
+      }
+  
+      handleSavePayment();
+    }
+  }, [method, orderId, amount]);
   
   const now = new Date();
   const options = {
