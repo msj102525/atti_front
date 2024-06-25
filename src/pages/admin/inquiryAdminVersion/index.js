@@ -144,9 +144,9 @@ const InquiryAdminVersionListComponent = observer(() => {
                 <div className={styles.content}>
                     <div className={styles.container}>
                         <h2 className={styles.centeredText}>문의하기(Admin ver.)</h2>
-                        <button className={styles.mkbutton} onClick={() => handleNavigation('/faq/faq')}>글쓰기</button>
-
+                        
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                            <button onClick={() => handleNavigation('/faq/faq')} style={{ marginRight: 'auto' }}>글쓰기</button>
                             <select value={searchType} onChange={handleSearchTypeChange}>
                                 <option value="id">아이디</option>
                                 <option value="name">내용</option>
