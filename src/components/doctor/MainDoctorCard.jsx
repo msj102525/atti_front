@@ -8,11 +8,11 @@ export default function MainDoctorCard({
   averageStarPoint,
 }) {
   return (
-    <div className="w-48 p-8 mx-2 my-12 bg-white border border-gray-200 rounded-lg shadow-2xl">
+    <div className="w-48 p-8 bg-white border border-gray-200 rounded-lg shadow-2xl">
       <div className="m-2">
         <img
-          src={profileUrl}
-          className="h-12 border border-gray-400 rounded-full"
+          src={profileUrl ? profileUrl : "/doctor.png"}
+          className="border border-gray-400 rounded-full"
         />
       </div>
       <div className="m-2 text-xl font-semibold">{name}</div>

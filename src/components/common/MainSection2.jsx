@@ -9,7 +9,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 // import required modules
-import { Pagination, Navigation } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 
 export default function MainSection2() {
   const [swiperRef, setSwiperRef] = useState(null);
@@ -38,20 +38,24 @@ export default function MainSection2() {
         />
       </div>
       <div className="flex flex-col p-8 bg-gray-100">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center my-4">
           <p className="m-2 text-3xl">나에게 딱 맞는 전문가</p>
           <p>공인 자격을 갖춘 검증된 전문가들이 여러분들을 기다리고 있어요</p>
         </div>
         <div className="relative">
           <Swiper
             onSwiper={setSwiperRef}
-            slidesPerView={3}
+            slidesPerView={5}
             centeredSlides={true}
-            spaceBetween={-600}
+            spaceBetween={100}
             loop={true}
             navigation={true}
-            modules={[Navigation]}
+            modules={[Autoplay, Navigation]}
             className="mySwiper"
+            autoplay={{
+              delay: 1000,
+              disableOnInteraction: false,
+            }}
           >
             {doctors.map((doctor, i) => (
               <SwiperSlide key={i}>

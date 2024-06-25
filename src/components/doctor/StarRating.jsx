@@ -1,6 +1,7 @@
 import React from "react";
 const StarRating = ({ starRating }) => {
   const totalStars = 5;
+
   return (
     <div className="flex items-center">
       {Array.from({ length: totalStars }, (_, index) => (
