@@ -13,7 +13,7 @@ function NoticeDetail() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const router = useRouter();
     const { boardNum } = router.query;
-    const userType = localStorage.getItem('userType'); // 유저 타입 상태 추가
+    
 
     useEffect(() => {
         if (boardNum) {
@@ -21,6 +21,7 @@ function NoticeDetail() {
                 try {
                     const response = await axios.get(`http://localhost:8080/board/boardDetail/${boardNum}`);
                     setBoard(response.data);
+                    
                 } catch (error) {
                     console.error("There was an error fetching the board detail!", error);
                 }
@@ -34,28 +35,13 @@ function NoticeDetail() {
         router.push("/board/boardList");
     };
 
-    const handleBoardUpdateClick = () => {
-        router.push(`/board/boardUpdate?boardNum=${boardNum}`);
-    };
+    
 
-    const handleDeleteClick = () => {
-        setModalIsOpen(true);
-    };
+    
 
-    const closeModal = () => {
-        setModalIsOpen(false);
-    };
+    
 
-    const confirmDelete = async () => {
-        try {
-            await axios.delete(`http://localhost:8080/board/boardDetail/${boardNum}`);
-            closeModal();
-            router.push("/board/boardList");
-        } catch (error) {
-            console.error("There was an error deleting the board!", error);
-            closeModal();
-        }
-    };
+    
 
     if (!board) {
         return <div>Loading...</div>;
@@ -70,11 +56,10 @@ function NoticeDetail() {
                 <span>조회수 {board.readCount}</span>
                 <span>중요도: {board.importance}</span>
                 <span>Date: {board.boardDate.split(" ")[0]}</span>
-                <br />
                 {board.fileUrl && (
                     
-                        <a href={board.fileUrl} download>
-                        다운로드 : 💽
+                        <a href={`http://localhost:8080${board.fileUrl}`} download>
+                            다운로드 <i className="fa fa-download"></i> 💽
                         </a>
                     
                 )}
@@ -94,33 +79,7 @@ function NoticeDetail() {
                     
                 </div>
             </div>
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                contentLabel="Delete Confirmation"
-                className={styles.modal}
-                overlayClassName={styles.overlay}
-            >
-                <h2>삭제하시겠습니까?</h2>
-                <div className="flex space-x-4">
-                    <MintButton
-                        onClick={confirmDelete}
-                        text="확인"
-                        sizeW="w-24"
-                        sizeH="h-12"
-                        fontSize="text-lg"
-                        className="mr-4"
-                    />
-                    <MintButton
-                        onClick={closeModal}
-                        text="취소"
-                        sizeW="w-24"
-                        sizeH="h-12"
-                        fontSize="text-lg"
-                        className="mr-4"
-                    />
-                </div>
-            </Modal>
+            
         </div>
     );
 }
