@@ -55,6 +55,7 @@ const SnsInfoUP = observer(() => {
       localStorage.setItem('email', authStore.email);
       setModalMessage('정보가 성공적으로 업데이트되었습니다.');
       setIsModalOpen(true);
+      router.push('/');
     } catch (error) {
       console.error(error);
       setModalMessage('정보 업데이트에 실패했습니다.');

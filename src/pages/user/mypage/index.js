@@ -23,7 +23,8 @@ const Mypage = observer(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const data = await getUserData(token);
+        const userId = authStore.userId;
+        const data = await getUserData(userId, token);
 
         authStore.setUserId(data.userId);
         authStore.setUserName(data.userName);
@@ -34,6 +35,7 @@ const Mypage = observer(() => {
         authStore.setGender(data.gender);
         authStore.setPhone(data.phone);
         authStore.setLoginType(data.loginType);
+        authStore.setBirthDate(data.birthDate)
         setProfileUrl(data.profileUrl);
       } catch (error) {
         console.error('Error fetching user data:', error);
