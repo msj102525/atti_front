@@ -83,7 +83,7 @@ export default function ReplyList({ data, fetchData }) {
                         {replyList.map((reply, idx) => (
                             <div key={idx} className="mb-4">
                                 <div
-                                    className={`cursor-pointer flex flex-col border w-full p-4 rounded-[40px] ${reply.replyUserType === "D" ? "bg-customBrown2" : ""}`}
+                                    className={`cursor-pointer border-[#001219] flex flex-col border w-full p-4 rounded-[40px] ${reply.replyUserType === "D" ? "bg-customBrown2" : ""}`}
                                     onClick={() => handleToggleReplyForm({ feedNum: reply.feedNum, replyNum: reply.replyNum })}
                                 >
                                     <div className="flex gap-2 text-m items-center text-gray-500 pb-2 w-full">

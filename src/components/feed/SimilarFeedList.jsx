@@ -208,7 +208,7 @@ export default function SimilarFeedList({ data }) {
                 <div className="gap-24 columns-1 w-full">
                     <p className="pb-10 px-10 w-2/5 text-customBrown text-3xl relative after:content-[''] after:absolute after:bg-slate-500 after:block after:w-full after:h-[2px] after:left-10 after:bottom-[15px]">이 글과 유사한 글 보기</p>
                     {similarFeeds.map((feed, idx) => (
-                        <div key={idx} className="flex flex-col border min-w-full p-4 rounded-[40px] mb-4 cursor-pointer hover-grow">
+                        <div key={idx} className="border-[#001219] flex flex-col border min-w-full p-4 rounded-[40px] mb-4 cursor-pointer hover-grow">
                             <Link href={`/feed/${feed.feedNum}`}>
                                 <div className="flex gap-2 text-m items-center text-gray-500 pb-2 min-w-96">
                                     <p>{feed.category}</p>
