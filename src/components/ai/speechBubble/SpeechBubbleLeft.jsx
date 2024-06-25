@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "@/styles/ai/speechBubbleLeft.module.css";
 import { sentimentAnalysis } from "@/api/ai/aiApi";
+import DoughnutChart from "@/components/common/DoughnutChart";
 
 export default function SpeechBubbleLeft({
   messages,
@@ -14,6 +15,7 @@ export default function SpeechBubbleLeft({
   const [currentChar, setCurrentChar] = useState(0);
   const [concern, updateConcern] = useState("");
   const [hoverState, setHoverState] = useState(false);
+  const [sentimentData, setSentimentData] = useState(null);
 
   const paragraphDelay = slow ? 1000 : 100;
 
@@ -59,21 +61,12 @@ export default function SpeechBubbleLeft({
   };
 
   const handleSentimentAnalysis = async () => {
-    // console.log(concern);
     try {
       const result = await sentimentAnalysis(concern);
 
       if (result.status == 200) {
-        console.log(result.data);
-
         const { document: { confidence: { negative, neutral, positive } } } = result.data;
         const { sentences: [{ content }] } = result.data;
-
-
-        console.log(content)
-        console.log(negative)
-        console.log(neutral)
-        console.log(positive)
 
         let sentence = "";
 
@@ -99,17 +92,15 @@ export default function SpeechBubbleLeft({
           sentence = "복잡한 감정을 가진 상황이지만, 모든 것이 잘 해결될 거예요 :)";
         }
 
-
-        updateConcern(`${content}\n\n ${sentence}`);
-
+        updateConcern(`${content}\n\n${sentence}`);
+        setSentimentData([negative, neutral, positive]);
       } else {
         console.error('감정분석 실패', result.status);
       }
-
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   return (
     <div className={styles.speechBubbleContainer}>
@@ -125,10 +116,15 @@ export default function SpeechBubbleLeft({
             마음에 들지 않으신가요? 답변을 수정하거나 재녹음을 해보세요!
           </div>
         )}
+        {sentimentData && (
+          <div className="flex justify-center mt-4">
+            <DoughnutChart data={sentimentData} />
+          </div>
+        )}
         {audioEnd && (
           <div className="flex justify-end">
             <div
-              className="flex items-center justify-center w-48 mr-5 bg-purple-300 border-4 border-black cursor-pointer rounded-3xl hover:bg-purple-500 "
+              className="flex items-center justify-center w-48 mr-5 bg-purple-300 border-4 border-black cursor-pointer rounded-3xl hover:bg-purple-500"
               onMouseEnter={() => setHoverState(true)}
               onMouseLeave={() => setHoverState(false)}
               onClick={handleSentimentAnalysis}
@@ -150,6 +146,7 @@ export default function SpeechBubbleLeft({
             )}
           </div>
         )}
+        
       </hgroup>
     </div>
   );
