@@ -46,7 +46,7 @@ export const snsUserUpdate = async (authStore) => {
     const response = await instance.put(baseUrl2 + '/update', JSON.stringify(userData), {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json', // Content-Type을 명시적으로 지정
+        'Content-Type': 'application/json', 
       },
     });
 
@@ -99,8 +99,9 @@ export const deleteUser = async (userId) => {
 
 // 사용자 데이터 가져오기
 export const getUserData = async (token) => {
+  console.log(token,'토큰');
   try {
-    const response = await instance.get('/users', {
+    const response = await instance.get('/users',{
       headers: {
         Authorization: `Bearer ${token}`
       }

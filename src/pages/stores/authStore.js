@@ -41,7 +41,7 @@ class AuthStore {
       this.loginType = localStorage.getItem("loginType") || 'regular';  
       this.password = localStorage.getItem("password") || ''; 
       this.confirmPassword = '';
-      }
+    }
   }
 
   setLoggedIn(status) {
@@ -49,9 +49,9 @@ class AuthStore {
     localStorage.setItem("loggedIn", JSON.stringify(status));
   }
 
-  setSocialLoggedIn(status){
+  setSocialLoggedIn(status) {
     this.socialLoggedIn = status;
-    localStorage.setItem()
+    localStorage.setItem("socialLoggedIn", JSON.stringify(status));
   }
 
   checkLoggedIn() {
@@ -65,9 +65,13 @@ class AuthStore {
     localStorage.setItem("isAdmin", JSON.stringify(status));
   }
 
-  setSocialLoggedIn(status) {
+  setLogoutKakao(status) {
     this.logoutkakao = status;
     localStorage.setItem("logoutkakao", JSON.stringify(status));
+  }
+
+  setLogoutNaver(status) {
+    this.logoutnaver = status;
     localStorage.setItem("logoutnaver", JSON.stringify(status));
   }
 
@@ -86,9 +90,9 @@ class AuthStore {
     localStorage.setItem("email", email);
   }
 
-  setNickName(nickname) {
-    this.nickName = nickname;
-    localStorage.setItem("nickName", nickname);
+  setNickName(nickName) {
+    this.nickName = nickName;
+    localStorage.setItem("nickName", nickName);
   }
 
   setProfileUrl(profileUrl) {
@@ -112,35 +116,76 @@ class AuthStore {
       this.gender = type;
       localStorage.setItem("gender", type);
     } else {
-      throw new Error("Invalid gender type. Must be 'F' or 'M'.");
+      this.gender = ''; // 기본값 설정
+      localStorage.removeItem("gender");
     }
   }
 
+  // setBirthDate(date) {
+  //   let formattedDate;
+  //   console.log(formattedDate,'12313138484');
+  //   if (date instanceof Date) {
+  //     // Date 객체를 YYYY-MM-DD 형식의 문자열로 변환
+  //     const year = date.getFullYear();
+  //     const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 두 자리로 맞춤
+  //     const day = String(date.getDate()).padStart(2, '0'); // 일을 두 자리로 맞춤
+  //     formattedDate = `${year}-${month}-${day}`;
+  //   } else if (typeof date === 'string' && date.includes('T')) {
+  //     // ISO 8601 형식의 문자열을 Date 객체로 변환
+  //     const parsedDate = new Date(date);
+  //     const year = parsedDate.getFullYear();
+  //     const month = String(parsedDate.getMonth() + 1).padStart(2, '0'); // 월을 두 자리로 맞춤
+  //     const day = String(parsedDate.getDate()).padStart(2, '0'); // 일을 두 자리로 맞춤
+  //     formattedDate = `${year}-${month}-${day}`;
+  //   } else if (typeof date === 'string') {
+  //     // 이미 YYYY-MM-DD 형식의 문자열일 경우
+  //     formattedDate = date;
+  //   } else {
+  //     throw new Error("Invalid date input. The date must be a Date object or a valid date string.");
+  //   } 
+  //   // 변환 후 날짜 형식 검증 (예: YYYY-MM-DD)
+  //   const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  //   if (datePattern.test(formattedDate)) {
+  //     this.birthDate = formattedDate;
+  //     localStorage.setItem("birthDate", formattedDate);
+  //     console.log(formattedDate,'sdfsdffwefwe');
+  //   } else {
+  //     throw new Error("Invalid date format. The date must be in YYYY-MM-DD format.");
+  //   }
+  // }
   setBirthDate(date) {
+    let formattedDate = '';
+console
     if (date instanceof Date) {
       // Date 객체를 YYYY-MM-DD 형식의 문자열로 변환
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 두 자리로 맞춤
       const day = String(date.getDate()).padStart(2, '0'); // 일을 두 자리로 맞춤
-      date = `${year}-${month}-${day}`;
+      formattedDate = `${year}-${month}-${day}`;
     } else if (typeof date === 'string' && date.includes('T')) {
       // ISO 8601 형식의 문자열을 Date 객체로 변환
-      date = new Date(date);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 두 자리로 맞춤
-      const day = String(date.getDate()).padStart(2, '0'); // 일을 두 자리로 맞춤
-      date = `${year}-${month}-${day}`;
+      const parsedDate = new Date(date);
+      const year = parsedDate.getFullYear();
+      const month = String(parsedDate.getMonth() + 1).padStart(2, '0'); // 월을 두 자리로 맞춤
+      const day = String(parsedDate.getDate()).padStart(2, '0'); // 일을 두 자리로 맞춤
+      formattedDate = `${year}-${month}-${day}`;
+    } else if (typeof date === 'string') {
+      // 이미 YYYY-MM-DD 형식의 문자열일 경우
+      formattedDate = date;
+    } else {
+      throw new Error("Invalid date input. The date must be a Date object or a valid date string.");
     }
-
+    
     // 변환 후 날짜 형식 검증 (예: YYYY-MM-DD)
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-    if (datePattern.test(date)) {
-      this.birthDate = date;
-      localStorage.setItem("birthDate", date);
+    if (datePattern.test(formattedDate)) {
+      this.birthDate = formattedDate;
+      localStorage.setItem("birthDate", formattedDate);
     } else {
       throw new Error("Invalid date format. The date must be in YYYY-MM-DD format.");
     }
   }
+  
 
   setPhone(phone) {
     this.phone = phone;
@@ -160,6 +205,6 @@ class AuthStore {
   setConfirmPassword(confirmPassword) {
     this.confirmPassword = confirmPassword;
   }
-
 }
+
 export const authStore = new AuthStore();

@@ -1,7 +1,7 @@
 import styles from "@/styles/common/mintButton.module.css";
 
 export default function MintButton(props) {
-  // size 속성을 props에서 추출하여 기본값을 medium으로 설정합니다.
+  // props에서 필요한 속성을 추출합니다.
   const {
     onClick,
     text,
@@ -10,6 +10,7 @@ export default function MintButton(props) {
     sizeH,
     fontSize,
     visible = true,
+    className, // 추가된 className 속성
   } = props;
 
   return (
@@ -17,7 +18,7 @@ export default function MintButton(props) {
       onClick={onClick}
       className={`bg-teal-400 hover:bg-teal-600 text-white font-bold ${
         styles.roundedBetween
-      } ${sizeW} ${sizeH} ${fontSize} ${visible ? "" : "hidden"}`}
+      } ${sizeW} ${sizeH} ${fontSize} ${visible ? "" : "hidden"} ${className}`}
     >
       {text}
       <br />

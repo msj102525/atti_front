@@ -97,8 +97,8 @@
 
 /* Content adjustments to accommodate sidebar */
 .content {
-  margin-left: 220px; /* Add space to the left for the sidebar */
-  padding: 20px;
+  /* margin-left: 220px; */
+  padding: 20px 0 20px 0;
   width: calc(100% - 220px); /* 사이드바를 고려한 너비 */
 
 }

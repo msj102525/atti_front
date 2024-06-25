@@ -20,19 +20,19 @@ const SearchForm = ({ onSubmit }) => {
     event.preventDefault();
     const formData = {
       action,
-      beginDate,
-      endDate,
-      keyword,
+      keyword: action === 'date' ? '' : keyword,
+      beginDate: action === 'date' ? beginDate : '',
+      endDate: action === 'date' ? endDate : '',
     };
     onSubmit(formData);
   };
 
-  const moveWrite = () => {
-    router.push('/board/boardWrite');  // 버튼 클릭 시 이동할 페이지 경로를 지정합니다.
-  };
+  
+  
 
   return (
     <div className={styles.searchdiv}>
+      
       <form className={styles.form} onSubmit={handleSubmit}>
         <select
           className={styles.searchSelect}
@@ -79,6 +79,7 @@ const SearchForm = ({ onSubmit }) => {
           sizeW="w-24"
           sizeH="h-12"
           fontSize="text-lg"
+          className="ml-4"
         />
       </form>
       

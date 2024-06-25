@@ -106,6 +106,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 8vw; /* 필요한 너비에 맞게 조정 */
+  display: inline-block;
+}
+
+.truncatedText2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   max-width: 15vw; /* 필요한 너비에 맞게 조정 */
   display: inline-block;
 }

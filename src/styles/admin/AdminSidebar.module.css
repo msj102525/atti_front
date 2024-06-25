@@ -1,14 +1,14 @@
 .sidebar {
     width: 200px;
     background-color: #d8fab8;
-    padding: 10px;
-    position: fixed;
+    padding: 20px;
+    /* position: fixed; */
     /* top: 0; */
     /* top: 120px; 헤더의 높이에 맞게 조정 (예시로 60px 설정) 이 높이는 헤더 선하고 딱 맞음 */
-    top: 170px; /* 헤더의 높이에 맞게 조정 (예시로 60px 설정) */
+    /* top: 170px; 헤더의 높이에 맞게 조정 (예시로 60px 설정) */
     /* left: 0; */
     /* height: 100%; */
-    height: calc(100% - 60px); /* 헤더의 높이에 맞게 조정 */
+    /* height: calc(100% - 60px);  */
     overflow: auto;
     font-family: Arial, sans-serif;
     font-size: 14px;
@@ -19,6 +19,8 @@
     border-radius: 8px;
 
     text-align: center; /* 모든 텍스트를 가운데 정렬 */
+    margin-top: 2rem;
+    min-height: calc(100% - 60px);
 
     
     
