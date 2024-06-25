@@ -53,7 +53,7 @@ export default function MainSection2() {
             modules={[Autoplay, Navigation]}
             className="mySwiper"
             autoplay={{
-              delay: 1000,
+              delay: 1500,
               disableOnInteraction: false,
             }}
           >
