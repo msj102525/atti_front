@@ -339,7 +339,7 @@ const MemberListComponent = observer(() => {
         <div className="max-w-screen-2xl mx-auto p-4">
             <Header />
 
-            <div style={{ display: 'flex', minHeight: '1000px' }}>
+            <div style={{ display: 'flex',justifyContent: "space-between", minHeight: '1000px' }}>
             {/* <div style={{ minHeight: '1000px'}}> */}
             
                 <AdminSidebar />
@@ -369,8 +369,8 @@ const MemberListComponent = observer(() => {
                                 <tr>
                                     <th style={{ width: "8vw", textAlign: "center" }}>회원아이디</th>
                                     <th style={{ width: "8vw",textAlign: "center" }}>회원이름</th>
-                                    <th style={{ width: "8vw", textAlign: "center" }}>닉네임</th>
-                                    <th style={{ width: "15vw", textAlign: "center" }}>이메일</th>
+                                    <th style={{ width: "10vw", textAlign: "center" }}>닉네임</th>
+                                    <th style={{ width: "7vw", textAlign: "center" }}>이메일</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
                                 </tr>
                             </thead>
