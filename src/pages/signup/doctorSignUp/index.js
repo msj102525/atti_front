@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { sendCodeToEmail } from "@/api/doctor/doctor.js";
 import { signup, login } from "@/api/user/user.js"; // 로그인 API 임포트
 import Modal from "@/components/common/modal";
@@ -26,13 +26,42 @@ export default function DoctorSignUp() {
   const [genderValid, setGenderValid] = useState(false);
   const [maleValid, setMaleValid] = useState(false);
   const [femaleValid, setFemaleValid] = useState(false);
+  const [showTimeOut, setShowTimeOut] = useState(false);
 
   const [codeInput, setCodeInput] = useState(false);
-
+  const [timeLeft, setTimeLeft] = useState(0);
+  
   const [emailButtonColor, setEmailButtonColor] = useState("grey");
   const [codeButtonColor, setCodeButtonColor] = useState("grey");
   const [isVerified, setIsVerified] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [timerStarted, setTimerStarted] = useState(false);
+
+  
+   useEffect(() => {
+    // 타이머가 0이고 타이머가 시작되었을 경우 로직 실행
+    if (timeLeft === 0 && timerStarted) {
+      setCodeReadOnly(true);
+      setEmailButtonColor("grey");
+      setIsVerified(false);
+      alert("인증 시간이 만료되었습니다. 다시 시도해 주세요.");
+      return;
+    }
+
+    if (timeLeft > 0) {
+      setTimerStarted(true); // 타이머 시작 표시
+      const timerId = setInterval(() => {
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
+
+      // 컴포넌트 언마운트 시 타이머 해제
+      return () => clearInterval(timerId);
+    }
+  }, [timeLeft]);
+  
+const formatNumber = (number) => number.toString().padStart(2, '0');
+
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -116,6 +145,9 @@ export default function DoctorSignUp() {
     setCodeInput(true);
     setEmailReadOnly(true);
     setCompleteCertificate(true);
+    //타이머 시작
+    setTimeLeft(300);
+    setShowTimeOut(true);
     handleEmailVerification();
   };
 
@@ -189,6 +221,7 @@ export default function DoctorSignUp() {
       setIsVerified(true);
       setCodeButtonColor("teal-400");
       setCodeReadOnly(true);
+      setShowTimeOut(false); 
     } else {
       setIsVerified(false);
     }
@@ -312,8 +345,11 @@ export default function DoctorSignUp() {
                   />
                 </div>
                 <div className="ml-2 text-xs text-teal-400">
-                  {codeReadOnly && <div>인증성공!</div>}
-                </div>
+                  {codeReadOnly && (<div>인증성공!</div>)}
+                  </div>
+                  <div className={`${showTimeOut?"":"hidden"} text-red-500`}>
+                  {formatNumber(Math.floor(timeLeft / 60))}:{formatNumber(timeLeft % 60)}
+                  </div>
               </div>
               <div className="mb-2 text-xs text-red-500">
                 {!isVerified && <div>코드가 일치하지 않습니다!</div>}

@@ -22,6 +22,11 @@ const MyPageNavBar = ({ userType }) => {
             <Link href="/review">내가 쓴 리뷰</Link>
           </li>
         )}
+        {userType == "A" && (
+          <li className="py-1">
+            <Link href="/admin/memberList">관리자페이지</Link>
+          </li>
+        )}
       </ul>
     </div>
   );
