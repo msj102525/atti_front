@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart, registerables, TimeScale, LinearScale } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import styles from "@/styles/admin/communityAdminVersion.module.css";
+import styles from "@/styles/admin/noticeAdminVersion.module.css";
 import Header from '../common/Header';
 import AdminSidebar from "@/components/admin/AdminSidebar"
 
@@ -36,9 +36,10 @@ const GraphComponent = () => {
 
   useEffect(() => {
     const aggregateData = () => {
+      let result;
       if (selectedMonth === '전체보기') {
         // 년도의 월별 데이터 그룹화
-        return data.reduce((acc, curr) => {
+        result = data.reduce((acc, curr) => {
           const date = new Date(curr.payDate);
           if (date.getFullYear() === parseInt(selectedYear, 10)) {
             const month = date.getMonth() + 1;
@@ -54,7 +55,7 @@ const GraphComponent = () => {
         }, []);
       } else {
         // 년도와 월의 일별 데이터 그룹화
-        return data.reduce((acc, curr) => {
+        result = data.reduce((acc, curr) => {
           const date = new Date(curr.payDate);
           if (date.getFullYear() === parseInt(selectedYear, 10) && (date.getMonth() + 1) === parseInt(selectedMonth, 10)) {
             const day = date.getDate();
@@ -69,6 +70,9 @@ const GraphComponent = () => {
           return acc;
         }, []);
       }
+      // 날짜 기준으로 정렬
+      result.sort((a, b) => new Date(a.date) - new Date(b.date));
+      return result;
     };
 
     setAggregatedData(aggregateData());
@@ -78,7 +82,7 @@ const GraphComponent = () => {
     labels: aggregatedData.map(item => item.date),
     datasets: [
       {
-        label: 'Pay Amount Over Time',
+        label: '결제 금액',
         data: aggregatedData.map(item => item.amount),
         fill: false,
         backgroundColor: 'rgba(75,192,192,0.4)',
@@ -100,7 +104,7 @@ const GraphComponent = () => {
   return (
     <div className="max-w-screen-2xl mx-auto p-4">
       <Header />
-      <div style={{ display: 'flex', minHeight: '1000px' }}>
+      <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1000px' }}>
         <AdminSidebar />
         <div className={styles.content}>
           <div className={styles.container}>

@@ -4,8 +4,7 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import styles from "../../styles/board/boardDetail.module.css"; // 스타일 파일을 임포트
 import Header from '../common/Header';
-import Mintbutton from "@/components/common/MintButton"; 
-
+import MintButton from "@/components/common/MintButton"; 
 
 Modal.setAppElement('#__next');
 
@@ -71,41 +70,28 @@ function NoticeDetail() {
                 <span>조회수 {board.readCount}</span>
                 <span>중요도: {board.importance}</span>
                 <span>Date: {board.boardDate.split(" ")[0]}</span>
+                <br />
+                {board.fileUrl && (
+                    
+                        <a href={board.fileUrl} download>
+                        다운로드 : 💽
+                        </a>
+                    
+                )}
                 <hr />
                 <div className={styles.contentbox}>{board.boardContent}</div>
+                
                 <hr />
-                <div className={styles.btnbox}>
-                    <Mintbutton
+                <div className="flex space-x-4">
+                    <MintButton
                         onClick={handleBoardListClick}
                         text="목록"
                         sizeW="w-24"
                         sizeH="h-12"
                         fontSize="text-lg"
-                    />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {userType === 'A' && (
-                    <Mintbutton
-                        onClick={handleBoardUpdateClick}
-                        text="수정"
-                        sizeW="w-24"
-                        sizeH="h-12"
-                        fontSize="text-lg"
+                        className="mr-4"
                     />
-                    )}
-                    {userType === 'A' && (
-                    <Mintbutton
-                        onClick={handleDeleteClick}
-                        text="삭제"
-                        sizeW="w-24"
-                        sizeH="h-12"
-                        fontSize="text-lg"
-                    />
-                    )}
+                    
                 </div>
             </div>
             <Modal
@@ -116,21 +102,22 @@ function NoticeDetail() {
                 overlayClassName={styles.overlay}
             >
                 <h2>삭제하시겠습니까?</h2>
-                <div className={styles.modalButtons}>
-                    <Mintbutton
-                    onClick={confirmDelete}
-                    text="확인"
-                    sizeW="w-24"
-                    sizeH="h-12"
-                    fontSize="text-lg"
+                <div className="flex space-x-4">
+                    <MintButton
+                        onClick={confirmDelete}
+                        text="확인"
+                        sizeW="w-24"
+                        sizeH="h-12"
+                        fontSize="text-lg"
+                        className="mr-4"
                     />
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Mintbutton
-                    onClick={closeModal}
-                    text="취소"
-                    sizeW="w-24"
-                    sizeH="h-12"
-                    fontSize="text-lg"
+                    <MintButton
+                        onClick={closeModal}
+                        text="취소"
+                        sizeW="w-24"
+                        sizeH="h-12"
+                        fontSize="text-lg"
+                        className="mr-4"
                     />
                 </div>
             </Modal>
