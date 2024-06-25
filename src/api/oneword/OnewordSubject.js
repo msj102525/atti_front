@@ -32,7 +32,7 @@ export const getOnewordSubjectDetail = (owsjNum) => {
     return axios.get(`/onewordsubject/onesjdetail/${owsjNum}`)
         .then(res => {
             console.log('Read successfully : ', res);
-            console.log('Read successfully2 : ', res.data);
+            // console.log('Read successfully2 : ', res.data);
             return res.data;
         })
         .catch(error => {
