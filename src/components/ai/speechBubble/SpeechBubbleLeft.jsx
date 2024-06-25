@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "@/styles/ai/speechBubbleLeft.module.css";
+import { sentimentAnalysis } from "@/api/ai/aiApi";
 
 export default function SpeechBubbleLeft({
   messages,
@@ -57,6 +58,59 @@ export default function SpeechBubbleLeft({
     setConcern(newText); // 부모 컴포넌트로 concern 전달
   };
 
+  const handleSentimentAnalysis = async () => {
+    // console.log(concern);
+    try {
+      const result = await sentimentAnalysis(concern);
+
+      if (result.status == 200) {
+        console.log(result.data);
+
+        const { document: { confidence: { negative, neutral, positive } } } = result.data;
+        const { sentences: [{ content }] } = result.data;
+
+
+        console.log(content)
+        console.log(negative)
+        console.log(neutral)
+        console.log(positive)
+
+        let sentence = "";
+
+        if (positive >= 80) {
+          sentence = "당신은 정말 대단해요! 훌륭한 일을 해내고 있군요 :)";
+        } else if (positive >= 60 && positive < 80) {
+          sentence = "긍정적인 마음가짐으로 멋진 일들을 이룰 수 있어요 :)";
+        } else if (positive >= 40 && positive < 60) {
+          sentence = "긍정적으로 생각하면 해결할 수 있는 문제들이에요 :)";
+        } else if (neutral >= 80) {
+          sentence = "상황을 잘 이해하고 고려하는 당신, 멋져요! :)";
+        } else if (neutral >= 60 && neutral < 80) {
+          sentence = "중립적인 관점을 유지하며 문제를 해결할 수 있을 거예요 :)";
+        } else if (neutral >= 40 && neutral < 60) {
+          sentence = "여러 감정을 조율하며 최선의 결정을 내릴 수 있을 거에요 :)";
+        } else if (negative >= 80) {
+          sentence = "어려운 일을 겪고 있지만, 이 역시 지나가는 일일 거예요 :)";
+        } else if (negative >= 60 && negative < 80) {
+          sentence = "부정적인 감정을 이겨내고 긍정적으로 다가가 보세요 :)";
+        } else if (negative >= 40 && negative < 60) {
+          sentence = "마음의 변화와 함께 새로운 긍정을 찾아보는 것이 중요할 거예요 :)";
+        } else {
+          sentence = "복잡한 감정을 가진 상황이지만, 모든 것이 잘 해결될 거예요 :)";
+        }
+
+
+        updateConcern(`${content}\n\n ${sentence}`);
+
+      } else {
+        console.error('감정분석 실패', result.status);
+      }
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <div className={styles.speechBubbleContainer}>
       <hgroup className={styles.speechBubble}>
@@ -77,6 +131,7 @@ export default function SpeechBubbleLeft({
               className="flex items-center justify-center w-48 mr-5 bg-purple-300 border-4 border-black cursor-pointer rounded-3xl hover:bg-purple-500 "
               onMouseEnter={() => setHoverState(true)}
               onMouseLeave={() => setHoverState(false)}
+              onClick={handleSentimentAnalysis}
             >
               내 감정은?
             </div>

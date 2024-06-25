@@ -18,3 +18,9 @@ export const cosultToPhilosopher = (philosopher, concern) => {
   const encodedPhilosopher = encodeURIComponent(philosopher);
   return axios.get(`/philosophy/${encodedPhilosopher}/${encodedConcern}`);
 };
+
+export const sentimentAnalysis = async(content) => {
+  console.log(content);
+  return await axios.post(`/sentiment`, {content});
+
+}
