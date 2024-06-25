@@ -38,7 +38,8 @@ const List = () => {
         // 모든 중요도 2인 항목에 ⭐ 표시
         const updatedBoards = data.map(board => ({
           ...board,
-          boardTitle: board.importance === 2 ? `⭐ ${board.boardTitle}` : board.boardTitle
+          boardTitle: `${board.importance === 2 ? '⭐ ' : ''}${board.boardTitle}${board.filePath ? ' 💽' : ''}`
+        
         }));
 
         // 모든 항목을 boardNum 기준으로 정렬
@@ -125,6 +126,7 @@ const List = () => {
       const updatedBoards = data.map(board => ({
         ...board,
         boardTitle: board.importance === 2 ? `⭐ ${board.boardTitle}` : board.boardTitle
+        
       }));
 
       // 모든 항목을 boardNum 기준으로 정렬
