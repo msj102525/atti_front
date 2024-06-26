@@ -14,7 +14,7 @@ class AuthStore {
   userType = '';
   gender = '';
   birthDate = '';
-  phone = ''; 
+  phone = '';
   loginType = 'regular';  //일반 유저일때는 regular ,소셜은 각 이름들로 보임
   password = '';
   confirmPassword = '';
@@ -38,8 +38,8 @@ class AuthStore {
       this.gender = localStorage.getItem("gender") || '';
       this.birthDate = localStorage.getItem("birthDate") || '';
       this.phone = localStorage.getItem("phone") || '';
-      this.loginType = localStorage.getItem("loginType") || 'regular';  
-      this.password = localStorage.getItem("password") || ''; 
+      this.loginType = localStorage.getItem("loginType") || 'regular';
+      this.password = localStorage.getItem("password") || '';
       this.confirmPassword = '';
     }
   }
@@ -47,6 +47,42 @@ class AuthStore {
   setLoggedIn(status) {
     this.loggedIn = status;
     localStorage.setItem("loggedIn", JSON.stringify(status));
+
+    if (!status) {
+      this.socialLoggedIn = false;
+      this.isAdmin = false;
+      this.logoutkakao = false;
+      this.logoutnaver = false;
+      this.userId = '';
+      this.userName = '';
+      this.email = '';
+      this.nickName = '';
+      this.profileUrl = '';
+      this.userType = '';
+      this.gender = '';
+      this.birthDate = '';
+      this.phone = '';
+      this.loginType = 'regular';
+      this.password = '';
+      this.confirmPassword = '';
+      localStorage.removeItem("socialLoggedIn");
+      localStorage.removeItem("isAdmin");
+      localStorage.removeItem("logoutkakao");
+      localStorage.removeItem("logoutnaver");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("email");
+      localStorage.removeItem("nickName");
+      localStorage.removeItem("profileUrl");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("gender");
+      localStorage.removeItem("birthDate");
+      localStorage.removeItem("phone");
+      localStorage.removeItem("loginType");
+      localStorage.removeItem("password");
+      localStorage.removeItem("confirmPassword");
+    }
+
   }
 
   setSocialLoggedIn(status) {
@@ -175,7 +211,7 @@ class AuthStore {
     } else {
       throw new Error("Invalid date input. The date must be a Date object or a valid date string.");
     }
-    
+
     // 변환 후 날짜 형식 검증 (예: YYYY-MM-DD)
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
     if (datePattern.test(formattedDate)) {
@@ -185,7 +221,7 @@ class AuthStore {
       throw new Error("Invalid date format. The date must be in YYYY-MM-DD format.");
     }
   }
-  
+
 
   setPhone(phone) {
     this.phone = phone;
@@ -195,7 +231,7 @@ class AuthStore {
   setLoginType(type) {
     this.loginType = type || 'regular';
     localStorage.setItem("loginType", this.loginType);
-  } 
+  }
 
   setPassword(password) {
     this.password = password;
