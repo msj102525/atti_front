@@ -144,14 +144,14 @@ const FaqAdminVersionListComponent = observer(() => {
     return (
         <div className="max-w-screen-2xl mx-auto p-4">
             <Header />
-            <div style={{ display: 'flex', minHeight: '1000px' }}>
+            <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1000px' }}>
                 <AdminSidebar />
                 <div className={styles.content}>
                     <div className={styles.container}>
                         <h2 className={styles.centeredText}>FAQ(Admin ver.)</h2>
-                        <button className={styles.mkbutton} onClick={() => openModal()}>글쓰기</button>
-
+                        
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                            <button onClick={() => openModal()} style={{ marginRight: 'auto' }}>글쓰기</button>
                             <select value={searchType} onChange={handleSearchTypeChange}>
                                 <option value="id">아이디</option>
                                 <option value="name">내용</option>

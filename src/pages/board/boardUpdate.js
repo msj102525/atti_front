@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import styles from "../../styles/board/boardUpdate.module.css"; // 스타일 파일을 임포트
-import Header from '../common/Header';// Header 경로 수정
+import Header from '../common/Header'; // Header 경로 수정
 
 const BoardUpdate = () => {
     const router = useRouter();
     const { boardNum } = router.query;
-
+    const [file, setFile] = useState(null); 
+    const [fileName, setFileName] = useState(''); // 기존 파일 이름을 저장할 상태
     const [boardTitle, setBoardTitle] = useState('');
     const [boardContent, setBoardContent] = useState('');
     const [importance, setImportance] = useState(1);
+    const [readCount, setReadCount] = useState(1);
 
     useEffect(() => {
         if (boardNum) {
-            
             const fetchBoardDetail = async () => {
                 try {
                     const response = await axios.get(`http://localhost:8080/board/boardDetail/${boardNum}`);
@@ -22,6 +23,8 @@ const BoardUpdate = () => {
                     setBoardTitle(board.boardTitle);
                     setBoardContent(board.boardContent);
                     setImportance(board.importance);
+                    setReadCount(board.readCount);
+                    setFileName(board.fileUrl ? board.fileUrl.split('/').pop() : ''); // 파일 이름 설정
                 } catch (error) {
                     console.error("There was an error fetching the board detail!", error);
                 }
@@ -33,16 +36,31 @@ const BoardUpdate = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('boardTitle', boardTitle);
+        formData.append('boardContent', boardContent);
+        formData.append('importance', importance);
+        formData.append('readCount', readCount);
+        
+        if (file) {
+            formData.append('file', file);
+        }
+
         try {
-            await axios.put(`http://localhost:8080/board/boardUpdate/${boardNum}`, {
-                boardTitle: boardTitle,
-                boardContent: boardContent,
-                importance: importance
+            await axios.put(`http://localhost:8080/board/boardUpdate/${boardNum}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
             router.push(`/board/boardDetail?boardNum=${boardNum}`);
         } catch (error) {
             console.error("There was an error updating the board!", error);
         }
+    };
+
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
     };
 
     const handleCheckboxChange = (event) => {
@@ -65,7 +83,18 @@ const BoardUpdate = () => {
                             onChange={(e) => setBoardTitle(e.target.value)}
                             required
                         />
+                        {fileName && (
+                            <div className="mt-4">
+                                <p>Uploaded file: <a href={`http://localhost:8080/board/download/${fileName}`} download>{fileName}</a></p>
+                            </div>
+                        )}
+                        <input
+                            type='file'
+                            onChange={handleFileChange}
+                            className="mt-4"
+                        />
                         <hr />
+                        
                         <textarea
                             className={styles.contentbox}
                             name="boardContent"
@@ -91,8 +120,8 @@ const BoardUpdate = () => {
                             />O
                         </label>
                         <br />
-                        <button type="submit" className={styles.mv}>수정하기</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button type="button" onClick={() => router.push(`/board/boardDetail/${boardNum}`)} className={styles.mv}>돌아가기</button>
+                        <button type="submit" className={`${styles.mv} mr-4`}>수정하기</button>
+                        <button type="button" onClick={() => router.push(`/board/boardDetail/${boardNum}`)} className={`${styles.mv} mr-4`}>돌아가기</button>
                     </form>
                 </div>
             </div>

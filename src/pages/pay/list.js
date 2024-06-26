@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
-import styles from "@/styles/admin/communityAdminVersion.module.css";
+import styles from "@/styles/admin/noticeAdminVersion.module.css";
 import Header from '../common/Header';
 import SearchForm from "../pay/paySearch";
 import Mintbutton from "@/components/common/MintButton"; 
@@ -102,8 +102,8 @@ const List = () => {
   return (
     <div className="max-w-screen-2xl mx-auto p-4">
       <Header />
-      <Mintbutton />
-      <div style={{ display: 'flex', minHeight: '1000px' }}>
+      
+      <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1000px' }}>
         <AdminSidebar />
         <div className={styles.content}>
           <div className={styles.container}>

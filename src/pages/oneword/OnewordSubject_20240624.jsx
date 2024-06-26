@@ -1,15 +1,13 @@
-import Header from "@/pages/common/Header";
+import Header from "../common/Header";
 import React, { useEffect } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import OnewordSubjectListComponent from "@/components/oneword/OnewordSubjectListComponent";
-import OnewordSubjectWriteModalComponent from "@/components/oneword/OnewordSubjectWriteModalComponent";
+import OnewordSubjectListComponent from "../../components/oneword/OnewordSubjectListComponent";
+import OnewordSubjectWriteModalComponent from "../../components/oneword/OnewordSubjectWriteModalComponent";
 import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
-import { handleAxiosError } from "@/api/errorAxiosHandle";
-import { getOnewordSubjectList, getOnewordSubjectListCount, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject } from "@/api/oneword/OnewordSubject";
-import DetailPostModal from "@/components/oneword/DetailPostModal";
-import AdminSidebar from "@/components/admin/AdminSidebar"
-import styles from "@/styles/oneword/onewordsubjectAdmin.module.css";
+import { handleAxiosError } from "../../api/errorAxiosHandle";
+import { getOnewordSubjectList, getOnewordSubjectListCount, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject } from "../../api/oneword/OnewordSubject";
+import DetailPostModal from "../../components/oneword/DetailPostModal";
 
 const OnewordSubjectComponent = observer(() => {
     const [keyword, setKeyword] = React.useState("");
@@ -129,41 +127,35 @@ const OnewordSubjectComponent = observer(() => {
     const totalPages = Math.ceil(getCount / size); /// 전체 페이지 수
 
     return (
-        <div className="max-w-screen-2xl mx-auto p-4">
-            <Header />
-
-            <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1000px' }}>
-                {/* <AdminSidebar /> */}
-
-                <div className={styles.content}>
-                    <div className={styles.container}>
-                        <h2 className={styles.centeredText}>오늘 한 줄 주제 등록(Admin ver.)</h2>
-
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", textAlign: "left" }}>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <input
-                                    type="text"
-                                    placeholder="제목"
-                                    className="border border-black rounded py-2 px-4 mr-5" // 여기서 mr-2 클래스를 추가하여 오른쪽으로 2칸 띄웁니다.
-                                    value={searchInput}
-                                    onChange={handleSearchChange}
-                                    onKeyDown={handleKeyPress}
-                                />
-                                <button onClick={executeSearch}>검색</button>
-                                <div>
-                                    <button className={styles.mkbutton} onClick={openModal}>글쓰기</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <table className={styles.table}>
+        <div>
+            <div>
+                <Header />
+            </div>
+            {/* <div className="container mt-5"> */}
+            <div className="container mx-auto mt-5">
+                <h2>오늘 한 줄 주제</h2>
+                <div style={{ height: "2vw", justifyContent: "center", textAlign: "left" }}>
+                    {/* <select value={size} onChange={handleSizeChange} style={{ height: "88%" }}>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select> */}
+                    <input type="text" placeholder="제목" className="border border-black rounded py-2 px-4"
+                        value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
+                    <button onClick={executeSearch}>검색</button>
+                </div>
+            </div>
+            <div className="container mx-auto mt-5">
+                {/* <div className={styles['table-container']}> */}
+                <div>
+                    <table className="min-w-full divide-y divide-gray-200">
                         <thead>
-                            <tr>
-                                <th style={{ width: "5vw", textAlign: "center" }}>번호</th>
-                                <th style={{ width: "30vw", textAlign: "center" }}>제목</th>
-                                <th style={{ width: "10vw", textAlign: "center" }}>작성자</th>
-                                <th style={{ width: "7vw", textAlign: "center" }}>작성일</th>
+                            <tr className="bg-gray-50">
+                                <th className="px-6 py-3 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" style={{ width: "5vw", textAlign: "center" }}>번호</th>
+                                <th className="px-6 py-3 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" style={{ textAlign: "center" }}>제목</th>
+                                <th className="px-6 py-3 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" style={{ width: "10vw", textAlign: "center" }}>글쓴이</th>
+                                <th className="px-6 py-3 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" style={{ width: "7vw", textAlign: "center" }}>작성일</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -172,39 +164,55 @@ const OnewordSubjectComponent = observer(() => {
                                 <OnewordSubjectListComponent
                                     key={onewordsubject.owsjNum}
                                     onewordsubject={onewordsubject}
+                                    isPinned
                                     onOnewordSubjectClick={() => openDetailModal(onewordsubject)}
                                 />
                             ))}
+
+                            {/* 데이터가 10개 미만인 경우 빈 공간을 추가하여 10개의 행을 유지 */}
+                            {Array.from({ length: Math.max(10 - data.length, 0) }).map((_, index) => (
+                                <tr key={`empty-${index}`} className="h-16">
+                                    <td className="px-6 py-4 whitespace-no-wrap" colSpan="4">
+                                        {/* 빈 공간 */}
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
-                    {/* {isAdmin && (
-                            <div>
-                                <button onClick={openModal}>글쓰기</button>
-                            </div>
-                        )} */
-                    }
-                    <OnewordSubjectWriteModalComponent isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
-                    <DetailPostModal
-                        isOpen={isDetailModalOpen}
-                        onClose={closeDetailModal}
-                        post={selectedOnewordSubject}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                        isAdmin={isAdmin}
-                    />
+                </div>
+                {/* {isAdmin && (
                     <div>
-                        <Pagination pageCount={totalPages} onPageChange={handlePageChange} page={page} />
+                        <button onClick={openModal}>글쓰기</button>
                     </div>
+                )} */
+                }
 
+                <div>
+                    <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">글쓰기</button>
                 </div>
 
+                <OnewordSubjectWriteModalComponent isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
+                <DetailPostModal
+                    isOpen={isDetailModalOpen}
+                    onClose={closeDetailModal}
+                    post={selectedOnewordSubject}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    isAdmin={isAdmin}
+                />
+
+                {/* Pagination */}
+                {/* <div>
+                    <button disabled={page === 1} onClick={() => handlePageChange(page - 1)}>Previous</button>
+                    <span> Page {page} </span>
+                    <button disabled={data.length < size} onClick={() => handlePageChange(page + 1)}>Next</button>
+                </div> */}
+                <div>
+                    <Pagination pageCount={totalPages} onPageChange={handlePageChange} page={page} />
+                </div>
             </div>
         </div>
     );
-
-
-
-
 });
 
 export default OnewordSubjectComponent;

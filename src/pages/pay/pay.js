@@ -83,7 +83,7 @@ function App() {
   return (
     <div>
       <Header />
-      <div className="flex">
+      <div className="flex max-w-screen-2xl mx-auto">
         <div className="w-1/2 bg-gray-100 p-12">
           <h2 className="text-gray-700 text-2xl mb-5">아띠 전문가 상담 결제하기</h2>
           <button
@@ -123,16 +123,16 @@ function App() {
         </div>
         <div className="h-[95vh] w-[5px] bg-black"></div>
         <div className="w-1/2 bg-white p-12">
-          <h4 className="border-b border-black pb-2 mb-4">결제 방법</h4>
+          <h4 className="hidden border-b border-black pb-2 mb-4">결제 방법</h4>
           <div className="flex items-center justify-around mb-5">
             <div
-              className={`cursor-pointer border-2 p-2 rounded-md ${selectedPayment === 'toss' ? 'border-blue-500' : 'border-transparent'}`}
+              className={`hidden cursor-pointer border-2 p-2 rounded-md ${selectedPayment === 'toss' ? 'border-blue-500' : 'border-transparent'}`}
               onClick={() => setSelectedPayment('toss')}
             >
               <img alt="토스" src="../../Toss_Logo_Primary.png" width="100px" height="auto" />
             </div>
             <div
-              className={`cursor-pointer border-2 p-2 rounded-md ${selectedPayment === 'kakaopay' ? 'border-blue-500' : 'border-transparent'}`}
+              className={`hidden cursor-pointer border-2 p-2 rounded-md ${selectedPayment === 'kakaopay' ? 'border-blue-500' : 'border-transparent'}`}
               onClick={() => setSelectedPayment('kakaopay')}
             >
               <img alt="카카오페이" src="../../kakaopay.png" width="100px" height="auto" />

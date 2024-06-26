@@ -19,6 +19,7 @@
   background-color: #def3d6;
   padding: 1rem; /* 패딩 추가 */
   border-radius: 8px; /* 모서리 둥글게 */
+  min-height: calc(100% - 60px);
 }
 
 .container h2 {
@@ -96,8 +97,8 @@
 
 /* Content adjustments to accommodate sidebar */
 .content {
-  margin-left: 220px; /* Add space to the left for the sidebar */
-  padding: 20px;
+  /* margin-left: 220px; Add space to the left for the sidebar */
+  padding: 20px 0 20px 0;
   width: calc(100% - 220px); /* 사이드바를 고려한 너비 */
 }
 
@@ -105,7 +106,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 30vw; /* 필요한 너비에 맞게 조정 */
+  max-width: 8vw; /* 필요한 너비에 맞게 조정 */
   display: inline-block;
 }
 
@@ -114,5 +115,13 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 15vw; /* 필요한 너비에 맞게 조정 */
+  display: inline-block;
+}
+
+.truncatedText3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 30vw; /* 필요한 너비에 맞게 조정 */
   display: inline-block;
 }

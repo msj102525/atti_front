@@ -139,14 +139,14 @@ const NoticeAdminVersionListComponent = observer(() => {
     return (
         <div className="max-w-screen-2xl mx-auto p-4">
             <Header />
-            <div style={{ display: 'flex', minHeight : '1000px' }}>
+            <div style={{ display: 'flex', justifyContent: "space-between", minHeight : '1000px' }}>
                 <AdminSidebar />
                 <div className={styles.content}>
                     <div className={styles.container}>
                         <h2 className={styles.centeredText}>공지사항(Admin ver.)</h2>
-                        <button className={styles.mkbutton} onClick={() => handleNavigation('/board/boardWrite')}>글쓰기</button>
-
+                        
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                            <button onClick={() => handleNavigation('/board/boardWrite')} style={{ marginRight: 'auto' }}>글쓰기</button>
                             <select value={searchType} onChange={handleSearchTypeChange}>
                                 <option value="id">아이디</option>
                                 <option value="name">내용</option>
@@ -157,9 +157,10 @@ const NoticeAdminVersionListComponent = observer(() => {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th style={{ width: "8vw", textAlign: "center" }}>회원아이디</th>
+                                    
                                     <th style={{ width: "15vw",textAlign: "center" }}>제목</th>
                                     <th style={{ width: "30vw", textAlign: "center" }}>내용</th>
+                                    <th style={{ width: "8vw", textAlign: "center" }}>회원아이디</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
                                 </tr>
                             </thead>

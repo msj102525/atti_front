@@ -126,7 +126,7 @@ const CommunityAdminVersionListComponent = observer(() => {
         <div className="max-w-screen-2xl mx-auto p-4">
             <Header />
 
-            <div style={{ display: 'flex', minHeight: '1000px' }}>
+            <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1000px' }}>
                 <AdminSidebar />
                 <div className={styles.content}>
                     <div className={styles.container}>

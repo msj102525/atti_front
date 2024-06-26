@@ -11,6 +11,11 @@ const BoardWrite = () => {
   const [boardContent, setBoardContent] = useState('');
   const [importance, setImportance] = useState(1);
   const [readCount, setReadCount] = useState(1);
+  const [file, setFile] = useState(null); // 파일 상태 추가
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,17 +23,23 @@ const BoardWrite = () => {
     // 로컬 스토리지에서 userId 가져오기
     const boardWriter = localStorage.getItem('userId');
 
-    // Form 데이터
-    const formData = {
-      readCount,
-      boardTitle,
-      boardContent,
-      importance,
-      boardWriter, // boardWriter 추가
-    };
+    // FormData 객체 생성
+    const formData = new FormData();
+    formData.append("boardTitle", boardTitle);
+    formData.append("boardContent", boardContent);
+    formData.append("importance", importance);
+    formData.append("boardWriter", boardWriter);
+    formData.append("readCount", 0); // readCount 추가
+    if (file) {
+      formData.append("file", file);
+    }
 
     // formData를 서버로 전송
-    axios.post(`http://localhost:8080/board`, formData)
+    axios.post(`http://localhost:8080/board`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
       .then(response => {
         console.log(formData);
         // 서버로 데이터 전송 후, 리스트 페이지로 리디렉션
@@ -65,6 +76,10 @@ const BoardWrite = () => {
               onChange={(e) => setBoardTitle(e.target.value)}
             />
             <hr />
+            <input
+             type='file'
+             onChange={handleFileChange}
+             />
             <textarea
               className="contentbox w-full p-4 border border-gray-300 rounded mb-4"
               name="boardContent"

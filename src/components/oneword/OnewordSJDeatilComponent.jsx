@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { getOnewordList, insertOneword, updateOneword, deleteOneword } from "../../api/oneword/Oneword";
-import { handleAxiosError } from "../../api/errorAxiosHandle";
+import { getOnewordList, insertOneword, updateOneword, deleteOneword } from "@/api/oneword/Oneword";
+import { handleAxiosError } from "@/api/errorAxiosHandle";
 
 const OnewordSJDeatilComponent = observer((data) => {
     const router = useRouter();

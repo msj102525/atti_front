@@ -13,8 +13,6 @@ const ReplyPage = observer(() => {
 
   const queryClient = useQueryClient();
 
-  console.log('owsjNum:', owsjNum); // owsjNum 값을 로그로 출력
-
   const { data, isLoading } = useQuery(['onewordSubjectDetail', owsjNum], () => getOnewordSubjectDetail(owsjNum),
     {
       enabled: !!owsjNum,

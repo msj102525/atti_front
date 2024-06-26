@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import OnewordSubjectListComponent from "./OnewordSubjectListComponent";
-import { handleAxiosError } from "../../api/errorAxiosHandle";
-import { getOnewordSubjectList } from "../../api/oneword/OnewordSubject";
+import OnewordSubjectListComponent from "@/OnewordSubjectListComponent";
+import { handleAxiosError } from "@/api/errorAxiosHandle";
+import { getOnewordSubjectList } from "@/api/oneword/OnewordSubject";
 import Link from 'next/link';
 
 const OnewordListFormComponent = observer(() => {
