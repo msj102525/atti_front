@@ -9,6 +9,8 @@ import Header from "@/pages/common/Header";
 import Footer from "@/pages/common/Footer";
 import AdminSidebar from "@/components/admin/AdminSidebar"
 
+import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
+
 // QueryClient 생성
 const queryClient = new QueryClient();
 
@@ -32,6 +34,9 @@ const CommunityAdminVersionListComponent = observer(() => {
 
     const searchField = searchType === 'id' ? 'userId' : 'feedContent';
 
+    const [pageCount, setPageCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+
 
 
     const { data, isLoading, error, refetch } = useQuery(
@@ -39,6 +44,10 @@ const CommunityAdminVersionListComponent = observer(() => {
         () => getCommunityAdminVersionList({ searchField: searchParams.searchField, searchInput: searchParams.searchInput, page: page - 1, size }),
         {
             keepPreviousData: true,
+
+            onSuccess: (data) => {
+                setPageCount(data.totalPages);
+              },
         }
     );
 
@@ -115,6 +124,11 @@ const CommunityAdminVersionListComponent = observer(() => {
         setIsModalOpen(false); // 모달 닫기
     };
 
+    const handlePageChange = (selectedPage) => {
+        setPage(selectedPage.selected + 1);
+        setCurrentPage(selectedPage.selected);
+      };
+
 
     if (isLoading) return <div>Loading...</div>; // 로딩 중일 때 표시
     //밑에 한 줄 추가
@@ -126,7 +140,7 @@ const CommunityAdminVersionListComponent = observer(() => {
         <div className="max-w-screen-2xl mx-auto p-4">
             <Header />
 
-            <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1000px' }}>
+            <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1050px' }}>
                 <AdminSidebar />
                 <div className={styles.content}>
                     <div className={styles.container}>
@@ -157,8 +171,8 @@ const CommunityAdminVersionListComponent = observer(() => {
                         />
                     ))} */}
 
-                                {data && Array.isArray(data) ? (
-                                    data.map(user => (
+                                {data && Array.isArray(data.members) ? (
+                                    data.members.map(user => (
                                         <CommunityAdminVersionBoardCard
                                             key={user.feeedNum} // feedNum을 key로 사용
                                             user={user}
@@ -173,8 +187,9 @@ const CommunityAdminVersionListComponent = observer(() => {
                             </tbody>
                         </table>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-                            <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
-                            <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button>
+                            {/* <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
+                            <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button> */}
+                            <Pagination pageCount={pageCount} onPageChange={handlePageChange} currentPage={currentPage} />
                         </div>
                     </div>
                 </div>

@@ -12,6 +12,8 @@ import axios from 'axios';
 import styles from "@/styles/admin/faqAdminVersion.module.css"; // 기존 스타일 유지
 import modalstyles from '@/styles/faq/faqModal.module.css';
 
+import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
+
 
 // QueryClient 생성
 const queryClient = new QueryClient();
@@ -32,6 +34,9 @@ const FaqAdminVersionListComponent = observer(() => {
 
     const searchField = searchType === 'id' ? 'faqWriter' : 'faqContent';
 
+    const [pageCount, setPageCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+
     const router = useRouter();
 
     const { data, isLoading, error, refetch } = useQuery(
@@ -39,6 +44,10 @@ const FaqAdminVersionListComponent = observer(() => {
         () => getFaqAdminVersionList({ searchField: searchParams.searchField, searchInput: searchParams.searchInput, page: page - 1, size }),
         {
             keepPreviousData: true,
+
+            onSuccess: (data) => {
+                setPageCount(data.totalPages);
+              },
         }
     );
 
@@ -130,6 +139,10 @@ const FaqAdminVersionListComponent = observer(() => {
         }
     };
     
+    const handlePageChange = (selectedPage) => {
+        setPage(selectedPage.selected + 1);
+        setCurrentPage(selectedPage.selected);
+      };
 
     const handleNavigation = (path) => {
         router.push(path);
@@ -139,12 +152,12 @@ const FaqAdminVersionListComponent = observer(() => {
     if (error) return <div>Error loading data: {error.message}</div>;
 
     // FAQ 목록에서 카테고리 목록 추출
-    const categories = [...new Set(data.map(faq => faq.faqCategory))];
+    const categories = [...new Set(data.members.map(faq => faq.faqCategory))];
 
     return (
         <div className="max-w-screen-2xl mx-auto p-4">
             <Header />
-            <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1000px' }}>
+            <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1050px' }}>
                 <AdminSidebar />
                 <div className={styles.content}>
                     <div className={styles.container}>
@@ -169,8 +182,8 @@ const FaqAdminVersionListComponent = observer(() => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data && Array.isArray(data) ? (
-                                    data.map(user => (
+                                {data && Array.isArray(data.members) ? (
+                                    data.members.map(user => (
                                         <tr key={user.faqNum}>
                                             <td style={{ width: "15vw", textAlign: "center" }}>
                                                 <span className={styles.truncatedText}>{user.faqTitle}</span>
@@ -195,8 +208,9 @@ const FaqAdminVersionListComponent = observer(() => {
                             </tbody>
                         </table>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-                            <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
-                            <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button>
+                            {/* <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
+                            <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button> */}
+                            <Pagination pageCount={pageCount} onPageChange={handlePageChange} currentPage={currentPage} />
                         </div>
                     </div>
                 </div>

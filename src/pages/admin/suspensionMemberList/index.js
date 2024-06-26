@@ -9,6 +9,8 @@ import Header from "@/pages/common/Header";
 import Footer from "@/pages/common/Footer";
 import AdminSidebar from "@/components/admin/AdminSidebar"
 
+import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
+
 import SuspendModal from '@/components/admin/SuspendModal'; // SuspendModal 컴포넌트 가져오기
 
 
@@ -34,6 +36,9 @@ const SuspensionMemberListComponent = observer(() => {
     const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
 
     const searchField = searchType === 'id' ? 'userId' : 'suspensionTitle';
+
+    const [pageCount, setPageCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
 
 
 
@@ -82,6 +87,10 @@ const SuspensionMemberListComponent = observer(() => {
         () => getSuspensionMemberList({ searchField: searchParams.searchField, searchInput: searchParams.searchInput, page: page - 1, size }),
         {
             keepPreviousData: true,
+
+            onSuccess: (data) => {
+                setPageCount(data.totalPages);
+              },
         }
     );
 
@@ -281,6 +290,11 @@ const SuspensionMemberListComponent = observer(() => {
 
     //******************************* 
 
+    const handlePageChange = (selectedPage) => {
+        setPage(selectedPage.selected + 1);
+        setCurrentPage(selectedPage.selected);
+      };
+
 
     // 회원 수정 핸들러
     // const handleEdit = async () => {  //(userId) => {
@@ -331,7 +345,7 @@ const SuspensionMemberListComponent = observer(() => {
         <div className="max-w-screen-2xl mx-auto p-4">
             <Header />
 
-            <div style={{ display: 'flex', justifyContent: "space-between",minHeight: '1000px' }}>
+            <div style={{ display: 'flex', justifyContent: "space-between",minHeight: '1050px' }}>
                 <AdminSidebar />
                 <div className={styles.content}>
                     <div className={styles.container}>
@@ -378,8 +392,8 @@ const SuspensionMemberListComponent = observer(() => {
                     ))} */}
 
 
-                                {data && Array.isArray(data) ? (
-                                    data.map(user => (
+                                {data && Array.isArray(data.members) ? (
+                                    data.members.map(user => (
                                         <SuspensionMemberCard
                                             key={user.suspensionNo}
                                             user={user}
@@ -398,9 +412,10 @@ const SuspensionMemberListComponent = observer(() => {
                         </table>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                             {/* 페이지네이션 구현 (현재 페이지: {page}) */}
-                            <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
-                            <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button>
+                            {/* <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
+                            <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button> */}
                             {/* 페이지네이션 로직 추가 */}
+                            <Pagination pageCount={pageCount} onPageChange={handlePageChange} currentPage={currentPage} />
                         </div>
                     </div>
                 </div>
