@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Button from "../common/Button";
-import { updateFeed, formatDate, deleteFeedByFeedNum, postLike } from "@/api/feed/feed";
+import { updateFeed, formatDate, deleteFeedByFeedNum } from "@/api/feed/feed";
+import { postLike } from '@/api/likeHistory/likeHistory';
 import { useRouter } from 'next/router';
 
 const CustomEditor = dynamic(() => {
     return import('@/components/common/custom-editor');
 }, { ssr: false });
 
-let user = {
-    userId: "user01",
-    userProfileUrl: "#"
-}
+
 
 export default function FeedDetail({ data, user }) {
     const router = useRouter();
@@ -19,6 +17,8 @@ export default function FeedDetail({ data, user }) {
     const [editorData, setEditorData] = useState(data.feedContent);
     const [likeCount, setLikeCount] = useState(data.likeCount);
     const [loginUserIsLiked, setLoginUserIsLiked] = useState(data.loginUserIsLiked);
+
+    console.log(`로그인 유저 : ${user.userId}`);
 
 
     const modFormData = {
@@ -59,6 +59,8 @@ export default function FeedDetail({ data, user }) {
             if (response.status === 200) {
                 setLoginUserIsLiked(!loginUserIsLiked);
                 setLikeCount(loginUserIsLiked ? likeCount - 1 : likeCount + 1);
+            } else if(response.status === 403) {
+                alert("로그인 후 이용해주세요!");
             }
         } catch (err) {
             console.error("좋아요 처리 실패:", err);
