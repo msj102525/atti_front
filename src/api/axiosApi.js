@@ -22,6 +22,7 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+//토큰 갱신
 const refreshToken = async () => {
   try {
     const refreshToken = localStorage.getItem("refresh");
@@ -47,6 +48,7 @@ const refreshToken = async () => {
   }
 };
 
+//로그아웃
 const logout = async () => {
   const token = localStorage.getItem("token");
 
