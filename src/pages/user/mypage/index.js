@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import Head from 'next/head';
 import Header from '@/pages/common/header';
 import styles from '@/styles/user/mypage.module.css';
-import Modal from "@/components/common/Modal";
+import Modal2 from "@/components/common/Modal";
 import Footer from '@/pages/common/Footer';
 import { getUserData, updateUser, deleteUser } from '@/api/user/userApi';
 import { uploadProfilePhoto, deleteProfilePhoto } from '@/api/doctor/doctorUpdate';
@@ -15,6 +15,7 @@ const Mypage = observer(() => {
   const fileInput = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [redirectPath, setRedirectPath] = useState(null); // Add state for redirect path
   const router = useRouter();
 
   const serverImage = process.env.NEXT_PUBLIC_API_URL;
@@ -67,7 +68,7 @@ const Mypage = observer(() => {
       await updateUser(updatedUser);
       setModalMessage('수정 완료!');
       setIsModalOpen(true);
-      router.push('/'); // 수정 완료 시 메인 페이지로 이동
+      setRedirectPath('/'); 
     } catch (error) {
       console.error(error);
       setModalMessage('수정 실패!');
@@ -82,7 +83,7 @@ const Mypage = observer(() => {
         window.localStorage.clear();
         setModalMessage('탈퇴 완료!');
         setIsModalOpen(true);
-        router.push('/'); // 탈퇴 성공 시 메인 페이지로 이동
+        setRedirectPath('/'); 
       } catch (error) {
         console.error(error);
         setModalMessage('탈퇴 실패!');
@@ -93,6 +94,9 @@ const Mypage = observer(() => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    if (redirectPath) {
+      router.push(redirectPath); 
+    }
   };
 
   const handleFileChange = async (e) => {
@@ -216,7 +220,7 @@ const Mypage = observer(() => {
         </form>
       </div>
       <Footer />
-      <Modal isOpen={isModalOpen} onClose={closeModal} title="알림" content={modalMessage} />
+      <Modal2 isOpen={isModalOpen} onClose={closeModal} title="알림" content={modalMessage} />
     </div>
   );
 });

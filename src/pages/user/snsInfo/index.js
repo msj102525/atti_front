@@ -10,10 +10,10 @@ import unlinkKakaoAccount from '@/components/user/kakkaoDelet';
 import unlinkNaverAccount from '@/components/user/naverDelet';
 import { uploadProfilePhoto, deleteProfilePhoto } from '@/api/doctor/doctorUpdate';
 
-
 const SnsInfoUP = observer(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false); // Update success state
   const router = useRouter();
   const [profileUrl, setProfileUrl] = useState(null);
   const fileInput = useRef(null);
@@ -56,11 +56,12 @@ const SnsInfoUP = observer(() => {
       localStorage.setItem('email', authStore.email);
       setModalMessage('정보가 성공적으로 업데이트되었습니다.');
       setIsModalOpen(true);
-      router.push('/');
+      setIsUpdateSuccess(true); // Set success state to true
     } catch (error) {
       console.error(error);
       setModalMessage('정보 업데이트에 실패했습니다.');
       setIsModalOpen(true);
+      setIsUpdateSuccess(false); // Set success state to false
     }
   };
 
@@ -68,12 +69,9 @@ const SnsInfoUP = observer(() => {
     if (confirm('탈퇴 하시겠습니까?')) {
       let unlinkSuccess = false;
       if (authStore.loginType === 'kakao') {
-        console.log(authStore.loginType === 'kakao');
         unlinkSuccess = await unlinkKakaoAccount(authStore.userId);
       } else if (authStore.loginType === 'naver') {
-        console.log(authStore.loginType === 'naver');
-        unlinkSuccess = await unlinkNaverAccount(authStore.userId); 
-        console.log(unlinkNaverAccount,'26+4816849+');
+        unlinkSuccess = await unlinkNaverAccount(authStore.userId);
       }
 
       if (unlinkSuccess) {
@@ -82,20 +80,26 @@ const SnsInfoUP = observer(() => {
           window.localStorage.clear();
           setModalMessage('탈퇴 완료!');
           setIsModalOpen(true);
-          router.push('/'); // 탈퇴 성공 시 메인 페이지로 이동
+          setIsUpdateSuccess(true); // Set success state to true for cancel
         } catch (error) {
           console.error(error);
           setModalMessage('탈퇴 실패!');
           setIsModalOpen(true);
+          setIsUpdateSuccess(false); // Set success state to false
         }
       } else {
         setModalMessage(`${authStore.loginType === 'kakao' ? '카카오' : '네이버'} 연결 끊기 실패!`);
         setIsModalOpen(true);
+        setIsUpdateSuccess(false); // Set success state to false
       }
     }
   };
+
   const closeModal = () => {
     setIsModalOpen(false);
+    if (isUpdateSuccess) {
+      router.push('/'); // Redirect to main page if update or cancel was successful
+    }
   };
 
   const handleFileChange = async (e) => {
@@ -108,7 +112,7 @@ const SnsInfoUP = observer(() => {
         }
       };
       reader.readAsDataURL(file);
-  
+
       try {
         const userId = authStore.userId; // authStore에서 userId 가져오기
         const response = await uploadProfilePhoto(file, userId);
@@ -199,7 +203,7 @@ const SnsInfoUP = observer(() => {
           </div>
         </form>
       </div>
-      <Modal2 isOpen={isModalOpen} onClose={closeModal} title="알림" content={modalMessage} content1={setModalMessage} />
+      <Modal2 isOpen={isModalOpen} onClose={closeModal} title="알림" content={modalMessage} />
     </div>
   );
 });
