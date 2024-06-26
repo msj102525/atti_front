@@ -32,7 +32,7 @@ const FaqAdminVersionListComponent = observer(() => {
     const [searchType, setSearchType] = useState('id');
     const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
 
-    const searchField = searchType === 'id' ? 'faqWriter' : 'faqContent';
+    const searchField = searchType === 'id' ? 'faqTitle' : 'faqContent';
 
     const [pageCount, setPageCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
@@ -166,7 +166,7 @@ const FaqAdminVersionListComponent = observer(() => {
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
                             <button onClick={() => openModal()} style={{ marginRight: 'auto' }}>글쓰기</button>
                             <select value={searchType} onChange={handleSearchTypeChange}>
-                                <option value="id">아이디</option>
+                                <option value="id">제목</option>
                                 <option value="name">내용</option>
                             </select>
                             <input type="text" placeholder="검색..." value={searchInput} onChange={handleSearchChange} onKeyDown={handleKeyPress} />
