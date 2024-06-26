@@ -5,8 +5,8 @@ import { logoutNaver } from '@/api/user/user'; // 네이버 로그아웃 함수 
 const NaverUnlink = () => {
   const handleUnlink = async () => {
     const accessToken = localStorage.getItem('token'); // 로컬 스토리지에서 액세스 토큰을 가져옴
-    const clientId = process.env.NEXT_PUBLIC_API_NAVER_CLIENT_ID; // 환경 변수에서 네이버 클라이언트 ID를 가져옴
-    const clientSecret = process.env.NEXT_PUBLIC_API_NAVER_CLIENT_SECRET; // 환경 변수에서 네이버 클라이언트 시크릿을 가져옴
+    const clientId = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID; // 환경 변수에서 네이버 클라이언트 ID를 가져옴
+    const clientSecret = process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET; // 환경 변수에서 네이버 클라이언트 시크릿을 가져옴
 
     if (!accessToken) {
       console.error('No access token found'); // 액세스 토큰이 없을 경우 오류 로그 출력
@@ -20,7 +20,6 @@ const NaverUnlink = () => {
       params.append('client_id', clientId);
       params.append('client_secret', clientSecret);
       params.append('access_token', accessToken);
-      params.append('service_provider', 'NAVER');
 
       const response = await axios.post(
         'https://nid.naver.com/oauth2.0/token',
@@ -47,7 +46,7 @@ const NaverUnlink = () => {
 
   return (
     <div>
-      <button onClick={handleUnlink}>네이버 계정 연결 끊기</button> {/* 버튼 클릭 시 handleUnlink 함수 호출 */}
+      <button onClick={handleUnlink}>네이버 계정 연결 끊기</button>
     </div>
   );
 };
