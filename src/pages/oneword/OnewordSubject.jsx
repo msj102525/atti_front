@@ -20,6 +20,7 @@ const OnewordSubjectComponent = observer(() => {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const queryClient = useQueryClient();
     const [isAdmin, setIsAdmin] = React.useState(false);
+    const [userId, setUserId] = React.useState("");
 
     const { data, isLoading } = useQuery(['onewordSubjectList', { keyword, page, size }], () => getOnewordSubjectList({
         keyword: keyword,
@@ -62,6 +63,7 @@ const OnewordSubjectComponent = observer(() => {
 
     useEffect(() => {
         setIsAdmin(localStorage.getItem("isAdmin") === "true");
+        setUserId(localStorage.getItem("userId"));
     }, [])
 
     const handleSearchChange = (e) => setSearchInput(e.target.value);
@@ -126,6 +128,9 @@ const OnewordSubjectComponent = observer(() => {
     if (isLoading) return <div>Loading...</div>;
     if (!data) return <div>No data</div>;
 
+    console.log("admin 유무 : " + isAdmin);
+    console.log("userId : " + userId);
+
     const totalPages = Math.ceil(getCount / size); /// 전체 페이지 수
 
     return (
@@ -140,21 +145,33 @@ const OnewordSubjectComponent = observer(() => {
                         <h2 className={styles.centeredText}>오늘 한 줄 주제 등록(Admin ver.)</h2>
 
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", textAlign: "left" }}>
+                            {/* 오른쪽에 제목 입력 필드와 검색 버튼을 포함하는 영역 */}
                             <div style={{ display: "flex", alignItems: "center" }}>
                                 <input
                                     type="text"
                                     placeholder="제목"
-                                    className="border border-black rounded py-2 px-4 mr-5" // 여기서 mr-2 클래스를 추가하여 오른쪽으로 2칸 띄웁니다.
+                                    className="border border-black rounded py-2 px-4 mr-2" // 여기서 mr-2 클래스를 추가하여 오른쪽으로 2칸 띄웁니다.
                                     value={searchInput}
                                     onChange={handleSearchChange}
                                     onKeyDown={handleKeyPress}
                                 />
                                 <button onClick={executeSearch}>검색</button>
-                                <div>
-                                    <button className={styles.mkbutton} onClick={openModal}>글쓰기</button>
-                                </div>
                             </div>
+
+                            {/* 좌측에 글쓰기 버튼 */}
+                            {isAdmin && (
+                                <div>
+                                    <button className={styles.mkbutton} style={{ marginRight: "10px" }} onClick={openModal}>글쓰기</button>
+                                </div>)
+                            }
+                            {/* {isAdmin && (
+                            <div>
+                                <button onClick={openModal}>글쓰기</button>
+                            </div>
+                            )} */
+                            }
                         </div>
+
                     </div>
 
                     <table className={styles.table}>
@@ -162,8 +179,8 @@ const OnewordSubjectComponent = observer(() => {
                             <tr>
                                 <th style={{ width: "5vw", textAlign: "center" }}>번호</th>
                                 <th style={{ width: "30vw", textAlign: "center" }}>제목</th>
-                                <th style={{ width: "10vw", textAlign: "center" }}>작성자</th>
-                                <th style={{ width: "7vw", textAlign: "center" }}>작성일</th>
+                                <th style={{ width: "5vw", textAlign: "center" }}>작성자</th>
+                                <th style={{ width: "5vw", textAlign: "center" }}>작성일</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -177,13 +194,8 @@ const OnewordSubjectComponent = observer(() => {
                             ))}
                         </tbody>
                     </table>
-                    {/* {isAdmin && (
-                            <div>
-                                <button onClick={openModal}>글쓰기</button>
-                            </div>
-                        )} */
-                    }
                     <OnewordSubjectWriteModalComponent isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
+
                     <DetailPostModal
                         isOpen={isDetailModalOpen}
                         onClose={closeDetailModal}

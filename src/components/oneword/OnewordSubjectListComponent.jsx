@@ -24,16 +24,12 @@ const OnewordSubjectListComponent = observer(({ onewordsubject, onOnewordSubject
 
     return (
         <tr onClick={onOnewordSubjectClick}>
-            <td style={{ width: "8vw", textAlign: "center" }}>{onewordsubject.owsjNum}</td>
-            <td style={{ width: "30vw", textAlign: "center" }}>
+            <td style={{ width: "5vw", textAlign: "center" }}>{onewordsubject.owsjNum}</td>
+            <td style={{ width: "30vw", textAlign: "left" }}>
                 <span className={styles.truncatedText}>{onewordsubject.owsjSubject}</span>
             </td>
-            <td style={{ width: "8vw", textAlign: "center" }}>{onewordsubject.owsjWriter}</td>
-            <td style={{ width: "8vw", textAlign: "center" }}>{formattedDate}</td>
-
-            {/* <td style={{ width: "20vw", textAlign: "center" }}>
-                <button className={styles.button} onClick={() => handleDelete(user.owsjNum)}>삭제</button>
-            </td> */}
+            <td style={{ width: "5vw", textAlign: "center" }}>{onewordsubject.owsjWriter}</td>
+            <td style={{ width: "5vw", textAlign: "center" }}>{formattedDate}</td>
         </tr>
     );
 
