@@ -38,6 +38,7 @@ const Sidebar = () => {
                             <li onClick={() => handleNavigation('/admin/faqAdminVersion')}>FAQ</li>
                             <li onClick={() => handleNavigation('/admin/inquiryAdminVersion')}>문의하기</li>
                             <li onClick={() => handleNavigation('/admin/onewordAdminVersion')}>오늘 한 줄</li>
+                            <li onClick={() => handleNavigation('/oneword/OnewordSubject')}>오늘 한 줄 주제</li>
                         </ul>
                         <li onClick={() => toggleMenu('pay')}>
                             <span>결제관리</span>
