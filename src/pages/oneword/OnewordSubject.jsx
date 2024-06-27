@@ -194,16 +194,16 @@ const OnewordSubjectComponent = observer(() => {
                             ))}
                         </tbody>
                     </table>
+                    {/* 글쓰기 */}
                     <OnewordSubjectWriteModalComponent isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
-
-                    <DetailPostModal
-                        isOpen={isDetailModalOpen}
-                        onClose={closeDetailModal}
-                        post={selectedOnewordSubject}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                        isAdmin={isAdmin}
-                    />
+                    {/* 글 수정, 삭제(userId가 존재하지 않을 경우 비활성화 처리) */}
+                    {userId && (
+                        <DetailPostModal isOpen={isDetailModalOpen} onClose={closeDetailModal}
+                            post={selectedOnewordSubject}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            isAdmin={isAdmin}
+                        />)}
                     <div>
                         <Pagination pageCount={totalPages} onPageChange={handlePageChange} page={page} />
                     </div>
@@ -213,8 +213,6 @@ const OnewordSubjectComponent = observer(() => {
             </div>
         </div>
     );
-
-
 
 
 });
