@@ -6,9 +6,7 @@
     max-width: 800px; /* 수정: max-width를 800px로 변경 */
     padding: 0 20px;
     margin: 0 auto; /* 가운데 정렬을 위해 추가 */
-  
     background-color: #f7f7f7;
-  
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -19,7 +17,6 @@
     background-color: #def3d6;
     padding: 1rem; /* 패딩 추가 */
     border-radius: 8px; /* 모서리 둥글게 */
-
     min-height: calc(100% - 60px);
   }
   
@@ -96,9 +93,7 @@
     margin-right: 0;
   }
   
-  /* Content adjustments to accommodate sidebar */
   .content {
-    /* margin-left: 220px; Add space to the left for the sidebar */
     padding: 20px 0 20px 0;
     width: calc(100% - 220px); /* 사이드바를 고려한 너비 */
   }

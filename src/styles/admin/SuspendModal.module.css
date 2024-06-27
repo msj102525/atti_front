@@ -44,7 +44,6 @@
     justify-content: space-between;
 }
 
-/* ******select 부분******* */
 .select {
     width: 100%;
     padding: 8px;
@@ -53,10 +52,6 @@
     background-color: #c9cfda;
     text-align: center; /* Ensure text within the select is centered */
 }
-
-
-
-/* ****************** */
 
 .actions button {
     padding: 8px 20px;

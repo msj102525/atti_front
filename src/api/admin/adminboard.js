@@ -6,9 +6,7 @@ import axios from '@/api/axiosApi';
 
 export const getCommunityAdminVersionList = ({ searchField , searchInput, page, size }) => {
     // 쿼리 파라미터를 사용하여 URL 생성
-    // if (!searchField) {
-    //     searchField = 'userId';
-    // }
+    
     const params = new URLSearchParams({
             searchField,
             searchInput,
@@ -35,9 +33,7 @@ export const deleteCommunityAdminVersion = async (feedNum) => {
 
 export const getNoticeAdminVersionList = ({ searchField , searchInput, page, size }) => {
     // 쿼리 파라미터를 사용하여 URL 생성
-    // if (!searchField) {
-    //     searchField = 'userId';
-    // }
+    
     const params = new URLSearchParams({
             searchField,
             searchInput,
@@ -65,9 +61,7 @@ export const deleteNoticeAdminVersion = async (boardNum) => {
 
 export const getFaqAdminVersionList = ({ searchField , searchInput, page, size }) => {
     // 쿼리 파라미터를 사용하여 URL 생성
-    // if (!searchField) {
-    //     searchField = 'userId';
-    // }
+    
     const params = new URLSearchParams({
             searchField,
             searchInput,
@@ -96,9 +90,7 @@ export const deleteFaqAdminVersion = async (faqNum) => {
 
 export const getInquiryAdminVersionList = ({ searchField , searchInput, page, size }) => {
     // 쿼리 파라미터를 사용하여 URL 생성
-    // if (!searchField) {
-    //     searchField = 'userId';
-    // }
+   
     const params = new URLSearchParams({
             searchField,
             searchInput,
@@ -131,9 +123,7 @@ export const deleteInquiryAdminVersion = async (inquiryNo) => {
 
 export const getOnewordAdminVersionList = ({ searchField , searchInput, page, size }) => {
     // 쿼리 파라미터를 사용하여 URL 생성
-    // if (!searchField) {
-    //     searchField = 'userId';
-    // }
+    
     const params = new URLSearchParams({
             searchField,
             searchInput,

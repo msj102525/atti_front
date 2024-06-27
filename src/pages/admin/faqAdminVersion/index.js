@@ -23,12 +23,9 @@ const FaqAdminVersionListComponent = observer(() => {
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(10);
     const queryClient = useQueryClient();
-    const [isAdmin, setIsAdmin] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [currentFAQ, setCurrentFAQ] = useState({});
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
     const [searchType, setSearchType] = useState('id');
     const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
 
@@ -208,8 +205,6 @@ const FaqAdminVersionListComponent = observer(() => {
                             </tbody>
                         </table>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-                            {/* <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
-                            <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button> */}
                             <Pagination pageCount={pageCount} onPageChange={handlePageChange} currentPage={currentPage} />
                         </div>
                     </div>

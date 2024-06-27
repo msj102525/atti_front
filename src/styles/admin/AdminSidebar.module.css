@@ -2,35 +2,21 @@
     width: 200px;
     background-color: #d8fab8;
     padding: 20px;
-    /* position: fixed; */
-    /* top: 0; */
-    /* top: 120px; 헤더의 높이에 맞게 조정 (예시로 60px 설정) 이 높이는 헤더 선하고 딱 맞음 */
-    /* top: 170px; 헤더의 높이에 맞게 조정 (예시로 60px 설정) */
-    /* left: 0; */
-    /* height: 100%; */
-    /* height: calc(100% - 60px);  */
     overflow: auto;
     font-family: Arial, sans-serif;
     font-size: 14px;
     z-index: 1;/* 추가한 부분 */
-
     max-height: 77%; /* 최대 높이 설정 */
-
     border-radius: 8px;
-
     text-align: center; /* 모든 텍스트를 가운데 정렬 */
     margin-top: 2rem;
     min-height: calc(100% - 60px);
-
-    
-    
 }
 
 .menu {
     display: flex;
     flex-direction: column;
-    height: calc(100% - 50px); /*Adjust height to account for title */
-    /*height: 100%;*/
+    height: calc(100% - 50px); 
     padding-top: 10px;
 }
 
@@ -53,10 +39,7 @@
     justify-content: space-between;
     align-items: center;
     font-size: 15px;
-
     transition: background-color 0.3s ease; /*메뉴 항목에 애니메이션 추가 */
-
-    
 }
 
 .menu ul li:hover {
@@ -65,7 +48,6 @@
 
 .menu ul ul {
     padding-left: 15px;
-
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.5s ease; /* 서브메뉴 열리고 닫힐 때 애니메이션 */
@@ -81,9 +63,7 @@
     color: #0f8f0b;
 }
 
-/* Content adjustments to accommodate sidebar */
 .content {
     margin-left: 220px; /* Add space to the left for the sidebar */
     padding: 20px;
-
 }

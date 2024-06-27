@@ -16,27 +16,16 @@ const queryClient = new QueryClient();
 
 
 const CommunityAdminVersionListComponent = observer(() => {
-    //const [searchField, setSearchField] = useState("id"); // 검색 필드 상태
+    
     const [searchInput, setSearchInput] = useState(""); // 검색 입력 상태
     const [page, setPage] = useState(1); // 현재 페이지 상태
     const [size, setSize] = useState(10); // 페이지 크기 상태
     const queryClient = useQueryClient(); // React Query 클라이언트
-    const [isAdmin, setIsAdmin] = useState(false); // 관리자 여부 상태
-
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
-    const [selectedUser, setSelectedUser] = useState(null); // 선택된 회원 정보
-
-    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false); // 정지 모달 열림 상태
-
     const [searchType, setSearchType] = useState('id'); // 'id' 또는 'name' 값을 가질 수 있는 상태
-
     const [searchParams, setSearchParams] = useState({ searchField: '', searchInput: '' });
-
     const searchField = searchType === 'id' ? 'userId' : 'feedContent';
-
     const [pageCount, setPageCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
-
 
 
     const { data, isLoading, error, refetch } = useQuery(
@@ -54,8 +43,6 @@ const CommunityAdminVersionListComponent = observer(() => {
     useEffect(() => {
         refetch();
     }, [page, size, refetch]);
-
-
 
 
     // 회원 삭제 뮤테이션
@@ -88,9 +75,7 @@ const CommunityAdminVersionListComponent = observer(() => {
         }
     };
 
-    // 페이지 크기 변경 핸들러
-    //const handleSizeChange = (event) => setSize(event.target.value);
-
+    
     // 검색 필드 변경 핸들러
     const handleSearchTypeChange = (event) => {
         setSearchType(event.target.value);
@@ -99,31 +84,13 @@ const CommunityAdminVersionListComponent = observer(() => {
     // 검색 입력 변경 핸들러
     const handleSearchChange = (event) => setSearchInput(event.target.value);
 
-
-    // 관리자 여부 설정
-    //useEffect(() => {
-    //setIsAdmin(localStorage.getItem("isAdmin") === "true");
-    //}, []);
-
-
-
     // 회원 삭제 핸들러
     const handleDelete = (feedNum) => {
         console.log(`Delete member with ID: ${feedNum}`);
         deleteCommunityAdminVersionMutation.mutate(feedNum);
     };
 
-    //수정모달 작업중 ***************************
-
-    const openEditModal = (userData) => {
-        setSelectedUser(userData); // 선택된 회원 정보 설정
-        setIsModalOpen(true); // 모달 열기
-    };
-
-    const closeEditModal = () => {
-        setIsModalOpen(false); // 모달 닫기
-    };
-
+    
     const handlePageChange = (selectedPage) => {
         setPage(selectedPage.selected + 1);
         setCurrentPage(selectedPage.selected);
@@ -131,9 +98,7 @@ const CommunityAdminVersionListComponent = observer(() => {
 
 
     if (isLoading) return <div>Loading...</div>; // 로딩 중일 때 표시
-    //밑에 한 줄 추가
     if (error) return <div>Error loading data: {error.message}</div>;
-    //if (!data) return <div>No data</div>; // 데이터가 없을 때 표시
 
 
     return (
@@ -162,15 +127,6 @@ const CommunityAdminVersionListComponent = observer(() => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* {data.map(user => (
-                    
-                        <CommunityAdminVersionBoardCard
-                        key={user.feeedNum} // feedNum을 key로 사용
-                        user={user} 
-                        handleDelete={handleDelete}
-                        />
-                    ))} */}
-
                                 {data && Array.isArray(data.members) ? (
                                     data.members.map(user => (
                                         <CommunityAdminVersionBoardCard
@@ -187,8 +143,6 @@ const CommunityAdminVersionListComponent = observer(() => {
                             </tbody>
                         </table>
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-                            {/* <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>이전</button>
-                            <button onClick={() => setPage(prev => prev + 1)} disabled={data.length < size}>다음</button> */}
                             <Pagination pageCount={pageCount} onPageChange={handlePageChange} currentPage={currentPage} />
                         </div>
                     </div>

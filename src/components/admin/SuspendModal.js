@@ -37,22 +37,8 @@ const SuspendModal = ({ isOpen, onClose, user }) => {
       }
     } finally {
       setLoading(false);
-      //onClose(); // 모달 닫기
     }
-    // try {
-    //   await suspendMember({
-    //     userId: user.userId,
-    //     suspensionTitle: suspensionTitle,
-    //     suspensionContent: suspensionContent,
-    //   });
-    //   window.location.reload(); // 페이지 새로고침
-    // } catch (error) {
-    //   console.error('Error suspending member:', error);
-    // } finally {
-    //   setLoading(false);
-    //   //추가한 부분 onClose();
-    //   //onClose();
-    // }
+    
   };
 
   return (

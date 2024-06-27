@@ -25,29 +25,6 @@ const MemberCard = observer(({ user, handleEdit, handleSuspend, handleDelete }) 
     const openSuspendModal = () => setIsSuspendModalOpen(true);
     const closeSuspendModal = () => setIsSuspendModalOpen(false);
 
-    // 회원 정보 업데이트 처리 함수
-    // const handleUpdate = async() => {
-    //     // 업데이트 로직 구현
-    //     // onUpdate 함수 호출
-    //     if (!user) return;
-
-    //     try {
-    //         // 선택된 회원 정보 업데이트 요청
-    //         await updateMember(user.userId, {
-    //             name: user.userName,
-    //             nickname: user.nickName,
-    //             email: user.email
-    //         });
-    //         queryClient.invalidateQueries('memberList');
-    //         closeEditModal(); // 모달 닫기
-    //         onUpdate(); // 상태 업데이트
-    //     } catch (error) {
-    //         console.error("Error updating member:", error);
-    //     }
-    //     console.log(`Edit member with ID: ${user.userId}`);
-    //     // 수정 로직 처리
-    // };
-
 
     return (
         <tr>

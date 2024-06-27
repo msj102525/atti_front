@@ -3,27 +3,8 @@ import styles from '@/styles/admin/EditModal.module.css'; // 모달 스타일 �
 import { updateMember } from '@/api/admin/memberList'; // 회원 정보 수정 API 함수
  
 const EditModal = ({ isOpen, onClose, user, onUpdate }) => {
-//   const [name, setName] = useState(user.userName); // 이름 입력 상태
-//   const [nickname, setNickname] = useState(user.nickName); // 닉네임 입력 상태
-//   const [email, setEmail] = useState(user.email); // 이메일 입력 상태
-//   const [loading, setLoading] = useState(false); // 데이터 업데이트 중인지 여부
 
-    // userData 객체에서 필요한 속성 추출
-    // const { userName, nickName, email: userEmail } = userData || {}; // userData가 undefined인 경우를 대비하여 기본값 설정
-
-    // const [name, setName] = useState(userName || ''); // 이름 입력 상태
-    // const [nickname, setNickname] = useState(nickName || ''); // 닉네임 입력 상태
-    // const [email, setEmail] = useState(userEmail || ''); // 이메일 입력 상태
-    // const [loading, setLoading] = useState(false); // 데이터 업데이트 중인지 여부
-
-    
     const { userId, userName, nickName, email } = user || {}; // user가 undefined인 경우를 대비하여 기본값 설정
-
-    // 상태 초기화 및 업데이트 함수
-    // const [name, setName] = useState(userName || ''); // 이름 입력 상태
-    // const [nickname, setNickname] = useState(nickName || ''); // 닉네임 입력 상태
-    // const [userEmail, setUserEmail] = useState(email || ''); // 이메일 입력 상태
-    // const [loading, setLoading] = useState(false); // 데이터 업데이트 중인지 여부
 
     // 상태 초기화 및 업데이트 함수
     const [name, setName] = useState('');
@@ -58,8 +39,6 @@ const EditModal = ({ isOpen, onClose, user, onUpdate }) => {
       });
       // 부모 컴포넌트에 업데이트 완료를 알림
       window.location.reload(); // 페이지 새로고침
-    //   onUpdate();
-    //   onClose(); // 모달 닫기
     } catch (error) {
       console.error('Error updating member:', error);
     } finally {
@@ -71,20 +50,6 @@ const EditModal = ({ isOpen, onClose, user, onUpdate }) => {
   const handleCloseModal = () => {
     onClose(); // 모달 닫기
   };
-
-  // *********추가 : 업데이트됬는데 안 닫힘 ********** 
-//   useEffect(() => {
-//     // 모달이 열릴 때마다 입력값 초기화
-//     if (isOpen && user) {
-//       setName(user.userName || '');
-//       setNickname(user.nickName || '');
-//       setUserEmail(user.email || '');
-//     }
-//   }, [isOpen, user]);
-
-  
-
-// ****************************************
 
   return (
     <>

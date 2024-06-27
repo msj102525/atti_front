@@ -6,25 +6,8 @@ import { useRouter } from "next/router";
  
 const NoticeAdminVersionBoardCard = observer(({ user, handleDelete }) => {
     
-    
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
-    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false); // 정지 모달 상태
     const router = useRouter();
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
-    const handleSubmit = (postData) => openEditModal(postData);
-    const openEditModal = (userData) => {
-        setIsModalOpen(true); // 모달 열기
-    };
-    // 수정 모달 닫기
-    const closeEditModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const openSuspendModal = () => setIsSuspendModalOpen(true);
-    const closeSuspendModal = () => setIsSuspendModalOpen(false);
-    
     const handleRowClick = (boardNum) => {
         router.push(`/board/boardDetail?boardNum=${boardNum}`);
       };
