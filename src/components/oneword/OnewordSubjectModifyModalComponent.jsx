@@ -119,14 +119,17 @@ const DetailPostModal = ({ isOpen, onClose, post, onEdit, onDelete, isAdmin }) =
                         )}
                         {/* <button onClick={onClose} className="btn btn-primary">닫기</button> */}
                         <button onClick={onClose} style={{
-                            backgroundColor: '#3b82f6',
-                            hoverBackgroundColor: '#2563eb',
-                            color: '#ffffff',
+                            backgroundColor: '#4b5563',
+                            color: '#fff',
                             fontWeight: 'bold',
                             padding: '0.5rem 1rem',
                             borderRadius: '0.25rem',
                             cursor: 'pointer',
-                        }}>
+                            transition: 'background-color 0.3s ease', // 배경색 변화 부드럽게
+                            }}
+                            onMouseOver={(e) => e.target.style.backgroundColor = '#1f2937'} // 호버시 배경색 더 진한 빨간색
+                            onMouseOut={(e) => e.target.style.backgroundColor = '#4b5563'} // 마우스 아웃시 다시 원래 배경색으로
+                        >
                             닫기
                         </button>
                     </div>

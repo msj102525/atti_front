@@ -7,7 +7,7 @@ import OnewordSubjectWriteModalComponent from "../../components/oneword/OnewordS
 import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
 import { handleAxiosError } from "../../api/errorAxiosHandle";
 import { getOnewordSubjectList, getOnewordSubjectListCount, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject } from "../../api/oneword/OnewordSubject";
-import DetailPostModal from "../../components/oneword/DetailPostModal";
+import DetailPostModal from "../../components/oneword/OnewordSubjectModifyModalComponent";
 
 const OnewordSubjectComponent = observer(() => {
     const [keyword, setKeyword] = React.useState("");

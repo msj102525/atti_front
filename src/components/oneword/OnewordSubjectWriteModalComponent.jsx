@@ -68,7 +68,7 @@ const OnewordSubjectWriteModalComponent = ({ isOpen, onClose, onSubmit }) => {
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '10px' }}>
 
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '4px' }}>
-                        <button
+                        {/* <button
                             style={{
                                 backgroundColor: '#28A745',
                                 color: 'white',
@@ -82,8 +82,28 @@ const OnewordSubjectWriteModalComponent = ({ isOpen, onClose, onSubmit }) => {
                             onClick={handleSubmit}
                         >
                             등록
-                        </button>
+                        </button> */}
+
                         <button
+                            onClick={handleSubmit}
+                            style={{
+                                backgroundColor: '#3b82f6',
+                                color: '#fff',
+                                fontWeight: 'bold',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '0.25rem',
+                                marginRight: '0.5rem',
+                                cursor: 'pointer', // 마우스 포인터를 변경하여 버튼이 클릭 가능함을 나타냄
+                                transition: 'background-color 0.3s ease', // 배경색 변화 부드럽게
+                                flex: '1' // Expand button to fill container width
+                            }}
+                            onMouseOver={(e) => e.target.style.backgroundColor = '#1d4ed8'}
+                            onMouseOut={(e) => e.target.style.backgroundColor = '#3b82f6'}
+                        >
+                            등록
+                        </button>
+
+                        {/* <button
                             style={{
                                 backgroundColor: '#6B7280',
                                 color: 'white',
@@ -95,6 +115,25 @@ const OnewordSubjectWriteModalComponent = ({ isOpen, onClose, onSubmit }) => {
                                 flex: '1' // Expand button to fill container width
                             }}
                             onClick={onClose}
+                        >
+                            닫기
+                        </button> */}
+
+                        <button
+                            onClick={onClose}
+                            style={{
+                                backgroundColor: '#4b5563',
+                                color: '#fff',
+                                fontWeight: 'bold',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '0.25rem',
+                                marginRight: '0.5rem',
+                                cursor: 'pointer',
+                                transition: 'background-color 0.3s ease', // 배경색 변화 부드럽게
+                                flex: '1' // Expand button to fill container width
+                            }}
+                            onMouseOver={(e) => e.target.style.backgroundColor = '#1f2937'}
+                            onMouseOut={(e) => e.target.style.backgroundColor = '#4b5563'}
                         >
                             닫기
                         </button>
