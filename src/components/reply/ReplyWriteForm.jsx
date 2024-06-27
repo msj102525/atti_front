@@ -32,9 +32,9 @@ export default function ReplyWriteForm({ data, fetchData, user }) {
             console.error("댓글 등록 실패:", err);
         }
     }
-
+    console.log(user);
     return (
-        <div className="max-w-screen-lg p-4 mx-auto">
+        <div className={`max-w-screen-lg p-4 mx-auto ${user.userId == "" ? "hidden" : ""}`}>
             <div className=" flex gap-4 p-2 justify-between text-gray-400">
                 <div className=" flex items-center gap-2 ">
                     <div className="border w-10 h-10 rounded-full overflow-hidden">

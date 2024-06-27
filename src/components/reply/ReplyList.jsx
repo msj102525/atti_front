@@ -10,12 +10,8 @@ const CustomEditorReply = dynamic(() => {
     return import('@/components/common/custom-editorReply');
 }, { ssr: false });
 
-const user = {
-    userId: "user01",
-    userProfile: "#"
-}
 
-export default function ReplyList({ data, fetchData }) {
+export default function ReplyList({ data, fetchData, user }) {
     const [replyList, setReplyList] = useState([]);
     const [showReplyForm, setShowReplyForm] = useState(false);
     const [feedNumReplyNum, setFeedNumReplyNum] = useState(null);
@@ -24,10 +20,6 @@ export default function ReplyList({ data, fetchData }) {
     const [editorDataReply, setEditorDataReply] = useState("");
     const [key, setKey] = useState(0);
 
-    useEffect(()=> {
-        const userId = localStorage.getItem("userId");
-        console.log(userId);
-    },[])
 
     useEffect(() => {
         const fetchReplyList = async () => {
@@ -43,18 +35,21 @@ export default function ReplyList({ data, fetchData }) {
     }, [data]);
 
     const handleToggleReplyForm = (parentReply) => {
+        if (!user.userId) {
+            console.log("로그인 X");
+            return;
+        }
         if (selectedReply && selectedReply.feedNum === parentReply.feedNum && selectedReply.replyNum === parentReply.replyNum) {
-            setShowReplyForm(false); 
+            setShowReplyForm(false);
             setSelectedReply(null);
         } else {
             setFeedNumReplyNum(parentReply);
-            setShowReplyForm(true); 
+            setShowReplyForm(true);
             setSelectedReply(parentReply);
-            console.log("클릭된 댓글 정보:", parentReply);
         }
     }
 
-    
+
     const submitReply = async () => {
         const replyForm = {
             feedNum: feedNumReplyNum.feedNum,
@@ -83,7 +78,7 @@ export default function ReplyList({ data, fetchData }) {
                         {replyList.map((reply, idx) => (
                             <div key={idx} className="mb-4">
                                 <div
-                                    className={`cursor-pointer border-[#001219] flex flex-col border w-full p-4 rounded-[40px] ${reply.replyUserType === "D" ? "bg-customBrown2" : ""}`}
+                                    className={`${user.userId == "" ? "" : "cursor-pointer"} border-[#001219] flex flex-col border w-full p-4 rounded-[40px] ${reply.replyUserType === "D" ? "bg-customBrown2" : ""}`}
                                     onClick={() => handleToggleReplyForm({ feedNum: reply.feedNum, replyNum: reply.replyNum })}
                                 >
                                     <div className="flex gap-2 text-m items-center text-gray-500 pb-2 w-full">
@@ -123,7 +118,7 @@ export default function ReplyList({ data, fetchData }) {
                                         <div className="border flex gap-4 p-2 justify-between text-gray-400">
                                             <div className=" flex items-center gap-2 ">
                                                 <div className=" w-10 h-10 rounded-full overflow-hidden">
-                                                    <img className="block w-full" src={"#"} alt="userImg" />
+                                                    <img className="block w-full" src={`${user.userProfileUrl}`} alt="userImg" />
                                                 </div>
                                                 <p>{user.userId}</p>
                                             </div>
