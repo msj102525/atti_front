@@ -9,7 +9,7 @@ export default function Navigation() {
   const links = [
     { href: "/feed", label: "커뮤니티" },
     { href: "/doctor", label: "전문가 찾기" },
-    { href: "/oneword/OnewordSubject", label: "오늘 한 줄" },
+    { href: "/oneword", label: "오늘 한 줄" },
     { href: "/ai", label: "AI 서비스" },
     { href: "/board/boardList", label: "공지사항" },
     { href: "/faq/faq", label: "FAQ" },
