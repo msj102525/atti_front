@@ -50,17 +50,22 @@ const OnewordSubjectWriteModalComponent = ({ isOpen, onClose, onSubmit }) => {
                 borderRadius: '10px',
                 display: 'flex',
                 flexDirection: 'column',
+                alignItems: 'center', // Center items horizontally
             }}>
                 <textarea
-                    rows="5"
+                    rows="10"
+                    cols="30"
                     placeholder="주제를 입력하세요..."
                     value={owsjSubject}
                     onChange={(e) => setOwsjSubject(e.target.value)}
+                    style={{ borderColor: 'gray', borderWidth: '2px', borderStyle: 'solid' }}
                 />
-                {errorMessage && (
-                    <p style={{ color: 'red', marginTop: '5px' }}>{errorMessage}</p>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '4px' }}>
+                <div>
+                    {errorMessage && (
+                        <p style={{ color: 'red', marginTop: '5px' }}>{errorMessage}</p>
+                    )}
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '10px' }}>
 
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '4px' }}>
                         <button
@@ -71,7 +76,8 @@ const OnewordSubjectWriteModalComponent = ({ isOpen, onClose, onSubmit }) => {
                                 padding: '8px',
                                 borderRadius: '4px',
                                 cursor: 'pointer',
-                                marginRight: '8px'
+                                marginRight: '8px',
+                                flex: '1' // Expand button to fill container width
                             }}
                             onClick={handleSubmit}
                         >
@@ -85,7 +91,8 @@ const OnewordSubjectWriteModalComponent = ({ isOpen, onClose, onSubmit }) => {
                                 padding: '8px',
                                 borderRadius: '4px',
                                 cursor: 'pointer',
-                                marginRight: '8px'
+                                marginRight: '8px',
+                                flex: '1' // Expand button to fill container width
                             }}
                             onClick={onClose}
                         >

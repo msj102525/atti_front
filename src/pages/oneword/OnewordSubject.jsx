@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import OnewordSubjectListComponent from "@/components/oneword/OnewordSubjectListComponent";
-import OnewordSubjectWriteModalComponent from "@/components/oneword/OnewordSubjectWriteModalComponent";
 import { handleAxiosError } from "@/api/errorAxiosHandle";
 import { getOnewordSubjectList, getOnewordSubjectListCount, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject } from "@/api/oneword/OnewordSubject";
-import DetailPostModal from "@/components/oneword/DetailPostModal";
+import OnewordSubjectListComponent from "@/components/oneword/OnewordSubjectListComponent";
+import OnewordSubjectWriteModalComponent from "@/components/oneword/OnewordSubjectWriteModalComponent";
+import OnewordSubjectModify from "@/components/oneword/OnewordSubjectModifyModalComponent";
 import Header from "@/pages/common/Header";
 import Footer from "@/pages/common/Footer";
 import AdminSidebar from "@/components/admin/AdminSidebar"
@@ -199,7 +199,7 @@ const OnewordSubjectComponent = observer(() => {
                         <OnewordSubjectWriteModalComponent isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
                         {/* 글 수정, 삭제(userId가 존재하지 않을 경우 비활성화 처리) */}
                         {userId && (
-                            <DetailPostModal isOpen={isDetailModalOpen} onClose={closeDetailModal}
+                            <OnewordSubjectModify isOpen={isDetailModalOpen} onClose={closeDetailModal}
                                 post={selectedOnewordSubject}
                                 onEdit={handleEdit}
                                 onDelete={handleDelete}
