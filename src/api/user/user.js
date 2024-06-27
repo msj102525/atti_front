@@ -20,7 +20,7 @@ export const login = (loginData) => {
         const pureToken = token.split(" ")[1];
         window.localStorage.setItem("token", pureToken);
         window.localStorage.setItem("isAdmin", response.data.isAdmin);
-        window.localStorage.setItem("refresh", response.data.refresh);
+        window.localStorage.setItem("refreshToken", response.data.refreshToken);
         window.localStorage.setItem("userId", response.data.userId);
         window.localStorage.setItem("userName", decodeURIComponent(response.data.userName));
         window.localStorage.setItem("nickName", response.data.nickName);

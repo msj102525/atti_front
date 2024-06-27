@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-const Modalsns = ({ isOpen, onClose, title, content, onConfirm = () => {} }) => {
+const Modalsns = ({ isOpen, onClose, title, content, content2 ,onConfirm = () => {} }) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
@@ -13,9 +13,12 @@ const Modalsns = ({ isOpen, onClose, title, content, onConfirm = () => {} }) => 
         >
           &times;
         </button>
-        <h2 className="mb-4 text-xl font-semibold">{title}</h2>
-        <div className="mb-4">
+        <h2 className="mb-4 text-xl font-semibold">
+          {title}
+        </h2>
+        <div className="mb-6 text-center text-gray-600">
           <p>{content}</p>
+          <p>{content2}</p>
         </div>
         <div className="flex justify-end space-x-4">
           <button

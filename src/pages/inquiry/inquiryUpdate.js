@@ -81,7 +81,7 @@ const InquiryUpdate = () => {
                         <br />
                         <div className={styles.btnGroup}>
                             <button type="submit" className={styles.mv}>수정하기</button>
-                            <button type="button" onClick={() => router.push(`/inquiry/inquiryDetail/${inquiryNo}`)} className={styles.mv}>돌아가기</button>
+                            <button type="button" onClick={() => router.push('/inquiry')} className={styles.mv}>돌아가기</button>
                             <button type="button" onClick={handleDelete} className={styles.delete}>삭제하기</button>
                         </div>
                     </form>

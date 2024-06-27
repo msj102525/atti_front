@@ -23,10 +23,10 @@ const InquiryList = observer(() => {
       console.log('API 응답 데이터:', data);
 
       // 응답 데이터
-      const inquiriesData = data.content;
+      const inquiryNo = data.content;
 
-      // 모든 항목을 inquiryDate 기준으로 내림차순 정렬
-      const finalInquiries = inquiriesData.sort((a, b) => new Date(b.inquiryDate) - new Date(a.inquiryDate));
+      // 모든 항목을 inquiryNo 기준으로 내림차순 정렬
+      const finalInquiries = inquiryNo.sort((a, b) => b.inquiryNo - a.inquiryNo);
 
       // 최종 데이터 설정
       setInquiries(finalInquiries);

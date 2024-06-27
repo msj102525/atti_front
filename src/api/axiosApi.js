@@ -2,53 +2,25 @@ import axios from "axios";
 
 // Axios 인스턴스 생성
 const instance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://localhost:8080", // 백엔드 API의 기본 URL 설정
   headers: {
     "Content-Type": "application/json;charset=UTF-8",
   },
 });
+
 // 요청 인터셉터 추가
 instance.interceptors.request.use(
   (config) => {
-    // '/reissue' 요청은 인터셉터에서 액세스 토큰을 추가하지 않도록 합니다.
-    if (config.url !== "/reissue") {
-      const token = localStorage.getItem("token");
-      if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`;
-      }
+    const token = localStorage.getItem("token");
+    if (token && config.url !== "/reissue") {
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-//토큰 갱신
-const refreshToken = async () => {
-  try {
-    const refreshToken = localStorage.getItem("refresh");
-    const response = await instance.post("/reissue", null, {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    });
-    const token =
-      response.headers["authorization"] || response.headers["Authorization"];
-    const pureToken = token.split(" ")[1];
-    localStorage.setItem("token", pureToken);
-    return pureToken;
-  } catch (error) {
-    // 에러 응답을 확인합니다.
-    if (error.response && error.response.data === "refresh token expired") {
-      // 리프레시 토큰이 만료된 경우 로그아웃 처리
-      logout();
-    } else {
-      // 다른 종류의 에러 처리
-      console.error("An error occurred:", error);
-    }
-  }
-};
-
-//로그아웃
+// 로그아웃 함수
 const logout = async () => {
   const token = localStorage.getItem("token");
 
@@ -61,29 +33,81 @@ const logout = async () => {
   } catch (error) {
     console.error("Logout error:", error);
   } finally {
-    // 로컬 스토리지의 모든 항목을 비웁니다.
     localStorage.clear();
-    // 메인 페이지로 리다이렉트
     window.location.href = "/";
+  }
+};
+
+// 토큰 갱신 함수
+const refreshToken = async () => {
+  try {
+    const refreshToken = localStorage.getItem("refresh");
+
+    if (!refreshToken) {
+      throw new Error("Refresh token is missing");
+    }
+
+    const response = await instance.post("/reissue", null, {
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    });
+
+    const newAccessToken = response.headers["authorization"];
+    const newRefreshToken = response.headers["refresh-token"];
+
+    if (newAccessToken) {
+      const pureAccessToken = newAccessToken.split(" ")[1];
+      localStorage.setItem("token", pureAccessToken);
+    }
+
+    if (newRefreshToken) {
+      const pureRefreshToken = newRefreshToken.split(" ")[1];
+      localStorage.setItem("refresh", pureRefreshToken);
+    }
+
+    return newAccessToken ? newAccessToken.split(" ")[1] : null;
+  } catch (error) {
+    if (error.response && (error.response.data === "Refresh token expired" || error.response.status === 401)) {
+      logout(); // 리프레시 토큰이 만료된 경우 로그아웃 처리
+    } else {
+      console.error("An error occurred:", error);
+    }
+    return null;
   }
 };
 
 // 응답 인터셉터 추가
 instance.interceptors.response.use(
-  (response) => response, // 정상 응답
+  (response) => {
+    const newAccessToken = response.headers["authorization"];
+    const newRefreshToken = response.headers["refresh-token"];
+
+    if (newAccessToken) {
+      const pureAccessToken = newAccessToken.split(" ")[1];
+      localStorage.setItem("token", pureAccessToken);
+    }
+
+    if (newRefreshToken) {
+      const pureRefreshToken = newRefreshToken.split(" ")[1];
+      localStorage.setItem("refresh", pureRefreshToken);
+    }
+
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
 
-    // 401 오류가 발생하고, 이미 재시도를 한 적이 없다면
     if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // 재시도 했음을 표시
+      originalRequest._retry = true;
 
-      // 토큰을 갱신하고 재시도
       const newAccessToken = await refreshToken();
-      originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-
-      // 원래 요청을 다시 수행
-      return instance(originalRequest);
+      if (newAccessToken) {
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        return instance(originalRequest);
+      } else {
+        logout();
+      }
     }
     return Promise.reject(error);
   }

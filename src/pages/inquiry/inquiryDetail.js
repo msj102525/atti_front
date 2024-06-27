@@ -115,14 +115,14 @@ function InquiryDetail() {
                     <MintButton
                         onClick={confirmDelete}
                         text="확인"
-                        sizeW="w-24"
+                        sizeW="w-30"
                         sizeH="h-12"
                         fontSize="text-lg"
                     />
                     <MintButton
                         onClick={closeModal}
                         text="취소"
-                        sizeW="w-24"
+                        sizeW="w-30"
                         sizeH="h-12"
                         fontSize="text-lg"
                     />

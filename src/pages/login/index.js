@@ -5,7 +5,7 @@ import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { login } from "@/api/user/user"; 
 import styles from "@/styles/login/normalLogin.module.css";
-import Modal2 from "@/components/common/Modal2"; 
+import Modal2 from "@/components/common/Modal2";
 
 // Dynamic import for client-side only components
 const KakaoLogin = dynamic(() => import("@/components/user/kakaoLogin"), { ssr: false });
@@ -19,16 +19,26 @@ export default function LoginForm() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
+    const [redirectPath, setRedirectPath] = useState(null); // 로그인 성공 여부를 저장
 
     const router = useRouter();
 
     const loginMutation = useMutation(loginData => login(loginData), {
         onSuccess: (data) => {
-            router.push('/');
+            if (data.suspended) {
+                setModalMessage('정지된 회원입니다. 관리자에게 문의하세요.');
+                setIsModalOpen(true);
+                setRedirectPath(null); // 로그인 실패 시 페이지 이동 없음
+            } else {
+                setModalMessage('로그인 성공!');
+                setIsModalOpen(true);
+                setRedirectPath('/'); // 로그인 성공 시 메인 페이지로 이동하도록 설정
+            }
         },
         onError: (error) => {
             setModalMessage(error.response?.data?.message || '로그인에 실패했습니다.');
             setIsModalOpen(true);
+            setRedirectPath(null); // 로그인 실패 시 페이지 이동 없음
         },
     });
 
@@ -55,6 +65,9 @@ export default function LoginForm() {
 
     const closeModal = () => {
         setIsModalOpen(false);
+        if (redirectPath) {
+            router.push(redirectPath); // 로그인 성공 시 메인 페이지로 이동
+        }
     };
 
     return (
@@ -126,8 +139,7 @@ export default function LoginForm() {
             <Modal2
                 isOpen={isModalOpen}
                 onClose={closeModal}
-                title="로그인 실패"
-                content1="비밀번호를 확인하세요."
+                title=""
                 content={modalMessage}
             />
         </div>

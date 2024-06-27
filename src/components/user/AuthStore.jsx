@@ -1,14 +1,18 @@
+// AuthStatus.js
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { authStore } from "@/pages/stores/authStore";
-import { logout, logoutKakao, logoutNaver } from "@/api/user/user";
+import { logoutKakao, logoutNaver } from "@/api/user/user";
 import MyPageNavBar from "../common/MyPageNavBar";
+import Modal2 from "../common/Modal2";
+import useLogout from "src/hooks/userLogout";
 
 const AuthStatus = observer(() => {
   const router = useRouter();
   const [userType, setUserType] = useState("");
   const [isClient, setIsClient] = useState(false);
+  const { logout, showModal, closeModal } = useLogout(); // 커스텀 훅 사용
 
   useEffect(() => {
     setUserType(authStore.userType);
@@ -36,12 +40,11 @@ const AuthStatus = observer(() => {
         }
         authStore.setSocialLoggedIn(false); // 소셜 로그아웃 처리
         localStorage.removeItem("loginType");
-        router.push("/");
+        logout(); // 로그아웃 호출
       } else {
         await logout();
         authStore.setLoggedIn(false); // 일반 로그아웃 처리
         localStorage.removeItem("loginType");
-        router.push("/");
       }
     } catch (error) {
       console.error("로그아웃 실패:", error);
@@ -52,12 +55,8 @@ const AuthStatus = observer(() => {
     const loginType = localStorage.getItem("loginType");
     if (loginType === "regular") {
       router.push("/user/mypage"); // 일반 유저 마이페이지
-    } else if (loginType === "kakao") {
-      router.push("/user/snsInfo"); // 카카오 유저 마이페이지
-    } else if (loginType === "naver") {
-      router.push("/user/snsInfo"); // 네이버 유저 마이페이지
     } else {
-      router.push("/user/snsInfo"); 
+      router.push("/user/snsInfo"); // 소셜 유저 마이페이지
     }
   };
 
@@ -87,6 +86,7 @@ const AuthStatus = observer(() => {
           <button onClick={() => router.push("/signup")}>회원가입</button>
         )}
       </div>
+      {showModal && <Modal2 isOpen={showModal} onClose={closeModal} title="로그아웃" content="로그아웃 되었습니다." />}
     </div>
   );
 });

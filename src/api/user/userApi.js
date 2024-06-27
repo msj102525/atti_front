@@ -78,7 +78,7 @@ export const deleteUser = async (userId) => {
     if (response.status === 204) {
       // Clear the local storage
       localStorage.clear();
-      console.log("User deleted and local storage cleared.");
+      console.log("유저 정보 삭제와 local storage 비움.");
     }
 
     return response.data;

@@ -59,9 +59,9 @@ export const createInquiry = async (formData) => {
 };
 
 // 문의사항 삭제
-export const deleteInquiry = async (inquiryNo) => {
+export const deleteInquiry = async (userId) => {
     try {
-        const response = await axios.delete(`${baseUrl}/inquiryDelete/${inquiryNo}`);
+        const response = await axios.delete(`${baseUrl}/inquiryDelete/${userId}`);
         return response.data;
     } catch (error) {
         throw error;
