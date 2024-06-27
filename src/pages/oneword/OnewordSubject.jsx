@@ -6,10 +6,10 @@ import OnewordSubjectWriteModalComponent from "@/components/oneword/OnewordSubje
 import { handleAxiosError } from "@/api/errorAxiosHandle";
 import { getOnewordSubjectList, getOnewordSubjectListCount, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject } from "@/api/oneword/OnewordSubject";
 import DetailPostModal from "@/components/oneword/DetailPostModal";
-import styles from "@/styles/oneword/onewordsubjectAdmin.module.css";
 import Header from "@/pages/common/Header";
 import Footer from "@/pages/common/Footer";
 import AdminSidebar from "@/components/admin/AdminSidebar"
+import styles from "@/styles/oneword/onewordsubjectAdmin.module.css";
 import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
 
 const OnewordSubjectComponent = observer(() => {

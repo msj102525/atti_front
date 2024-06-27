@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from "mobx-react";
+import styles from "@/styles/oneword/onewordsubjectAdmin.module.css";
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import styles from "@/styles/oneword/onewordsubjectAdmin.module.css";
 
 const OnewordSubjectListComponent = observer(({ onewordsubject, onOnewordSubjectClick }) => {
 
