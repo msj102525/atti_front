@@ -1,5 +1,14 @@
 import axios from '@/api/axiosApi';
 
+export const getOnewordSubjectListAll = () => {
+    console.log("getOnewordSubjectListAll : ");
+
+    return axios.get(`/onewordsubject/listall`)
+        .then(res => {
+            return res.data;
+        });
+}
+
 export const getOnewordSubjectList = ({ keyword, page, size }) => {
     // 쿼리 파라미터를 사용하여 URL 생성
     const params = new URLSearchParams({

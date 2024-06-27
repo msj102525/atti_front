@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import OnewordSubjectListComponent from "@/components/oneword/OnewordSubjectListComponent";
 import { handleAxiosError } from "@/api/errorAxiosHandle";
-import { getOnewordSubjectList } from "@/api/oneword/OnewordSubject";
+import { getOnewordSubjectListAll } from "@/api/oneword/OnewordSubject";
 import Link from 'next/link';
 
 const OnewordListFormComponent = observer(() => {
@@ -15,11 +15,15 @@ const OnewordListFormComponent = observer(() => {
   const queryClient = useQueryClient();
   const [isAdmin, setIsAdmin] = React.useState(false);
 
-  const { data, isLoading } = useQuery(['onewordSubjectList', { keyword, page, size }], () => getOnewordSubjectList({
-    keyword: keyword,
-    page: page,
-    size: size,
-  }), {
+  // const { data, isLoading } = useQuery(['onewordSubjectList', { keyword, page, size }], () => getOnewordSubjectList({
+  //   keyword: keyword,
+  //   page: page,
+  //   size: size,
+  // }), {
+  //   keepPreviousData: true,
+  // });
+
+  const { data, isLoading } = useQuery(['onewordSubjectListAll'], () => getOnewordSubjectListAll(), {
     keepPreviousData: true,
   });
 
@@ -27,14 +31,14 @@ const OnewordListFormComponent = observer(() => {
     setIsAdmin(localStorage.getItem("isAdmin") === "true");
   }, [])
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  // const openModal = () => setIsModalOpen(true);
+  // const closeModal = () => setIsModalOpen(false);
 
   if (isLoading) return <div>Loading...</div>;
   if (!data) return <div>No data</div>;
 
   // 상하로 최대 10개까지만 표시
-  const displayCount = Math.min(data.length, 10);
+  // const displayCount = Math.min(data.length, 10);
 
   // const getClassNames = (rowIndex, colIndex) => {
   //   return `md:col-span-3 col-span-3 md:row-span-2 row-span-4 p-4 border border-gray-200 shadow-md hover:shadow-lg rounded-md flex flex-col justify-between ${rowIndex === 0 && colIndex === 0 ? 'mt-0' : 'mt-4'
@@ -71,7 +75,7 @@ const OnewordListFormComponent = observer(() => {
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      {data.slice(0, displayCount).map((onewordsubject) => (
+      {data.map((onewordsubject) => (
         <div key={onewordsubject.owsjNum} className="border p-4 rounded">
           <Link href={`/oneword/${onewordsubject.owsjNum}`}>
             <div className="cursor-pointer">
