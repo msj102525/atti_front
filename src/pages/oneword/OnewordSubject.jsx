@@ -1,15 +1,16 @@
-import Header from "@/pages/common/Header";
 import React, { useEffect } from 'react';
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import OnewordSubjectListComponent from "@/components/oneword/OnewordSubjectListComponent";
 import OnewordSubjectWriteModalComponent from "@/components/oneword/OnewordSubjectWriteModalComponent";
-import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
 import { handleAxiosError } from "@/api/errorAxiosHandle";
 import { getOnewordSubjectList, getOnewordSubjectListCount, getOnewordSubjectDetail, insertOnewordSubject, updateOnewordSubject, deleteOnewordSubject } from "@/api/oneword/OnewordSubject";
 import DetailPostModal from "@/components/oneword/DetailPostModal";
-import AdminSidebar from "@/components/admin/AdminSidebar"
 import styles from "@/styles/oneword/onewordsubjectAdmin.module.css";
+import Header from "@/pages/common/Header";
+import Footer from "@/pages/common/Footer";
+import AdminSidebar from "@/components/admin/AdminSidebar"
+import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
 
 const OnewordSubjectComponent = observer(() => {
     const [keyword, setKeyword] = React.useState("");
@@ -137,14 +138,16 @@ const OnewordSubjectComponent = observer(() => {
         <div className="max-w-screen-2xl mx-auto p-4">
             <Header />
 
-            <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1000px' }}>
-                {/* <AdminSidebar /> */}
+            <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1050px' }}>
+                {isAdmin && (
+                    <AdminSidebar />)
+                }
 
-                <div className={styles.content}>
+                <div className={styles.content} flex justify-center mt-5 >
                     <div className={styles.container}>
                         <h2 className={styles.centeredText}>오늘 한 줄 주제 등록(Admin ver.)</h2>
-
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", textAlign: "left" }}>
+                            {/* <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}> */}
                             {/* 오른쪽에 제목 입력 필드와 검색 버튼을 포함하는 영역 */}
                             <div style={{ display: "flex", alignItems: "center" }}>
                                 <input
@@ -172,48 +175,47 @@ const OnewordSubjectComponent = observer(() => {
                             }
                         </div>
 
-                    </div>
-
-                    <table className={styles.table}>
-                        <thead>
-                            <tr>
-                                <th style={{ width: "5vw", textAlign: "center" }}>번호</th>
-                                <th style={{ width: "30vw", textAlign: "center" }}>제목</th>
-                                <th style={{ width: "5vw", textAlign: "center" }}>작성자</th>
-                                <th style={{ width: "5vw", textAlign: "center" }}>작성일</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {/* 데이터가 있을 경우 최대 10개의 행을 표시 */}
-                            {data.slice(0, 10).map((onewordsubject, index) => (
-                                <OnewordSubjectListComponent
-                                    key={onewordsubject.owsjNum}
-                                    onewordsubject={onewordsubject}
-                                    onOnewordSubjectClick={() => openDetailModal(onewordsubject)}
-                                />
-                            ))}
-                        </tbody>
-                    </table>
-                    {/* 글쓰기 */}
-                    <OnewordSubjectWriteModalComponent isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
-                    {/* 글 수정, 삭제(userId가 존재하지 않을 경우 비활성화 처리) */}
-                    {userId && (
-                        <DetailPostModal isOpen={isDetailModalOpen} onClose={closeDetailModal}
-                            post={selectedOnewordSubject}
-                            onEdit={handleEdit}
-                            onDelete={handleDelete}
-                            isAdmin={isAdmin}
-                        />)}
-                    <div>
-                        <Pagination pageCount={totalPages} onPageChange={handlePageChange} page={page} />
+                        <table className={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th style={{ width: "5vw", textAlign: "center" }}>번호</th>
+                                    <th style={{ width: "30vw", textAlign: "center" }}>제목</th>
+                                    <th style={{ width: "5vw", textAlign: "center" }}>작성자</th>
+                                    <th style={{ width: "5vw", textAlign: "center" }}>작성일</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {/* 데이터가 있을 경우 최대 10개의 행을 표시 */}
+                                {data.slice(0, 10).map((onewordsubject, index) => (
+                                    <OnewordSubjectListComponent
+                                        key={onewordsubject.owsjNum}
+                                        onewordsubject={onewordsubject}
+                                        onOnewordSubjectClick={() => openDetailModal(onewordsubject)}
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
+                        {/* 글쓰기 */}
+                        <OnewordSubjectWriteModalComponent isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
+                        {/* 글 수정, 삭제(userId가 존재하지 않을 경우 비활성화 처리) */}
+                        {userId && (
+                            <DetailPostModal isOpen={isDetailModalOpen} onClose={closeDetailModal}
+                                post={selectedOnewordSubject}
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}
+                                isAdmin={isAdmin}
+                            />)}
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+                            <Pagination pageCount={totalPages} onPageChange={handlePageChange} page={page} />
+                        </div>
                     </div>
 
                 </div>
 
             </div>
+            <Footer />
         </div>
     );
-
 
 });
 
