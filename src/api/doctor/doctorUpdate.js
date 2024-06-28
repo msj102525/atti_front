@@ -34,32 +34,21 @@ export const updateDoctorProfile = (formData) => {
   return fileUploadInstance.put("/doctor/mypage", formData).then((res) => res);
 };
 
-
 // export const uploadProfilePhoto = (file, userId) =>{
 //   return fileUploadInstance.put("/file/upload", file, userId).then((res) => res);
 // }
 
-
 export const uploadProfilePhoto = async (file, userId) => {
   try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('userId', userId);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userId", userId);
 
-      return fileUploadInstance.put("/profile/upload", formData).then((res) => res);
+    return fileUploadInstance.put("/file/upload", formData).then((res) => res);
   } catch (error) {
-      console.error('업로드 오류:', error);
-      throw error;
-  }
-};
-
-export const deleteProfilePhoto = async (userId) => {
-  try {
-    const response = await fileUploadInstance.delete(`/profile/delete/${userId}`);
-    return response.data;
-  } catch (error) {
-    console.error("삭제 오류:", error);
+    console.error("업로드 오류:", error);
     throw error;
   }
 };
+
 //-----------------------------------------------------------------

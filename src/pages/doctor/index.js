@@ -47,7 +47,6 @@ export default function DoctorList() {
   const [keyword, setKeyword] = useState("");
   const [hospitalName, sethospitalName] = useState("");
   const [hospitalPhoto, sethospitalPhoto] = useState("");
-
   const [mapPosition, setMapPosition] = useState(null);
   const [mapCoords, setMapCoords] = useState({
     latitude: null,
@@ -250,7 +249,7 @@ export default function DoctorList() {
                       longitude={doctor.longitude}
                       hospitalPhoto={doctor.hospitalPhotoUrl}
                       hospitalName={doctor.hospitalName}
-                      profileUrl="/doctor.png"
+                      profileUrl={doctor.profileUrl}
                       showMap={showMap}
                       closeMap={closeMap}
                     />
@@ -302,6 +301,7 @@ export default function DoctorList() {
 }
 
 function DoctorCard(props) {
+  const serverImage = process.env.NEXT_PUBLIC_API_URL;
   return (
     <div className="flex justify-between p-4 mb-4 bg-white border rounded-lg shadow-md">
       <div className="flex flex-col justify-between flex-grow p-4">
@@ -332,10 +332,12 @@ function DoctorCard(props) {
           전문가 프로필 보기 &gt;
         </Link>
       </div>
-      <div className="flex-shrink-0 w-24 h-24">
+      <div className="flex items-center justify-center">
         <img
-          className="object-cover w-full h-full rounded-lg"
-          src={props.profileUrl}
+          className="object-cover w-24 h-24 rounded-lg"
+          src={
+            props.profileUrl ? serverImage + props.profileUrl : "/doctor.png"
+          }
           alt="Doctor"
         />
       </div>
