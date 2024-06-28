@@ -1,5 +1,6 @@
 import StarRating from "./StarRating";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function MainDoctorCard({
   profileUrl,
@@ -8,17 +9,26 @@ export default function MainDoctorCard({
   doctorId,
   averageStarPoint,
 }) {
-  const [imgSrc, setImgSrc] = useState({ profileUrl });
-  const handleError = () => {
-    setImgSrc("/doctor.png");
+  const [imgSrc, setImgSrc] = useState("" + profileUrl);
+  // const handleError = () => {
+  //   setImgSrc("/doctor.png");
+  // };
+  const serverImage = process.env.NEXT_PUBLIC_API_URL;
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/doctor/${doctorId}`);
   };
+
   return (
-    <div className="w-48 p-8 bg-white border border-gray-200 rounded-lg shadow-2xl">
+    <div
+      className="w-48 p-8 bg-white border border-gray-200 rounded-lg shadow-2xl hover:cursor-pointer"
+      onClick={handleClick}
+    >
       <div className="h-24 m-2">
         <img
-          src={imgSrc ? imgSrc : "/doctor.png"}
+          src={imgSrc ? serverImage + imgSrc.toString() : "/doctor.png"}
           className="border border-gray-400 rounded-full"
-          onError={handleError}
+          // onError={handleError}
         />
       </div>
       <div className="flex items-center justify-center h-12 m-2 text-xl font-semibold">
