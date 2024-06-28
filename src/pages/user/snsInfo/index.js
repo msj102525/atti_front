@@ -13,7 +13,7 @@ import { uploadProfilePhoto, deleteProfilePhoto } from '@/api/doctor/doctorUpdat
 const SnsInfoUP = observer(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false); // Update success state
+  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
   const router = useRouter();
   const [profileUrl, setProfileUrl] = useState(null);
   const fileInput = useRef(null);
@@ -43,6 +43,12 @@ const SnsInfoUP = observer(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (authStore.profileUrl) {
+      setProfileUrl(authStore.profileUrl);
+    }
+  }, [authStore.profileUrl]);
+
   const handleUpdate = async () => {
     try {
       const result = await snsUserUpdate(authStore);
@@ -56,12 +62,12 @@ const SnsInfoUP = observer(() => {
       localStorage.setItem('email', authStore.email);
       setModalMessage('정보가 성공적으로 업데이트되었습니다.');
       setIsModalOpen(true);
-      setIsUpdateSuccess(true); // Set success state to true
+      setIsUpdateSuccess(true);
     } catch (error) {
       console.error(error);
       setModalMessage('정보 업데이트에 실패했습니다.');
       setIsModalOpen(true);
-      setIsUpdateSuccess(false); // Set success state to false
+      setIsUpdateSuccess(false);
     }
   };
 
@@ -80,17 +86,17 @@ const SnsInfoUP = observer(() => {
           window.localStorage.clear();
           setModalMessage('탈퇴 완료!');
           setIsModalOpen(true);
-          setIsUpdateSuccess(true); // Set success state to true for cancel
+          setIsUpdateSuccess(true);
         } catch (error) {
           console.error(error);
           setModalMessage('탈퇴 실패!');
           setIsModalOpen(true);
-          setIsUpdateSuccess(false); // Set success state to false
+          setIsUpdateSuccess(false);
         }
       } else {
         setModalMessage(`${authStore.loginType === 'kakao' ? '카카오' : '네이버'} 연결 끊기 실패!`);
         setIsModalOpen(true);
-        setIsUpdateSuccess(false); // Set success state to false
+        setIsUpdateSuccess(false);
       }
     }
   };
@@ -98,7 +104,7 @@ const SnsInfoUP = observer(() => {
   const closeModal = () => {
     setIsModalOpen(false);
     if (isUpdateSuccess) {
-      router.push('/'); // Redirect to main page if update or cancel was successful
+      router.push('/');
     }
   };
 
@@ -114,12 +120,12 @@ const SnsInfoUP = observer(() => {
       reader.readAsDataURL(file);
 
       try {
-        const userId = authStore.userId; // authStore에서 userId 가져오기
+        const userId = authStore.userId;
         const response = await uploadProfilePhoto(file, userId);
-        const filePath = response.profileUrl; // 서버에서 profileUrl로 받기
+        const filePath = response.filePath;
         authStore.setProfileUrl(filePath);
-        setProfileUrl(filePath);
-        setModalMessage('프로필 사진 업로드 완료!');
+        setProfileUrl(serverImage + filePath);
+        setModalMessage("프로필 사진 업로드 완료!\n사진 등록서 올라오는 시간이 걸려요!");
       } catch (error) {
         console.error('프로필 사진 업로드 오류:', error);
         setModalMessage(`프로필 사진 업로드 실패: ${error.message}`);
@@ -130,7 +136,7 @@ const SnsInfoUP = observer(() => {
 
   const handleImageDelete = async () => {
     try {
-      const userId = authStore.userId; // authStore에서 userId 가져오기
+      const userId = authStore.userId;
       await deleteProfilePhoto(userId);
       authStore.setProfileUrl("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
       setProfileUrl(null);
@@ -152,7 +158,7 @@ const SnsInfoUP = observer(() => {
         <form>
           <div className="mb-4">
             <label htmlFor="profileUrl" className="block mb-1 text-sm font-semibold text-gray-800">프로필 사진:</label>
-            <img src={profileUrl ? serverImage + profileUrl : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="Profile" className="w-32 h-32 mb-2 rounded-full" />
+            <img src={profileUrl ? profileUrl.includes("http") ? profileUrl : serverImage + profileUrl : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="Profile" className="w-32 h-32 mb-2 rounded-full" />
             <input
               type="file"
               id="profileUrl"
@@ -162,7 +168,7 @@ const SnsInfoUP = observer(() => {
               onChange={handleFileChange}
               ref={fileInput}
             />
-            <div className="flex justify-center mt-4 space-x-4"> {/* 버튼 간 간격 추가 */}
+            <div className="flex justify-center mt-4 space-x-4">
               <button type="button" className="w-full px-4 py-2 font-bold text-white bg-blue-400 rounded-full cursor-pointer" onClick={() => fileInput.current.click()}>프로필 사진 선택</button>
               <button type="button" className="w-full px-4 py-2 font-bold text-white bg-red-400 rounded-full cursor-pointer" onClick={handleImageDelete}>프로필 사진 삭제</button>
             </div>
