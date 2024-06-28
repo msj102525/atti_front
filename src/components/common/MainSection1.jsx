@@ -19,7 +19,7 @@ export default function MainSection1() {
         progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
     };
     return (
-        <div className="min-h-80 -solid -2 max-w-screen-2xl">
+        <div className="min-h-80 -solid -2 max-w-screen-2xl pb-10">
             <Swiper
                 spaceBetween={30}
                 centeredSlides={true}
