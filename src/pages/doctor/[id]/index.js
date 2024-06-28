@@ -29,18 +29,20 @@ export default function DoctorDetail() {
   const [currentReviewPage, setCurrentReviewPage] = useState(0);
   const [hasMoreReviews, setHasMoreReviews] = useState(false);
 
+  const serverImage = process.env.NEXT_PUBLIC_API_URL;
+
   const handleConsult = () => {
     const isLoggedIn = localStorage.getItem("loggedIn") === "true";
-    
+
     if (!isLoggedIn) {
-        alert("로그인을 먼저 진행해주세요");
-        router.push("/login");
+      alert("로그인을 먼저 진행해주세요");
+      router.push("/login");
     } else {
-        console.log("hello");
-        localStorage.setItem("consultDoctorId", id);
-        router.push("/pay/pay");
+      console.log("hello");
+      localStorage.setItem("consultDoctorId", id);
+      router.push("/pay/pay");
     }
-};
+  };
 
   const moreReview = () => {
     if (!hasMoreReviews) {
@@ -82,7 +84,7 @@ export default function DoctorDetail() {
             setEducationList(doctor.educations);
             setCareerList(doctor.careers);
             setUserName(doctor.userName);
-            setProfileUrl("/doctor.png");
+            setProfileUrl(doctor.profileUrl);
             setDoctorComment(doctor.introduce);
             setTagList(doctor.tags);
             setAverageRating(doctor.averageStarPoint);
@@ -140,8 +142,11 @@ export default function DoctorDetail() {
               ))}
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center w-full pt-5 md:w-1/2 md:pt-0">
-            <img src={profileUrl} className="w-auto h-[250px] md:h-[350px]" />
+          <div className="flex flex-col items-center justify-between w-full py-24 md:w-1/2">
+            <img
+              src={profileUrl ? serverImage + profileUrl : "/doctor.png"}
+              className="w-[250px] h-[250px] md:h-[350px] rounded-lg mt-12"
+            />
             <MintButton
               onClick={handleConsult}
               text="상담신청하기"

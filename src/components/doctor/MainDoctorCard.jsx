@@ -27,7 +27,7 @@ export default function MainDoctorCard({
       <div className="h-24 m-2">
         <img
           src={imgSrc ? serverImage + imgSrc.toString() : "/doctor.png"}
-          className="border border-gray-400 rounded-full"
+          className="rounded-full"
           // onError={handleError}
         />
       </div>
