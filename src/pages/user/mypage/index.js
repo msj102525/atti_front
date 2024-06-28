@@ -117,10 +117,11 @@ const Mypage = observer(() => {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
+      // 파일 미리보기 설정
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.readyState === 2) {
-          setProfileUrl(reader.result);
+          authStore.setProfileUrl(reader.result);
         }
       };
       reader.readAsDataURL(file);
