@@ -7,10 +7,7 @@ import Modal2 from "@/components/common/Modal";
 import Footer from "@/pages/common/Footer";
 import { getUserData, updateUser, deleteUser } from "@/api/user/userApi";
 import { changePassword } from "@/api/user/find";
-import {
-  uploadProfilePhoto,
-  deleteProfilePhoto,
-} from "@/api/doctor/doctorUpdate";
+import { uploadProfilePhoto, deleteProfilePhoto } from "@/api/doctor/doctorUpdate";
 import { authStore } from "@/pages/stores/authStore";
 import { useRouter } from "next/router";
 
@@ -26,30 +23,37 @@ const Mypage = observer(() => {
   const serverImage = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const userId = authStore.userId;
-        const data = await getUserData(userId, token);
-        authStore.setUserId(data.userId);
-        authStore.setUserName(data.userName);
-        authStore.setNickName(data.nickName);
-        authStore.setEmail(data.email);
-        authStore.setProfileUrl(data.profileUrl);
-        authStore.setUserType(data.userType);
-        authStore.setGender(data.gender);
-        authStore.setPhone(data.phone);
-        authStore.setLoginType(data.loginType);
-        authStore.setBirthDate(data.birthDate);
-        setProfileUrl(data.profileUrl);
-        console.log("프로필 URL!!!!!!!!!!! : " + profileUrl);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+    if (typeof window !== 'undefined') {
+      const fetchData = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          const userId = authStore.userId;
+          const data = await getUserData(userId, token);
+          authStore.setUserId(data.userId);
+          authStore.setUserName(data.userName);
+          authStore.setNickName(data.nickName);
+          authStore.setEmail(data.email);
+          authStore.setProfileUrl(data.profileUrl);
+          authStore.setUserType(data.userType);
+          authStore.setGender(data.gender);
+          authStore.setPhone(data.phone);
+          authStore.setLoginType(data.loginType);
+          authStore.setBirthDate(data.birthDate);
+          setProfileUrl(data.profileUrl);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
 
-    fetchData();
+      fetchData();
+    }
   }, []);
+
+  useEffect(() => {
+    if (authStore.profileUrl) {
+      setProfileUrl(authStore.profileUrl);
+    }
+  }, [authStore.profileUrl]);
 
   const handleUpdate = async () => {
     if (authStore.password !== authStore.confirmPassword) {
@@ -72,7 +76,6 @@ const Mypage = observer(() => {
       };
       await updateUser(updatedUser);
 
-      // 비밀번호 변경 로직 추가
       if (currentPassword) {
         await changePassword({
           currentPassword: currentPassword,
@@ -117,11 +120,10 @@ const Mypage = observer(() => {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      // 파일 미리보기 설정
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.readyState === 2) {
-          authStore.setProfileUrl(reader.result);
+          setProfileUrl(reader.result);
         }
       };
       reader.readAsDataURL(file);
@@ -129,10 +131,10 @@ const Mypage = observer(() => {
       try {
         const userId = authStore.userId;
         const response = await uploadProfilePhoto(file, userId);
-        const filePath = response.profileUrl;
+        const filePath = response.filePath;
         authStore.setProfileUrl(filePath);
-        setProfileUrl(filePath);
-        setModalMessage("프로필 사진 업로드 완료!");
+        setProfileUrl(serverImage + filePath); 
+        setModalMessage("프로필 사진 업로드 완료!\n사진 등록서 올라오는 시간이 걸려요!");
       } catch (error) {
         console.error("프로필 사진 업로드 오류:", error);
         setModalMessage(`프로필 사진 업로드 실패: ${error.message}`);
@@ -177,7 +179,9 @@ const Mypage = observer(() => {
           <img
             src={
               profileUrl
-                ? serverImage + profileUrl
+                ? profileUrl.includes("http")
+                  ? profileUrl
+                  : serverImage + profileUrl
                 : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
             }
             alt="Profile"
