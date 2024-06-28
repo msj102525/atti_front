@@ -134,7 +134,7 @@ const InquiryAdminVersionListComponent = observer(() => {
                                 <tr>
                                     <th style={{ width: "10vw", textAlign: "center" }}>회원아이디</th>
                                     <th style={{ width: "15vw", textAlign: "center" }}>제목</th>
-                                    <th style={{ width: "30vw", textAlign: "center" }}>내용</th>
+                                    <th style={{ width: "20vw", textAlign: "center" }}>내용</th>
                                     <th style={{ width: "20vw", textAlign: "center" }}>관리</th> {/* 버튼을 넣을 공간 */}
                                 </tr>
                             </thead>

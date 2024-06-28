@@ -15,7 +15,7 @@ const InquiryAdminVersionBoardCard = observer(({ user, handleDelete }) => {
             <td style={{ width: "15vw",textAlign: "center" }}>
                 <span className={styles.truncatedText2}>{user.title}</span>
             </td>
-            <td style={{ width: "30vw", textAlign: "center" }}>
+            <td style={{ width: "20vw", textAlign: "center" }}>
                 <span className={styles.truncatedText3}>{user.content}</span>
             </td>
             <td style={{ width: "20vw", textAlign: "center" }}>
