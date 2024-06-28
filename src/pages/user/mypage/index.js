@@ -6,6 +6,7 @@ import styles from '@/styles/user/mypage.module.css';
 import Modal2 from "@/components/common/Modal";
 import Footer from '@/pages/common/Footer';
 import { getUserData, updateUser, deleteUser } from '@/api/user/userApi';
+import { changePassword } from '@/api/user/find';
 import { uploadProfilePhoto, deleteProfilePhoto } from '@/api/doctor/doctorUpdate';
 import { authStore } from "@/pages/stores/authStore";
 import { useRouter } from 'next/router';
@@ -15,7 +16,8 @@ const Mypage = observer(() => {
   const fileInput = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const [redirectPath, setRedirectPath] = useState(null); // Add state for redirect path
+  const [redirectPath, setRedirectPath] = useState(null); 
+  const [currentPassword, setCurrentPassword] = useState('');
   const router = useRouter();
 
   const serverImage = process.env.NEXT_PUBLIC_API_URL;
@@ -66,6 +68,16 @@ const Mypage = observer(() => {
         profileUrl: authStore.profileUrl
       };
       await updateUser(updatedUser);
+
+      // 비밀번호 변경 로직 추가
+      if (currentPassword) {
+        await changePassword({
+          currentPassword: currentPassword,
+          newPassword: authStore.password,
+          userId: authStore.userId
+        });
+      }
+
       setModalMessage('수정 완료!');
       setIsModalOpen(true);
       setRedirectPath('/'); 
@@ -111,9 +123,9 @@ const Mypage = observer(() => {
       reader.readAsDataURL(file);
 
       try {
-        const userId = authStore.userId; // authStore에서 userId 가져오기
+        const userId = authStore.userId; 
         const response = await uploadProfilePhoto(file, userId);
-        const filePath = response.profileUrl; // 서버에서 profileUrl로 받기
+        const filePath = response.profileUrl; 
         authStore.setProfileUrl(filePath);
         setProfileUrl(filePath);
         setModalMessage('프로필 사진 업로드 완료!');
@@ -127,7 +139,7 @@ const Mypage = observer(() => {
 
   const handleImageDelete = async () => {
     try {
-      const userId = authStore.userId; // authStore에서 userId 가져오기
+      const userId = authStore.userId; 
       await deleteProfilePhoto(userId);
       authStore.setProfileUrl("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
       setProfileUrl(null);
@@ -183,11 +195,15 @@ const Mypage = observer(() => {
           {authStore.loginType === 'regular' && (
             <>
               <div className="mb-4">
-                <label htmlFor="password" className="block mb-1 text-sm font-semibold text-gray-800">비밀번호:</label>
+                <label htmlFor="currentPassword" className="block mb-1 text-sm font-semibold text-gray-800">현재 비밀번호:</label>
+                <input type="password" id="currentPassword" name="currentPassword" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="password" className="block mb-1 text-sm font-semibold text-gray-800">새 비밀번호:</label>
                 <input type="password" id="password" name="password" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.password} onChange={(e) => authStore.setPassword(e.target.value)} />
               </div>
               <div className="mb-4">
-                <label htmlFor="confirmPassword" className="block mb-1 text-sm font-semibold text-gray-800">비밀번호 확인:</label>
+                <label htmlFor="confirmPassword" className="block mb-1 text-sm font-semibold text-gray-800">새 비밀번호 확인:</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-teal-400" value={authStore.confirmPassword} onChange={(e) => authStore.setConfirmPassword(e.target.value)} />
               </div>
             </>

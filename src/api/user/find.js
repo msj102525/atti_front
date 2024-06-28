@@ -28,3 +28,12 @@ export const verifyTempPassword = async (data) => {
         throw error;
     }
 };
+//비밀번호 수정
+export const changePassword = async (data) => {
+    try {
+        const response = await axios.post(`${baseUrl}/changePassword`, data);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
