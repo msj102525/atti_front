@@ -11,6 +11,7 @@ const CustomEditor = dynamic(() => {
 
 
 export default function FeedWriteForm({ user, category }) {
+    const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
 
     const [editorData, setEditorData] = useState("");
@@ -24,7 +25,6 @@ export default function FeedWriteForm({ user, category }) {
     const handleEditorChange = (data) => {
         setEditorData(data);
     };
-
 
 
     useEffect(() => {
@@ -78,13 +78,12 @@ export default function FeedWriteForm({ user, category }) {
     return (
         <div className='w-full p-4 shadow-xl'>
             <div className='flex justify-between pb-4'>
-                <div className="border flex items-center gap-2 text-gray-400">
-                    <div className="border w-10 h-10 rounded-full overflow-hidden">
-                        <img className="block w-full" src={user.userProfileUrl} alt="userImg" />
+                <div className="flex items-center gap-2 text-gray-400">
+                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                        <img className="block w-full" src={user.userProfileUrl ? `${NEXT_PUBLIC_API_URL}` + user.userProfileUrl : "/common/user/noProfile.png"} alt="userImg" />
                     </div>
                     <p>{user.userId}</p>
                 </div>
-                {/* <div className="flex gap-4"> */}
                 <div className={`flex gap-4`}>
                     <Button text={"등록"} onClick={publicHandleSubmit} />
                     <Button text={"비공개"} onClick={privateHandleSubmit} />

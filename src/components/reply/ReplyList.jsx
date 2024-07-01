@@ -12,6 +12,7 @@ const CustomEditorReply = dynamic(() => {
 
 
 export default function ReplyList({ data, fetchData, user }) {
+    const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
     const [replyList, setReplyList] = useState([]);
     const [showReplyForm, setShowReplyForm] = useState(false);
     const [feedNumReplyNum, setFeedNumReplyNum] = useState(null);
@@ -82,8 +83,9 @@ export default function ReplyList({ data, fetchData, user }) {
                                     onClick={() => handleToggleReplyForm({ feedNum: reply.feedNum, replyNum: reply.replyNum })}
                                 >
                                     <div className="flex gap-2 text-m items-center text-gray-500 pb-2 w-full">
-                                        <div className="border w-10 h-10 rounded-full overflow-hidden">
-                                            <img className="block w-full" src={reply.replyWriterProfileUrl} alt="userImg" />
+                                        <div className="w-10 h-10 rounded-full overflow-hidden">
+                                            <img className="block w-full" src={reply.replyWriterProfileUrl ? `${NEXT_PUBLIC_API_URL}` + reply.replyWriterProfileUrl : "/common/user/noProfile.png"} alt="userImg" />
+                                            {/* <img className="block w-full" src={`${NEXT_PUBLIC_API_URL}` + reply.replyWriterProfileUrl} alt="userImg" /> */}
                                         </div>
                                         <p>{reply.replyWriter}</p>
                                         <p>{formatDate(reply.replyDate)}</p>
@@ -97,8 +99,8 @@ export default function ReplyList({ data, fetchData, user }) {
                                                 {reply.childReply.map((subReply, subIdx) => (
                                                     <div key={subIdx} className={`flex flex-col w-full p-4 rounded-[40px] mb-4 after:content-[''] after:bg-black after:block after:w-full after:h-[1px] after:left-0 after-bottom-0 ${subReply.replyUserType === "D" ? "bg-customBrown2" : ""}`}>
                                                         <div className="flex gap-2 text-m items-center text-gray-500 pb-2 w-full">
-                                                            <div className="border w-10 h-10 rounded-full overflow-hidden">
-                                                                <img className="block w-full" src={subReply.replyWriterProfileUrl} alt="userImg" />
+                                                            <div className="w-10 h-10 rounded-full overflow-hidden">
+                                                                <img className="block w-full" src={subReply.replyWriterProfileUrl ? `${NEXT_PUBLIC_API_URL}` + subReply.replyWriterProfileUrl : "/common/user/noProfile.png"} alt="userImg" />
                                                             </div>
                                                             <p>{subReply.replyWriter}</p>
                                                             <p>{subReply.replySeq}</p>

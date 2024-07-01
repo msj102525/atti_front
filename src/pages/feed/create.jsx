@@ -12,7 +12,7 @@ export default function FeedWrite() {
 
     const user = {
         userId: authStore.userId,
-        userProfileUrl: authStore.userProfileUrl
+        userProfileUrl: authStore.profileUrl
     }
 
 
