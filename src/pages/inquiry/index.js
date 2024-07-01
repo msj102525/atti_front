@@ -25,8 +25,8 @@ const InquiryList = observer(() => {
       // 응답 데이터
       const inquiryNo = data.content;
 
-      // 모든 항목을 inquiryNo 기준으로 내림차순 정렬
-      const finalInquiries = inquiryNo.sort((a, b) => b.inquiryNo - a.inquiryNo);
+      // 모든 항목을 inquiryDate 기준으로 오름차순 정렬
+      const finalInquiries = inquiryNo.sort((a, b) => new Date(a.inquiryDate) - new Date(b.inquiryDate));
 
       // 최종 데이터 설정
       setInquiries(finalInquiries);
@@ -83,9 +83,9 @@ const InquiryList = observer(() => {
           </tr>
         </thead>
         <tbody className={styles.tbody}>
-          {inquiries.map((inquiry) => (
+          {inquiries.map((inquiry, index) => (
             <tr key={inquiry.inquiryNo} onClick={() => handleRowClick(inquiry.inquiryNo)} className={styles.row}>
-              <td className={styles.td}>{inquiry.inquiryNo}</td>
+              <td className={styles.td}>{index + 1}</td>
               <td className={styles.td}>{inquiry.title}</td>
               <td className={styles.td}>{inquiry.userId}</td>
               <td className={styles.td}>{inquiry.inquiryDate.split("T")[0]}</td>

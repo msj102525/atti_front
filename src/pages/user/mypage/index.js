@@ -117,31 +117,31 @@ const Mypage = observer(() => {
     }
   };
 
-  // const handleFileChange = async (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       if (reader.readyState === 2) {
-  //         setProfileUrl(reader.result);
-  //       }
-  //     };
-  //     reader.readAsDataURL(file);
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setProfileUrl(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
 
-  //     try {
-  //       const userId = authStore.userId;
-  //       const response = await uploadProfilePhoto(file, userId);
-  //       const filePath = response.filePath;
-  //       authStore.setProfileUrl(filePath);
-  //       setProfileUrl(serverImage + filePath); 
-  //       setModalMessage("프로필 사진 업로드 완료!\n사진 등록서 올라오는 시간이 걸려요!");
-  //     } catch (error) {
-  //       console.error("프로필 사진 업로드 오류:", error);
-  //       setModalMessage(`프로필 사진 업로드 실패: ${error.message}`);
-  //     }
-  //     setIsModalOpen(true);
-  //   }
-  // };
+      try {
+        const userId = authStore.userId;
+        const response = await uploadProfilePhoto(file, userId);
+        const filePath = response.filePath;
+        authStore.setProfileUrl(filePath);
+        setProfileUrl(serverImage + filePath); 
+        setModalMessage("프로필 사진 업로드 완료!\n사진 등록 시간이 걸려요!");
+      } catch (error) {
+        console.error("프로필 사진 업로드 오류:", error);
+        setModalMessage(`프로필 사진 업로드 실패: ${error.message}`);
+      }
+      setIsModalOpen(true);
+    }
+  };
 
   // const handleFileChange = async (e) => {
   //   const file = e.target.files[0];
@@ -152,7 +152,7 @@ const Mypage = observer(() => {
   //       const profileUrl = `${serverImage}${response.filePath}`;  // 서버 URL과 결합
   //       authStore.setProfileUrl(profileUrl);
   //       setProfileUrl(profileUrl);
-  //       setModalMessage("프로필 사진 업로드 완료!\n사진 등록서 올라오는 시간이 걸려요!");
+  //       setModalMessage("프로필 사진 업로드 완료!\n사진 등록 후 올라오는 시간이 걸려요!");
   //     } catch (error) {
   //       console.error("프로필 사진 업로드 오류:", error);
   //       setModalMessage(`프로필 사진 업로드 실패: ${error.message}`);
@@ -162,23 +162,23 @@ const Mypage = observer(() => {
   // };
   
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      try {
-        const userId = authStore.userId;
-        const response = await uploadProfilePhoto(file, userId);
-        const profileUrl = response.filePath;  // 서버에서 반환된 profileUrl 사용
-        authStore.setProfileUrl(profileUrl);
-        setProfileUrl(profileUrl);
-        setModalMessage("프로필 사진 업로드 완료!\n사진 등록서 올라오는 시간이 걸려요!");
-      } catch (error) {
-        console.error("프로필 사진 업로드 오류:", error);
-        setModalMessage(`프로필 사진 업로드 실패: ${error.message}`);
-      }
-      setIsModalOpen(true);
-    }
-  };
+  // const handleFileChange = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     try {
+  //       const userId = authStore.userId;
+  //       const response = await uploadProfilePhoto(file, userId);
+  //       const profileUrl = response.filePath;
+  //       authStore.setProfileUrl(profileUrl);
+  //       setProfileUrl(profileUrl);
+  //       setModalMessage("프로필 사진 업로드 완료!\n사진 등록 후 올라오는 시간이 걸려요!");
+  //     } catch (error) {
+  //       console.error("프로필 사진 업로드 오류:", error);
+  //       setModalMessage(`프로필 사진 업로드 실패: ${error.message}`);
+  //     }
+  //     setIsModalOpen(true);
+  //   }
+  // };
   
 
   const handleImageDelete = async () => {
