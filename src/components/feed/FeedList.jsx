@@ -9,6 +9,7 @@ export default function FeedList({ category, subCategory, user, searchData }) {
     const [page, setPage] = useState(0);
     const elementRef = useRef(null);
     const size = 10;
+    const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
         setPage(0);
@@ -73,9 +74,8 @@ export default function FeedList({ category, subCategory, user, searchData }) {
                                 <div className="flex gap-2 text-m items-center text-gray-500 pb-2 min-w-96">
                                     <p>{feed.category}</p>
                                     <p>|</p>
-                                    <div className="border w-10 h-10 rounded-full overflow-hidden">
-                                        {/* <img className="block w-full" src={feed.feedWriterProfileUrl} alt="userImg" /> */}
-                                        <img className="block w-full" src={"#"} alt="userImg" />
+                                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                                        <img className="block w-full" src={feed.feedWriterProfileUrl ? `${NEXT_PUBLIC_API_URL}` + feed.feedWriterProfileUrl : "/common/user/noProfile.png"} alt="userImg" />
                                     </div>
                                     <p>{feed.inPublic === "Y" ? feed.feedWriterId : "비공개"}</p>
                                     <p>{formatDate(feed.feedDate)}</p>

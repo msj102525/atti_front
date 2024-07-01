@@ -111,7 +111,7 @@ export default function NormalSignUp() {
       });
       setErrorMessage("");
       setGenderErrorMessage("");
-      openModal("회원 가입 완료.", authStore.userName, "가입을 축하합니다.");
+      openModal("회원 가입 완료.", formData.userName, "님 가입을 축하합니다.");
     } catch (error) {
       if (error.response && error.response.status === 409) {
         openModal("회원 가입 실패", "이미 등록된 사용자입니다.", "다른 이메일을 사용하세요.");

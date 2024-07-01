@@ -15,7 +15,7 @@ export default function Feed() {
 
     const user = {
         userId: authStore.userId,
-        userProfileUrl: authStore.userProfileUrl
+        userProfileUrl: authStore.profileUrl
     }
 
     const fetchData = async () => {

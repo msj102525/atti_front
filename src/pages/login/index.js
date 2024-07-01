@@ -110,13 +110,13 @@ export default function LoginForm() {
                     </div>
                     <button
                       type="submit"
-                      className="w-full px-4 py-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+                      className={`w-full px-4 py-2 mt-2 font-bold text-white bg-teal-400 rounded-full cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed`}
                     >
                       로그인
                     </button>
-                    <div className={styles.socialLogin}>
-                        <KakaoLogin />
-                        <NaverLogin />                      
+                    <div className='{styles.socialLogin} px-2 mt-3'>
+                        <KakaoLogin className={styles.socialButton} />
+                        <NaverLogin className={styles.socialButton} />
                     </div>
                     <div className={styles.findInfo}>
                         <button

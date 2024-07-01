@@ -17,8 +17,8 @@ export default function FeedDetail({ data, user }) {
     const [editorData, setEditorData] = useState(data.feedContent);
     const [likeCount, setLikeCount] = useState(data.likeCount);
     const [loginUserIsLiked, setLoginUserIsLiked] = useState(data.loginUserIsLiked);
+    const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-    console.log(`로그인 유저 : ${user.userId}`);
 
 
     const modFormData = {
@@ -87,7 +87,7 @@ export default function FeedDetail({ data, user }) {
             alert('게시글 삭제를 취소하였습니다.');
         }
     };
-    
+    console.log(user);
 
     return (
         <div className="border max-w-screen-lg p-4 mx-auto">
@@ -101,8 +101,8 @@ export default function FeedDetail({ data, user }) {
             <div className='w-full p-4 shadow-xl'>
                 <div className='flex justify-between pb-4'>
                     <div className="flex items-center gap-x-2 text-gray-400">
-                        <div className="border w-10 h-10 rounded-full overflow-hidden">
-                            <img className="block w-full" src={"#"} alt="userImg" />
+                        <div className="w-10 h-10 rounded-full overflow-hidden">
+                            <img className="block w-full" src={data.feedWriterProfileUrl ? `${NEXT_PUBLIC_API_URL}` + data.feedWriterProfileUrl : "/common/user/noProfile.png"} alt="userImg" />
                         </div>
                         <p>{data.inPublic === "Y" ? data.feedWriterId : "비공개"}</p>
                         <p> | </p>
