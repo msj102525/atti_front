@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import Head from "next/head";
-import Header from "@/pages/common/header";
+import Header from "@/pages/common/Header";
 import styles from "@/styles/user/mypage.module.css";
 import Modal2 from "@/components/common/Modal";
 import Footer from "@/pages/common/Footer";
@@ -94,6 +94,8 @@ const Mypage = observer(() => {
     }
   };
 
+
+/* eslint-disable no-restricted-globals */
   const handleCancel = async () => {
     if (confirm("탈퇴 하시겠습니까?")) {
       try {
@@ -110,12 +112,15 @@ const Mypage = observer(() => {
     }
   };
 
+  /* eslint-enable no-restricted-globals */
+
   const closeModal = () => {
     setIsModalOpen(false);
     if (redirectPath) {
       router.push(redirectPath);
     }
   };
+  
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];

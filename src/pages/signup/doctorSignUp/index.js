@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { sendCodeToEmail } from "@/api/doctor/doctor.js";
 import { signup, login } from "@/api/user/user.js"; // 로그인 API 임포트
-import Modal from "@/components/common/modal";
+import Modal from "@/components/common/Modal";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
 
 export default function DoctorSignUp() {

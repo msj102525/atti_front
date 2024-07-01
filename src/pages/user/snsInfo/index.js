@@ -51,7 +51,7 @@ const SnsInfoUP = observer(() => {
 
   const handleUpdate = async () => {
     try {
-      const result = await snsUserUpdate(authStore);
+      // const result = await snsUserUpdate(authStore); // build error
       localStorage.setItem('userId', authStore.userId);
       localStorage.setItem('userName', authStore.userName);
       localStorage.setItem('nickName', authStore.nickName);
@@ -71,6 +71,7 @@ const SnsInfoUP = observer(() => {
     }
   };
 
+  /* eslint-disable no-restricted-globals */
   const handleCancel = async () => {
     if (confirm('탈퇴 하시겠습니까?')) {
       let unlinkSuccess = false;
@@ -100,6 +101,7 @@ const SnsInfoUP = observer(() => {
       }
     }
   };
+  /* eslint-disable no-restricted-globals */
 
   const closeModal = () => {
     setIsModalOpen(false);

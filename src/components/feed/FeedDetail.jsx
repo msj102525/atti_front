@@ -28,7 +28,7 @@ export default function FeedDetail({ data, user }) {
         inPublic: data.inPublic,
         feedContent: editorData
     }
-
+/* eslint-disable no-restricted-globals */
     const handleModSubmit = async () => {
         const userConfirmed = confirm('게시글을 수정하시겠습니까?');
     
@@ -88,7 +88,7 @@ export default function FeedDetail({ data, user }) {
         }
     };
     console.log(user);
-
+/* eslint-enable no-restricted-globals */
     return (
         <div className="border max-w-screen-lg p-4 mx-auto">
             <div className="after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[2px] after:left-0 after-bottom-0">

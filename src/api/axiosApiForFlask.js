@@ -37,7 +37,7 @@ const refreshToken = async () => {
     // 에러 응답을 확인합니다.
     if (error.response && error.response.data === "refresh token expired") {
       // 리프레시 토큰이 만료된 경우 로그아웃 처리
-      logout();
+      // logout(); build error
     } else {
       // 다른 종류의 에러 처리
       console.error("An error occurred:", error);

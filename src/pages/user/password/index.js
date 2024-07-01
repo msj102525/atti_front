@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { sendTempPassword, verifyTempPassword} from '@/api/user/find';
 import MoveMainLogo from "@/components/common/MoveMainLogo";
 import PassModal from '@/components/user/passmodel';

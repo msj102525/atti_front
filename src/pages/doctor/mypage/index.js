@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Header from "@/pages/common/header";
-import Footer from "@/pages/common/footer";
+import Header from "@/pages/common/Header";
+import Footer from "@/pages/common/Footer";
 import MintButton from "@/components/common/MintButton";
 import KakaoAddress from "@/components/doctor/KakaoAddress";
 import { getDoctorMypageData } from "@/api/doctor/doctor";
 import { useRouter } from "next/router";
-import FileUploadButton from "@/components/doctor/fileUploadButton";
+import FileUploadButton from "@/components/doctor/FileUploadButton";
 import Modal from "@/components/common/Modal";
 import { getCoordinatesFromAddress } from "../../../hooks/getCoordinates";
 import { updateDoctorProfile } from "@/api/doctor/doctorUpdate"; // 업데이트 API 임포트

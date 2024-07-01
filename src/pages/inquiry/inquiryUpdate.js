@@ -36,7 +36,7 @@ const InquiryUpdate = () => {
             console.error("There was an error updating the inquiry!", error);
         }
     };
-
+/* eslint-disable no-restricted-globals */
     const handleDelete = async () => {
         if (confirm('정말로 삭제하시겠습니까?')) {
             try {
@@ -47,7 +47,7 @@ const InquiryUpdate = () => {
             }
         }
     };
-
+/* eslint-enable no-restricted-globals */
     return (
         <div>
             <Header />

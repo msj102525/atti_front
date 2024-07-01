@@ -4,7 +4,7 @@ import StarRating from "../doctor/StarRating";
 import styles from "@/styles/common/mintButton.module.css";
 import EditableStarRating from "./EditableStarRating";
 import { updateReview, deleteReview } from "@/api/doctor/review";
-import Modal from "@/components/common/modal";
+import Modal from "@/components/common/Modal";
 import Link from "next/link";
 
 export default function ConsultCard({

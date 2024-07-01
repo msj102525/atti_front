@@ -1,19 +1,21 @@
-FROM node:20-alpine
+# Use an official Node runtime as a parent image
+FROM node:20
 
-# 작업 디렉토리를 설정
+# Set the working directory in the container
 WORKDIR /usr/src/app
 
-# package.json과 package-lock.json을 복사하여 의존성을 설치합니다.
+# Install dependencies
 COPY package*.json ./
-
-# 의존성을 설치합니다.
 RUN npm install
 
-# 애플리케이션을 빌드합니다.
+# Copy the rest of the application code
+COPY . .
+
+# Build the Next.js app
 RUN npm run build
 
-# 컨테이너가 바인딩할 포트를 지정합니다.
+# Expose the port the app runs on
 EXPOSE 3000
 
-# 애플리케이션을 시작합니다.
-CMD ["npm", "start"]
+# Define the command to run the app
+CMD ["npm", "run", "dev"]

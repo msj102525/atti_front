@@ -1,4 +1,4 @@
-import Header from "@/pages/common/header";
+import Header from "@/pages/common/Header";
 import PhilosopherSelect from "@/components/ai/PhilosopherSelect";
 import TextBox from "@/components/ai/TextBox";
 import { useEffect, useState } from "react";

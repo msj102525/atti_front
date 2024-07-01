@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { sendCodeToEmail } from "@/api/doctor/doctor.js";
 import { signup, login } from "@/api/user/user.js"; // login 함수 import 추가
-import Modal from "@/components/common/modal";
+import Modal from "@/components/common/Modal";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
 import { useRouter } from "next/router"; // useRouter import 추가
 import { authStore } from "@/pages/stores/authStore"; // authStore import 추가
