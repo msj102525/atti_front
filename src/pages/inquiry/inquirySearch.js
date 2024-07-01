@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import styles from "@/styles/inquiry/inquirySearch.module.css";
-import MintButton from "@/components/common/MintButton"; 
-import { useRouter } from 'next/router';
+import MintButton from "@/components/common/MintButton";
+import { useRouter } from "next/router";
 
 const InquirySearchForm = ({ onSubmit }) => {
-  const [action, setAction] = useState('title');
-  const [beginDate, setBeginDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [keyword, setKeyword] = useState('');
+  const [action, setAction] = useState("title");
+  const [beginDate, setBeginDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const adminStatus = localStorage.getItem('isAdmin');
-    setIsAdmin(adminStatus === 'true');
+    const adminStatus = localStorage.getItem("isAdmin");
+    setIsAdmin(adminStatus === "true");
   }, []);
 
   const handleSubmit = (event) => {
@@ -27,7 +28,7 @@ const InquirySearchForm = ({ onSubmit }) => {
   };
 
   const moveWrite = () => {
-    router.push('/inquiry/inquiryWrite');
+    router.push("/inquiry/inquiryWrite");
   };
 
   return (
@@ -44,7 +45,7 @@ const InquirySearchForm = ({ onSubmit }) => {
           <option value="writer">작성자</option>
           <option value="date">날짜</option>
         </select>
-        {action === 'date' ? (
+        {action === "date" ? (
           <>
             <input
               type="date"
@@ -80,7 +81,6 @@ const InquirySearchForm = ({ onSubmit }) => {
           fontSize="text-lg"
         />
       </form>
-      
     </div>
   );
 };

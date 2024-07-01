@@ -1,7 +1,7 @@
 FROM node:20-alpine
 
 # 작업 디렉토리를 설정
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # package.json과 package-lock.json을 복사하여 의존성을 설치합니다.
 COPY package*.json ./
