@@ -36,13 +36,6 @@ function NoticeDetail() {
     };
 
     
-
-    
-
-    
-
-    
-
     if (!board) {
         return <div>Loading...</div>;
     }
@@ -57,11 +50,9 @@ function NoticeDetail() {
                 <span>중요도: {board.importance}</span>
                 <span>Date: {board.boardDate.split(" ")[0]}</span>
                 {board.fileUrl && (
-                    
-                        <a href={`http://localhost:8080${board.fileUrl}`} download>
-                            다운로드 <i className="fa fa-download"></i> 💽
-                        </a>
-                    
+                    <a href={`http://localhost:8080${board.fileUrl}`} download>
+                        다운로드 <i className="fa fa-download"></i> 💾
+                    </a>
                 )}
                 <hr />
                 <div className={styles.contentbox}>{board.boardContent}</div>

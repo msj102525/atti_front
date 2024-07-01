@@ -87,9 +87,8 @@ const NoticeAdminVersionListComponent = observer(() => {
     // 검색 입력 변경 핸들러
     const handleSearchChange = (event) => setSearchInput(event.target.value);
 
-    // 회원 삭제 핸들러
+    // 글 삭제 핸들러
     const handleDelete = (boardNum) => {
-        console.log(`Delete member with ID: ${boardNum}`);
         deleteNoticeAdminVersionMutation.mutate(boardNum);
     };
 

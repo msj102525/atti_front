@@ -15,22 +15,7 @@ const FAQItem = ({ question, answer, isOpen, onToggle, onEdit, onDelete, isAdmin
       {isOpen && (
         <div className="mt-2 text-gray-700">
           <p>{answer}</p>
-          {isAdmin && (
-            <div className="mt-4">
-              <button 
-                className="text-blue-500 hover:underline mr-4"
-                onClick={onEdit}
-              >
-                수정
-              </button>
-              <button 
-                className="text-red-500 hover:underline"
-                onClick={onDelete}
-              >
-                삭제
-              </button>
-            </div>
-          )}
+          
         </div>
       )}
     </div>

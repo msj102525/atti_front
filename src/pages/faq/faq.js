@@ -164,14 +164,7 @@ const FAQ = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="mr-8 px-4 py-2 border rounded-full w-full sm:w-64"
             />
-            {isAdmin && (
-              <button
-                onClick={handleNewFAQ}
-                className="mt-8 mb-4 px-4 py-2 bg-teal-400 text-white rounded-full shadow-lg"
-              >
-                새 FAQ 작성
-              </button>
-            )}
+            
           </div>
         </div>
       </div>

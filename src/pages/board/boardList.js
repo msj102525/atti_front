@@ -38,7 +38,8 @@ const List = () => {
         // 모든 중요도 2인 항목에 ⭐ 표시
         const updatedBoards = data.map(board => ({
           ...board,
-          boardTitle: `${board.importance === 2 ? '⭐ ' : ''}${board.boardTitle}${board.filePath ? ' 💽' : ''}`
+          boardTitle: `${board.importance === 2 ? '⭐ ' : ''}
+          ${board.boardTitle}${board.filePath ? ' 💾' : ''}`
         
         }));
 
@@ -60,9 +61,7 @@ const List = () => {
     router.push(`/board/boardDetail?boardNum=${boardNum}`);
   };
 
-  useEffect(() => {
-    console.log(boards, "ㅋㅌㅊㅋㅌㅊㅋㅌㅊ");
-  }, [boards]);
+
 
   const handleSearchSubmit = async (formData) => {
     try {
@@ -75,8 +74,6 @@ const List = () => {
         size: 10  // 한 페이지에 보여줄 항목 수
       };
 
-      
-      console.log(searchQuery, "ㅋㅌㅊ")
 
       setSearchQuery(formData);
       setCurrentPage(0);  // 검색 후 첫 페이지로 이동
@@ -89,7 +86,8 @@ const List = () => {
       // 모든 중요도 2인 항목에 ⭐ 표시
       const updatedBoards = data.map(board => ({
         ...board,
-        boardTitle: board.importance === 2 ? `⭐ ${board.boardTitle}` : board.boardTitle
+        boardTitle: `${board.importance === 2 ? '⭐ ' : ''}${board.boardTitle}
+        ${board.filePath ? ' 💾' : ''}`
       }));
 
       // 모든 항목을 boardNum 기준으로 정렬
@@ -125,7 +123,8 @@ const List = () => {
 
       const updatedBoards = data.map(board => ({
         ...board,
-        boardTitle: board.importance === 2 ? `⭐ ${board.boardTitle}` : board.boardTitle
+        boardTitle: `${board.importance === 2 ? '⭐ ' : ''}
+        ${board.boardTitle}${board.filePath ? ' 💾' : ''}`
         
       }));
 
