@@ -1,4 +1,4 @@
-import instance from "../axiosApi"; // Import your axios instance
+import instance from "../axiosApi";
 
 const baseUrl = "/users";
 const baseUrl2 = "/auth";

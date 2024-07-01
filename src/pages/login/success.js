@@ -79,7 +79,7 @@ const LoginSuccess = () => {
 
             authStore.checkLoggedIn();
 
-            router.push('/user/snsInfo'); // 원하는 페이지로 리다이렉트합니다.
+            router.push('/user/snsInfo');
         }
     }, [router.query]);
 

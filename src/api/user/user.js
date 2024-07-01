@@ -33,7 +33,6 @@ export const login = (loginData) => {
         window.localStorage.setItem("password", response.data.password || '');
         window.localStorage.getItem("connfigPassword", response.data.configPassword || '');
         console.log(response.data);
-
         // authStore에 사용자 정보를 설정
         authStore.setLoggedIn(true);
         authStore.setUserId(response.data.userId);
@@ -46,7 +45,6 @@ export const login = (loginData) => {
         authStore.setBirthDate(response.data.birthDate);
         authStore.setPhone(response.data.phone);
         authStore.setLoginType(response.data.loginType || 'regular');
-
         if (response.data.birthDate) {
           authStore.setBirthDate(response.data.birthDate);
         }
