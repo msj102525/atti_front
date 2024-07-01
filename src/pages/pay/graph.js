@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart, registerables, TimeScale, LinearScale } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import styles from "@/styles/admin/noticeAdminVersion.module.css";
 import Header from '../common/Header';
 import AdminSidebar from "@/components/admin/AdminSidebar"
 
@@ -110,9 +109,35 @@ const GraphComponent = () => {
         data: aggregatedData.map(item => item.amount),
         fill: false,
         backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
+        borderColor: 'black',
       },
     ],
+  };
+
+  const options = {
+    scales: {
+      y: {
+        ticks: {
+          callback: function(value) {
+            return '₩' + value.toLocaleString();  // 숫자를 원화 형식으로 포맷팅
+          }
+        }
+      }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            let label = context.dataset.label || '';
+            if (label) {
+              label += ': ';
+            }
+            label += context.raw.toLocaleString();
+            return label + '원';
+          }
+        }
+      }
+    }
   };
 
   const renderYearOptions = () => {
@@ -128,23 +153,35 @@ const GraphComponent = () => {
   return (
     <div className="max-w-screen-2xl mx-auto p-4">
       <Header />
-      <div style={{ display: 'flex', justifyContent: "space-between", minHeight: '1000px' }}>
+      <div className="flex justify-between min-h-[1000px]">
         <AdminSidebar />
-        <div className={styles.content}>
-          <div className={styles.container}>
-            <h2 className={styles.centeredText}>매출</h2>
-            <div>
-              <label htmlFor="year">년도: </label>
-              <select id="year" value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+        <div className="p-5 w-[calc(100%-220px)]">
+          <div className="mt-8 border p-4 rounded-lg min-h-[calc(100%-60px)] ">
+            <h2 className="text-xl mb-12 text-center bg-green-300">매출</h2>
+            <div >
+            <select 
+                id="year" 
+                value={selectedYear} 
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="h-10 border-2 border-black mr-2 p-2 rounded-md"
+              >
                 {renderYearOptions()}
               </select>
-              <label htmlFor="month">월: </label>
-              <select id="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
+              <label htmlFor="year">년 </label>
+              
+              <select 
+                id="month" 
+                value={selectedMonth} 
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                className="h-10 border-2 border-black mr-2 p-2 rounded-md"
+              >
                 {renderMonthOptions()}
               </select>
+              <label htmlFor="month">월</label>
+              
             </div>
-            <div>
-              <Line data={chartData} />
+            <div style={{ width: '100%', height: '100%' }} className="flex mt-12 justify-center items-center ">
+              <Line data={chartData} options={options} />
             </div>
           </div>
         </div>
