@@ -108,14 +108,14 @@ export default function FeedDetail({ data, user }) {
                         <p> | </p>
                         <p>{formatDate(data.feedDate)}</p>
                     </div>
-                    <div className={data.feedWriterId == user.userId ? "flex gap-4" : "hidden"}>
+                    <div className={data.feedWriterId === user.userId ? "flex gap-4" : "hidden"}>
                         <Button text={"수정"} onClick={handleModSubmit} />
                         <Button text={"삭제"} onClick={handleDeleteSubmit} />
                     </div>
                 </div>
                 <div className="py-8 ">
                     {editorData && (
-                        <CustomEditor readOnly={data.feedWriterId == user.userId ? false : true} value={editorData} initialData={data.feedContent} setData={setEditorData} />
+                        <CustomEditor readOnly={data.feedWriterId === user.userId ? false : true} value={editorData} initialData={data.feedContent} setData={setEditorData} />
                     )}
                 </div>
                 <div className="flex gap-x-4">

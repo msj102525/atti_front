@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import MainDoctorCard from "@/components/doctor/MainDoctorCard";
@@ -35,6 +35,7 @@ export default function MainSection2() {
         <img
           src="/doctor/consult.png"
           className="object-contain object-center w-full h-full"
+          alt="의사이미지"
         />
       </div>
       <div className="flex flex-col p-8 bg-gray-100">

@@ -7,7 +7,7 @@ import Header from '../common/Header';
 import InquirySearchForm from "@/components/inquiry/inquirySearchForm";
 import MintButton from "@/components/common/MintButton";
 import { getInquiryList, searchInquiries } from "@/api/inquiry/inquiry";
-import { authStore } from "../stores/authStore";
+import { authStore } from "../../stores/authStore";
 
 const InquiryList = observer(() => {
   const [inquiries, setInquiries] = useState([]);

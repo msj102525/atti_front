@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { authStore } from '../stores/authStore';
+import { authStore } from '../../stores/authStore';
 
 const LoginSuccess = () => {
     const router = useRouter();

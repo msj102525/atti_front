@@ -69,7 +69,7 @@ export default function SpeechBubbleRight({
         {displayedText.map((line, index) => (
           <h1 key={index}>{line}</h1>
         ))}
-        {answerValid && !(messageSequence == 5) && (
+        {answerValid && !(messageSequence === 5) && (
           <div
             className="absolute text-xl text-blue-500 cursor-pointer right-5 bottom-5"
             onClick={onAnswerListen}

@@ -92,7 +92,7 @@ export default function FeedWriteForm({ user, category }) {
             <div className="py-8">
                 <CustomEditor placeholder={"고민 작성"} value={editorData} setData={setEditorData} onChange={handleEditorChange} readOnly={false} />
             </div>
-            <span className='p-1 border text-gray-500'>#{formData.category != "" ? formData.category : "일반 고민"}</span>
+            <span className='p-1 border text-gray-500'>#{formData.category !== "" ? formData.category : "일반 고민"}</span>
         </div>
     );
 }

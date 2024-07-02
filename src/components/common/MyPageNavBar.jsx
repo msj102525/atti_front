@@ -12,17 +12,17 @@ const MyPageNavBar = ({ userType }) => {
         <li className="py-1">
           <Link href="/user/mypage">마이 페이지</Link>
         </li>
-        {userType == "D" && (
+        {userType === "D" && (
           <li className="py-1">
             <Link href="/doctor/mypage">병원정보 등록</Link>
           </li>
         )}
-        {userType == "U" && (
+        {userType === "U" && (
           <li className="py-1">
             <Link href="/review">내가 쓴 리뷰</Link>
           </li>
         )}
-        {userType == "A" && (
+        {userType === "A" && (
           <li className="py-1">
             <Link href="/admin/memberList">관리자페이지</Link>
           </li>

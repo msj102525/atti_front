@@ -1,5 +1,5 @@
 import axios from "../axiosApi";
-import { authStore } from "@/pages/stores/authStore";
+import { authStore } from "src/stores/authStore";
 
 const baseUrl = "/users";
 

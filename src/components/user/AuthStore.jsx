@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
-import { authStore } from "@/pages/stores/authStore";
+import { authStore } from "src/stores/authStore";
 import { logoutKakao, logoutNaver } from "@/api/user/user";
 import MyPageNavBar from "../common/MyPageNavBar";
 import Modal2 from "../common/Modal2";

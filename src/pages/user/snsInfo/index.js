@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
-import { authStore } from "@/pages/stores/authStore";
-import { snsUserUpdate, getUserData, deleteUser } from '@/api/user/userApi';
+import { authStore } from "src/stores/authStore";
+import { getUserData, deleteUser } from '@/api/user/userApi';
 import Modal2 from "@/components/common/Modal2";
 import MoveMainLogo from '@/components/common/MoveMainLogo';
 import styles from '@/styles/user/snsInfo.module.css';
@@ -15,7 +15,7 @@ const SnsInfoUP = observer(() => {
   const [modalMessage, setModalMessage] = useState('');
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
   const router = useRouter();
-  const [profileUrl, setProfileUrl] = useState(null);
+  const [profileUrl, setProfileUrl] = useState(authStore.profileUrl);
   const fileInput = useRef(null);
 
   const serverImage = process.env.NEXT_PUBLIC_API_URL;
@@ -44,10 +44,8 @@ const SnsInfoUP = observer(() => {
   }, []);
 
   useEffect(() => {
-    if (authStore.profileUrl) {
-      setProfileUrl(authStore.profileUrl);
-    }
-  }, [authStore.profileUrl]);
+    setProfileUrl(authStore.profileUrl);
+  }, [profileUrl]);
 
   const handleUpdate = async () => {
     try {

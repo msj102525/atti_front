@@ -4,7 +4,6 @@ import { getReplyList } from "@/api/reply/reply";
 import dynamic from 'next/dynamic';
 import Button from '../common/Button';
 import { postReply } from '@/api/reply/reply';
-import { authStore } from "@/pages/stores/authStore";
 
 const CustomEditorReply = dynamic(() => {
     return import('@/components/common/custom-editorReply');
@@ -79,7 +78,7 @@ export default function ReplyList({ data, fetchData, user }) {
                         {replyList.map((reply, idx) => (
                             <div key={idx} className="mb-4">
                                 <div
-                                    className={`${user.userId == "" ? "" : "cursor-pointer"} border-[#001219] flex flex-col border w-full p-4 rounded-[40px] ${reply.replyUserType === "D" ? "bg-customBrown2" : ""}`}
+                                    className={`${user.userId === "" ? "" : "cursor-pointer"} border-[#001219] flex flex-col border w-full p-4 rounded-[40px] ${reply.replyUserType === "D" ? "bg-customBrown2" : ""}`}
                                     onClick={() => handleToggleReplyForm({ feedNum: reply.feedNum, replyNum: reply.replyNum })}
                                 >
                                     <div className="flex gap-2 text-m items-center text-gray-500 pb-2 w-full">

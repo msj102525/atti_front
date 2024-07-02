@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { signup } from "@/api/user/user.js";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
-import { authStore } from "@/pages/stores/authStore";
 
 // Dynamic import for client-side only components
 const KakaoSignup = dynamic(() => import("@/components/user/kakaoSignup"), { ssr: false });

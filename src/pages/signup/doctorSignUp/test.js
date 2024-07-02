@@ -4,7 +4,7 @@ import { signup, login } from "@/api/user/user.js"; // login 함수 import 추�
 import Modal from "@/components/common/Modal";
 import MoveMainLogo from "@/components/common/MoveMainLogo";
 import { useRouter } from "next/router"; // useRouter import 추가
-import { authStore } from "@/pages/stores/authStore"; // authStore import 추가
+import { authStore } from "src/stores/authStore";
 
 export default function DoctorSignUp() {
   const [id, setId] = useState("");
@@ -30,9 +30,6 @@ export default function DoctorSignUp() {
   const [femaleValid, setFemaleValid] = useState(false);
 
   const [codeInput, setCodeInput] = useState(false);
-
-  const [emailButtonColor, setEmailButtonColor] = useState("grey");
-  const [codeButtonColor, setCodeButtonColor] = useState("grey");
   const [isVerified, setIsVerified] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -137,10 +134,8 @@ export default function DoctorSignUp() {
       emailValue.includes("smkr96@gachon.ac.kr")
     ) {
       setEmailValid(true);
-      setEmailButtonColor("teal-400");
     } else {
       setEmailValid(false);
-      setEmailButtonColor("grey");
     }
   };
 
@@ -172,7 +167,6 @@ export default function DoctorSignUp() {
   const verifyCode = (e) => {
     if (e.target.value === code.toString()) {
       setIsVerified(true);
-      setCodeButtonColor("teal-400");
       setCodeReadOnly(true);
     } else {
       setIsVerified(false);

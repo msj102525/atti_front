@@ -8,11 +8,11 @@ import Footer from "@/pages/common/Footer";
 import { getUserData, updateUser, deleteUser } from "@/api/user/userApi";
 import { changePassword } from "@/api/user/find";
 import { uploadProfilePhoto, deleteProfilePhoto } from "@/api/doctor/doctorUpdate";
-import { authStore } from "@/pages/stores/authStore";
+import { authStore } from "src/stores/authStore";
 import { useRouter } from "next/router";
 
 const Mypage = observer(() => {
-  const [profileUrl, setProfileUrl] = useState(null);
+  const [profileUrl, setProfileUrl] = useState(authStore.profileUrl);
   const fileInput = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -50,10 +50,8 @@ const Mypage = observer(() => {
   }, []);
 
   useEffect(() => {
-    if (authStore.profileUrl) {
-      setProfileUrl(authStore.profileUrl);
-    }
-  }, [authStore.profileUrl]);
+    setProfileUrl(authStore.profileUrl);
+  }, [profileUrl]);
 
   const handleUpdate = async () => {
     if (authStore.password !== authStore.confirmPassword) {

@@ -3,7 +3,7 @@ import FeedNav from "@/components/feed/FeedNav";
 import FeedSideBar from "@/components/feed/FeedSideBar";
 import FeedWriteForm from "@/components/feed/FeedWriteForm";
 import { useState } from "react";
-import { authStore } from "../stores/authStore";
+import { authStore } from "../../stores/authStore";
 
 
 export default function FeedWrite() {

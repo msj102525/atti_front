@@ -31,37 +31,30 @@ export default function DoctorSignUp() {
   const [codeInput, setCodeInput] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   
-  const [emailButtonColor, setEmailButtonColor] = useState("grey");
-  const [codeButtonColor, setCodeButtonColor] = useState("grey");
   const [isVerified, setIsVerified] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [timerStarted, setTimerStarted] = useState(false);
 
-  
-   useEffect(() => {
-    // 타이머가 0이고 타이머가 시작되었을 경우 로직 실행
+  useEffect(() => {
     if (timeLeft === 0 && timerStarted) {
       setCodeReadOnly(true);
-      setEmailButtonColor("grey");
       setIsVerified(false);
       alert("인증 시간이 만료되었습니다. 다시 시도해 주세요.");
       return;
     }
 
-    if (timeLeft > 0) {
-      setTimerStarted(true); // 타이머 시작 표시
+    if (timeLeft > 0 && !timerStarted) {
+      setTimerStarted(true);
       const timerId = setInterval(() => {
         setTimeLeft(timeLeft - 1);
       }, 1000);
 
-      // 컴포넌트 언마운트 시 타이머 해제
       return () => clearInterval(timerId);
     }
-  }, [timeLeft]);
-  
-const formatNumber = (number) => number.toString().padStart(2, '0');
+  }, [timeLeft, timerStarted]);
 
+  const formatNumber = (number) => number.toString().padStart(2, '0');
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -69,7 +62,6 @@ const formatNumber = (number) => number.toString().padStart(2, '0');
 
   const closeModal = async () => {
     setIsModalOpen(false);
-    // 로그인 시도
     try {
       const loginData = {
         userId: id,
@@ -87,7 +79,6 @@ const formatNumber = (number) => number.toString().padStart(2, '0');
       window.localStorage.setItem("profileUrl", response.data.profileUrl || "");
       window.localStorage.setItem("userType", response.data.userType || "D");
 
-      // 마이페이지로 리다이렉트
       window.location.href = "/doctor/mypage";
     } catch (error) {
       console.error("로그인 실패:", error);
@@ -145,7 +136,6 @@ const formatNumber = (number) => number.toString().padStart(2, '0');
     setCodeInput(true);
     setEmailReadOnly(true);
     setCompleteCertificate(true);
-    //타이머 시작
     setTimeLeft(300);
     setShowTimeOut(true);
     handleEmailVerification();
@@ -184,10 +174,8 @@ const formatNumber = (number) => number.toString().padStart(2, '0');
       emailValue.includes("smkr96@gachon.ac.kr")
     ) {
       setEmailValid(true);
-      setEmailButtonColor("teal-400");
     } else {
       setEmailValid(false);
-      setEmailButtonColor("grey");
     }
   };
 
@@ -219,7 +207,6 @@ const formatNumber = (number) => number.toString().padStart(2, '0');
   const verifyCode = (e) => {
     if (e.target.value === code.toString()) {
       setIsVerified(true);
-      setCodeButtonColor("teal-400");
       setCodeReadOnly(true);
       setShowTimeOut(false); 
     } else {

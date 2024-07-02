@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { termsContent1, termsContent2, termsContent3 } from './payContent';
+import { termsContent1, termsContent2, termsContent3 } from '../../api/pay/payContent';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
 import { useRouter } from 'next/router';

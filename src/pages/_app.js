@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { useState } from 'react';
 import "@/styles/globals.css";
 import '@/styles/common/mainsection1.css';
-import { authStore } from './stores/authStore';
+import { authStore } from '../stores/authStore';
 import { Provider } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

@@ -35,7 +35,7 @@ export default function ReplyWriteForm({ data, fetchData, user }) {
     }
 
     return (
-        <div className={`max-w-screen-lg p-4 mx-auto ${user.userId == "" ? "hidden" : ""}`}>
+        <div className={`max-w-screen-lg p-4 mx-auto ${user.userId === "" ? "hidden" : ""}`}>
             <div className=" flex gap-4 p-2 justify-between text-gray-400">
                 <div className=" flex items-center gap-2 ">
                     <div className="w-10 h-10 rounded-full overflow-hidden">
