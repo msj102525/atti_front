@@ -127,7 +127,7 @@ const SuccessPage = () => {
             const getId = localStorage.getItem("consultDoctorId");
             const status = 'true'
             console.log('Amount123:', amount, typeof(amount));
-            const limitTime = amount === 110000 ? 60 : amount === 55000 ? 30 : null;
+            const limitTime = amount == 110000 ? 60 : amount === 55000 ? 30 : null;
             console.log('Limit time123:', limitTime, typeof(limitTime) );
 
             const chatSessionData = {
