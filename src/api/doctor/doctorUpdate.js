@@ -4,7 +4,7 @@ import axios from "axios";
 //이미지 파일 전송을 위한 별도의 객체 생성
 // 파일 업로드 전용 Axios 인스턴스 생성
 const fileUploadInstance = axios.create({
-  baseURL: "http://localhost:8080", // 서버의 기본 URL
+  baseURL: "http://43.202.66.137:8080", // 서버의 기본 URL
   headers: {
     // Content-Type 설정하지 않음, 브라우저가 자동으로 multipart/form-data로 설정
   },
@@ -40,20 +40,24 @@ export const updateDoctorProfile = (formData) => {
 
 export const uploadProfilePhoto = async (file, userId) => {
   try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('userId', userId);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userId", userId);
 
-      return fileUploadInstance.put("/profile/upload", formData).then((res) => res);
+    return fileUploadInstance
+      .put("/profile/upload", formData)
+      .then((res) => res);
   } catch (error) {
-      console.error('업로드 오류:', error);
-      throw error;
+    console.error("업로드 오류:", error);
+    throw error;
   }
 };
 
 export const deleteProfilePhoto = async (userId) => {
   try {
-    const response = await fileUploadInstance.delete(`/profile/delete/${userId}`);
+    const response = await fileUploadInstance.delete(
+      `/profile/delete/${userId}`
+    );
     return response.data;
   } catch (error) {
     console.error("삭제 오류:", error);
