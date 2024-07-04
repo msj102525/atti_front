@@ -89,7 +89,7 @@ export const getFeedByFeedNum = async (feedNum) => {
 export const searchSimilarFeeds = async (feedNum) => {
     console.log("Axios flask", feedNum);
     try {
-        const response = await flaskAxios.get(`http://127.0.0.1:5000/feed/similar/${feedNum}`);
+        const response = await flaskAxios.get(`http://43.202.66.137/feed/similar/${feedNum}`);
         console.log(response);
 
         return response.data;
