@@ -9,6 +9,7 @@ const BoardUpdate = () => {
     const { boardNum } = router.query;
     const [file, setFile] = useState(null); 
     const [fileName, setFileName] = useState(''); // 기존 파일 이름을 저장할 상태
+    const [fileUrl, setFileUrl] = useState(''); // 파일 URL을 저장할 상태
     const [boardTitle, setBoardTitle] = useState('');
     const [boardContent, setBoardContent] = useState('');
     const [importance, setImportance] = useState(1);
@@ -25,6 +26,7 @@ const BoardUpdate = () => {
                     setImportance(board.importance);
                     setReadCount(board.readCount);
                     setFileName(board.fileUrl ? board.fileUrl.split('/').pop() : ''); // 파일 이름 설정
+                    setFileUrl(board.fileUrl); // 파일 URL 설정
                 } catch (error) {
                     console.error("There was an error fetching the board detail!", error);
                 }
@@ -85,7 +87,7 @@ const BoardUpdate = () => {
                         />
                         {fileName && (
                             <div className="mt-4">
-                                <p>Uploaded file: <a href={`http://43.202.66.137:8080${board.fileUrl}`} download>{fileName}</a></p>
+                                <p>Uploaded file: <a href={`http://43.202.66.137:8080${fileUrl}`} download>{fileName}</a></p>
                             </div>
                         )}
                         <input
