@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from "@/api/axiosApi";
 import Modal from 'react-modal';
 import FAQItem from './faqItem';
 import Header from '../common/Header';
@@ -33,7 +33,7 @@ const FAQ = () => {
 
   const fetchFAQs = async (page) => {
     try {
-      const response = await axios.get(`http://localhost:8080/faq/faq?page=${page}&size=${itemsPerPage}`);
+      const response = await axios.get(`/faq/faq?page=${page}&size=${itemsPerPage}`);
       setFaqData(response.data.content);
       setPageCount(response.data.totalPages);
       setCategories(['All', ...new Set(response.data.content.map(faq => faq.faqCategory))]);
@@ -63,7 +63,7 @@ const FAQ = () => {
     const faqToDelete = filteredFAQs[index];
 
     if (window.confirm('정말로 이 FAQ를 삭제하시겠습니까?')) {
-      axios.delete(`http://localhost:8080/faq/faq/${faqToDelete.faqNum}`)
+      axios.delete(`/faq/faq/${faqToDelete.faqNum}`)
         .then(() => {
           fetchFAQs(currentPage);
         })
@@ -78,7 +78,7 @@ const FAQ = () => {
       // 수정 모드
       const updatedFAQ = { ...currentFAQ };
 
-      axios.put(`http://localhost:8080/faq/faq/${currentFAQ.faqNum}`, updatedFAQ)
+      axios.put(`/faq/faq/${currentFAQ.faqNum}`, updatedFAQ)
         .then(response => {
           fetchFAQs(currentPage);
           setIsModalOpen(false);
@@ -98,7 +98,7 @@ const FAQ = () => {
       console.log(currentFAQ, "프로젝트");
       console.log('Sending FAQ data:', newFAQ);
 
-      axios.post('http://localhost:8080/faq/faq', newFAQ)
+      axios.post('/faq/faq', newFAQ)
         .then(response => {
           fetchFAQs(currentPage);
           setIsModalOpen(false);

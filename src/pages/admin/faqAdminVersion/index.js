@@ -8,7 +8,7 @@ import Footer from "@/pages/common/Footer";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import { useRouter } from 'next/router';
 import Modal from 'react-modal';
-import axios from 'axios';
+import instance from "@/api/axiosApi";
 import styles from "@/styles/admin/faqAdminVersion.module.css"; // 기존 스타일 유지
 import modalstyles from '@/styles/faq/faqModal.module.css';
 
@@ -85,7 +85,7 @@ const FaqAdminVersionListComponent = observer(() => {
 
     const handleDelete = async (faqNum) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/faq/${faqNum}`);
+            const response = await instance.delete(`/faq/${faqNum}`);
             console.log(`Deleted FAQ with ID: ${faqNum}`, response.data);
             refetch(); // 데이터 다시 가져오기
         } catch (error) {
@@ -127,7 +127,7 @@ const FaqAdminVersionListComponent = observer(() => {
             console.log('Sending FAQ data:', faqData); // 전송할 데이터 확인
     
             // 서버로 데이터 전송
-            const response = await axios.post('http://localhost:8080/faq/faq', faqData);
+            const response = await instance.post('/faq/faq', faqData);
             console.log('FAQ submitted:', response.data);
             refetch(); // 데이터 다시 가져오기
             closeModal();

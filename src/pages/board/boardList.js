@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import instance from "@/api/axiosApi";
 import { useRouter } from "next/router";
 import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
 import styles from "../../styles/board/boardList.module.css";
@@ -29,7 +29,7 @@ const List = () => {
           params.endDate = searchQuery.endDate;
         }
 
-        const response = await axios.get("http://localhost:8080/board/search", {
+        const response = await instance.get("/board/search", {
           params: params,
         });
 
@@ -78,7 +78,7 @@ const List = () => {
       setSearchQuery(formData);
       setCurrentPage(0);  // 검색 후 첫 페이지로 이동
       
-      const response = await axios.get("http://localhost:8080/board/search", {
+      const response = await instance.get("/board/search", {
           params: params
       });
       const data = response.data.content;
@@ -114,7 +114,7 @@ const List = () => {
 
       console.log(searchQuery, '페이지이동')
 
-      const response = await axios.get("http://localhost:8080/board/search", {
+      const response = await instance.get("/board/search", {
         params: params,
       });
       const data = response.data.content;

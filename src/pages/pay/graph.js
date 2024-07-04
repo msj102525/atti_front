@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from "@/api/axiosApi";
 import { Line } from 'react-chartjs-2';
 import { Chart, registerables, TimeScale, LinearScale } from 'chart.js';
 import 'chartjs-adapter-date-fns';
@@ -22,7 +22,7 @@ const GraphComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/pay/graph');
+        const response = await axios.get('/pay/graph');
         console.log('API 응답 데이터:', response.data);
         setData(response.data);
       } catch (error) {

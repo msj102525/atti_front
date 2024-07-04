@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from "@/api/axiosApi";
 import { useRouter } from 'next/router';
 import styles from "../../styles/board/boardUpdate.module.css"; // 스타일 파일을 임포트
 import Header from '../common/Header'; // Header 경로 수정
@@ -18,7 +18,7 @@ const BoardUpdate = () => {
         if (boardNum) {
             const fetchBoardDetail = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/board/boardDetail/${boardNum}`);
+                    const response = await axios.get(`/board/boardDetail/${boardNum}`);
                     const board = response.data;
                     setBoardTitle(board.boardTitle);
                     setBoardContent(board.boardContent);
@@ -48,7 +48,7 @@ const BoardUpdate = () => {
         }
 
         try {
-            await axios.put(`http://localhost:8080/board/boardUpdate/${boardNum}`, formData, {
+            await axios.put(`/board/boardUpdate/${boardNum}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -85,7 +85,7 @@ const BoardUpdate = () => {
                         />
                         {fileName && (
                             <div className="mt-4">
-                                <p>Uploaded file: <a href={`http://localhost:8080/board/download/${fileName}`} download>{fileName}</a></p>
+                                <p>Uploaded file: <a href={`http://43.202.66.137:8080${board.fileUrl}`} download>{fileName}</a></p>
                             </div>
                         )}
                         <input

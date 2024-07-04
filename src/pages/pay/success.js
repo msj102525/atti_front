@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
+import axios from "@/api/axiosApi"; // axios 인스턴스 사용
 
 const SuccessPage = () => {
   const router = useRouter();
@@ -20,11 +21,10 @@ const SuccessPage = () => {
       setSelectedTime(storedSelectedTime);
 
       const storedUserId = localStorage.getItem("userId");
-      setUserId(storedUserId)
+      setUserId(storedUserId);
 
-      const getId = localStorage.getItem("consultDoctorId");
-      setGetId(getId)
-
+      const consultDoctorId = localStorage.getItem("consultDoctorId");
+      setGetId(consultDoctorId);
     }
   }, []);
 
@@ -42,24 +42,17 @@ const SuccessPage = () => {
       };
 
       try {
-        const response = await fetch('/api/confirm', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData),
-        });
+        const response = await axios.post('/api/confirm', requestData);
 
-        const json = await response.json();
+        const json = response.data;
         console.log(json);
 
-        if (!response.ok || json === 0) {
+        if (!response.status === 200 || json === 0) {
           router.push(`/pay/fail?message=${json.message || '결제 실패'}&code=${json.code || 'ERROR'}`);
         } else {
           // 결제 성공 비즈니스 로직을 구현하세요.
           console.log(json);
-          setMethod(json.method)
-          
+          setMethod(json.method);
         }
       } catch (error) {
         console.error('Error confirming payment:', error);
@@ -78,11 +71,11 @@ const SuccessPage = () => {
           router.push('/chat/chatList');
         }, 3000);
       }
-  
+
       handleSavePayment();
     }
   }, [method, orderId, amount]);
-  
+
   const now = new Date();
   const options = {
     year: 'numeric',
@@ -94,79 +87,63 @@ const SuccessPage = () => {
     hour12: false,
     timeZone: 'Asia/Seoul'
   };
-  
+
   const formattedDate = new Intl.DateTimeFormat('ko-KR', options).format(now);
   const formattedDateWithMilliseconds = formattedDate.replace(/\. /g, '-').replace(/ /g, 'T');
   const milliseconds = now.getMilliseconds().toString().padStart(3, '0');
 
   const savePayment = async (orderId, amount, method) => {
     const paymentData = {
-        payNum: orderId,
-        userId: userId, 
-        payAmount: amount,
-        payMethod: method,
-        payDate : `${formattedDateWithMilliseconds}.${milliseconds}`,
-        toDoctor : localStorage.getItem('consultDoctorId'),
+      payNum: orderId,
+      userId: userId,
+      payAmount: amount,
+      payMethod: method,
+      payDate: `${formattedDateWithMilliseconds}.${milliseconds}`,
+      toDoctor: localStorage.getItem('consultDoctorId'),
     };
 
     try {
-        const response = await fetch('http://localhost:8080/pay/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(paymentData),
-        });
+      const response = await axios.post('/pay/save', paymentData);
 
-        const json = await response.json();
-        if (response.ok && json === 1) {
-            console.log('Payment saved successfully');
+      const json = response.data;
+      if (response.status === 200 && json === 1) {
+        console.log('Payment saved successfully');
 
-            // 결제 성공 시 chat_sessions 테이블에 데이터 추가
-            const storedUserId = localStorage.getItem("userId");
-            const getId = localStorage.getItem("consultDoctorId");
-            const status = 'true'
-            console.log('Amount123:', amount, typeof(amount));
-            const limitTime = amount == 110000 ? 60 : amount === 55000 ? 30 : null;
-            console.log('Limit time123:', limitTime, typeof(limitTime) );
+        // 결제 성공 시 chat_sessions 테이블에 데이터 추가
+        const storedUserId = localStorage.getItem("userId");
+        const consultDoctorId = localStorage.getItem("consultDoctorId");
+        const status = 'true';
+        const limitTime = amount == 110000 ? 60 : amount === 55000 ? 30 : null;
 
-            const chatSessionData = {
-                senderId: storedUserId,
-                receiverId: getId,
-                limitTime: limitTime,
-                startTime: new Date().toISOString().slice(0, 19).replace('T', ' '),
-                status : status
-            };
+        const chatSessionData = {
+          senderId: storedUserId,
+          receiverId: consultDoctorId,
+          limitTime: limitTime,
+          startTime: new Date().toISOString().slice(0, 19).replace('T', ' '),
+          status: status
+        };
 
-            console.log(chatSessionData);
+        console.log(chatSessionData);
 
-            const chatResponse = await fetch('http://localhost:8080/chat/session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(chatSessionData),
-            });
+        const chatResponse = await axios.post('/chat/session', chatSessionData);
 
-            if (chatResponse.ok) {
+        if (chatResponse.status === 200) {
+          const chatSession = chatResponse.data;
+          const chatId = chatSession.chatId;
+          console.log('Chat session created successfully with chatId:', chatId);
 
-                const chatSession = await chatResponse.json();
-                const chatId = chatSession.chatId;
-                console.log('Chat session created successfully with chatId:', chatId);
-
-                // Save the chatId in localStorage or state for future use
-                localStorage.setItem('currentChatId', chatId);
-            } else {
-                console.error('Failed to create chat session');
-            }
+          // Save the chatId in localStorage or state for future use
+          localStorage.setItem('currentChatId', chatId);
         } else {
-            console.error('Failed to save payment');
+          console.error('Failed to create chat session');
         }
+      } else {
+        console.error('Failed to save payment');
+      }
     } catch (error) {
-        console.error('Error saving payment:', error);
+      console.error('Error saving payment:', error);
     }
-};
-
+  };
 
   useEffect(() => {
     if (timeLeft > 0) {

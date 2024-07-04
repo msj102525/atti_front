@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import MintButton from "@/components/common/MintButton";  // MintButton 컴포넌트를 임포트합니다.
 import Header from '../common/Header';
 import Footer from '../common/Footer';
-import axios from "axios";
+import axios from "@/api/axiosApi";
 
 const BoardWrite = () => {  
   const router = useRouter();
@@ -35,7 +35,7 @@ const BoardWrite = () => {
     }
 
     // formData를 서버로 전송
-    axios.post(`http://localhost:8080/board`, formData, {
+    axios.post(`/board`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

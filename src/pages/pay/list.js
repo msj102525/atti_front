@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "@/api/axiosApi";
 import { useRouter } from "next/router";
 import Pagination from "@/components/common/page";  // Pagination 컴포넌트 임포트
 import styles from "@/styles/admin/noticeAdminVersion.module.css";
@@ -30,7 +30,7 @@ const List = () => {
           params.endDate = searchQuery.endDate;
         }
   
-        const response = await axios.get("http://localhost:8080/pay/search", {
+        const response = await axios.get("/pay/search", {
           params: params,
         });
         
@@ -62,7 +62,7 @@ const List = () => {
       setSearchQuery(formData);
       setCurrentPage(0);  // 검색 후 첫 페이지로 이동
       
-      const response = await axios.get("http://localhost:8080/pay/search", {
+      const response = await axios.get("/pay/search", {
           params: params
       });
       const data = response.data.content;
@@ -86,7 +86,7 @@ const List = () => {
         size: 10,
       };
 
-      const response = await axios.get("http://localhost:8080/pay/search", {
+      const response = await axios.get("/pay/search", {
         params: params,
       });
       const data = response.data.content;

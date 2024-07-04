@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/router";
-import axios from 'axios';
+import instance from "@/api/axiosApi";
 import Modal from 'react-modal';
 import styles from "../../styles/board/boardDetail.module.css"; // 스타일 파일을 임포트
 import Header from '../common/Header';
@@ -19,7 +19,7 @@ function NoticeDetail() {
         if (boardNum) {
             const fetchBoardDetail = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/board/boardDetail/${boardNum}`);
+                    const response = await instance.get(`/board/boardDetail/${boardNum}`);
                     setBoard(response.data);
                     
                 } catch (error) {
@@ -50,7 +50,7 @@ function NoticeDetail() {
                 <span>중요도: {board.importance}</span>
                 <span>Date: {board.boardDate.split(" ")[0]}</span>
                 {board.fileUrl && (
-                    <a href={`http://localhost:8080${board.fileUrl}`} download>
+                    <a href={`http://43.202.66.137:8080${board.fileUrl}`} download>
                         다운로드 <i className="fa fa-download"></i> 💾
                     </a>
                 )}

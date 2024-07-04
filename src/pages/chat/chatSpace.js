@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
 import mqtt from 'mqtt';
-import axios from 'axios';
+import axios from "@/api/axiosApi";
 import { FaStar } from 'react-icons/fa';
 
 const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => {
@@ -32,7 +32,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
   useEffect(() => {
     const fetchChatSession = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/chat/session/${senderId}`, {
+        const response = await axios.get(`/chat/session/${senderId}`, {
           params: { type: userType === 'U' ? 'sender' : 'receiver' }
         });
         return response.data;
@@ -57,7 +57,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
 
   const fetchMessages = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/chat/messages', {
+      const response = await axios.get('/chat/messages', {
         params: { chatId, senderId }
       });
       console.log(response.data, 'chat messages123');
@@ -98,7 +98,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
   useEffect(() => {
     const fetchChatSession = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/chat/time/${chatId}`);
+        const response = await axios.get(`/chat/time/${chatId}`);
         setChatSession(response.data);
         console.log(response.data);
       } catch (error) {
@@ -123,7 +123,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
 
   const fetchUserPayTime = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/pay/recent`, {
+      const response = await axios.get(`/pay/recent`, {
         params: { userId: senderId }
       });
       console.log(response.data);  // 요청 결과를 로그에 출력
@@ -183,7 +183,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
 
         if (currentTime > firstMessageTime) {
             try {
-                await axios.post(`http://localhost:8080/chat/end/${chatId}`);
+                await axios.post(`/chat/end/${chatId}`);
                 setIsDisabled(true);
             } catch (error) {
                 console.error('Failed to update chat status:', error);
@@ -204,7 +204,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
     client.current.publish(`chat/${receiverId}`, JSON.stringify(message));
 
     try {
-      await axios.post('http://localhost:8080/chat/message', message);
+      await axios.post('/chat/message', message);
       setMessages((prevMessages) => [...prevMessages, message]);
       setInputValue('');
     } catch (error) {
@@ -219,7 +219,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
   const handleConfirmEndChat = async () => {
     try {
       // 서버에 종료 요청을 보냄
-      await axios.post(`http://localhost:8080/chat/end/${chatId}`);
+      await axios.post(`/chat/end/${chatId}`);
       
       // 로컬 스토리지 업데이트
       setIsDisabled(true);
@@ -273,7 +273,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
     try {
       // POST 요청으로 데이터 전송
       // 먼저 GET 요청을 보내서 기존 리뷰를 확인합니다.
-    const checkResponse = await axios.get('http://localhost:8080/review/check', {
+    const checkResponse = await axios.get('/review/check', {
       params: {
         writeDate,
         senderId,
@@ -289,7 +289,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
     }
 
 
-      const response = await axios.post(`http://localhost:8080/review`, reviewData);
+      const response = await axios.post(`/review`, reviewData);
   
       if (response.status === 200) {
         console.log('Review submitted successfully:', response.data);

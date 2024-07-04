@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from "@/api/axiosApi";
 import Chat from './chatSpace';
 
 const RegularUser = ({ userId, userType }) => {
@@ -12,7 +12,7 @@ const RegularUser = ({ userId, userType }) => {
   useEffect(() => {
     const fetchUserSession = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/chat/session/alarm/${userId}`, {
+        const response = await axios.get(`/chat/session/alarm/${userId}`, {
           params: { type: 'sender' }
         });
 
