@@ -2,7 +2,8 @@ import axios from "axios";
 
 // Axios 인스턴스 생성
 const instance = axios.create({
-  baseURL: "http://43.202.66.137:5000",
+  // baseURL: "http://43.202.66.137:5000",
+  baseURL: "http://localhost:5000",
 });
 
 // 요청 인터셉터 추가

@@ -84,7 +84,6 @@ export default function ReplyList({ data, fetchData, user }) {
                                     <div className="flex gap-2 text-m items-center text-gray-500 pb-2 w-full">
                                         <div className="w-10 h-10 rounded-full overflow-hidden">
                                             <img className="block w-full" src={reply.replyWriterProfileUrl ? `${NEXT_PUBLIC_API_URL}` + reply.replyWriterProfileUrl : "/common/user/noProfile.png"} alt="userImg" />
-                                            {/* <img className="block w-full" src={`${NEXT_PUBLIC_API_URL}` + reply.replyWriterProfileUrl} alt="userImg" /> */}
                                         </div>
                                         <p>{reply.replyWriter}</p>
                                         <p>{formatDate(reply.replyDate)}</p>
