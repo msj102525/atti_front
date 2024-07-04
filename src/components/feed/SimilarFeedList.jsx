@@ -1,9 +1,10 @@
-import {  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatDate } from "@/api/feed/feed";
 import { searchSimilarFeeds } from "@/api/feed/feed";
 
-export default function SimilarFeedList({ data }) {
+export default function SimilarFeedList({ data, user }) {
+    const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
     const [similarFeeds, setSimilarFeeds] = useState([]);
 
     console.log(data);
@@ -38,9 +39,8 @@ export default function SimilarFeedList({ data }) {
                                 <div className="flex gap-2 text-m items-center text-gray-500 pb-2 min-w-96">
                                     <p>{feed.category}</p>
                                     <p>|</p>
-                                    <div className="border w-10 h-10 rounded-full overflow-hidden">
-                                        {/* <img className="block w-full" src={feed.feedWriterProfileUrl} alt="userImg" /> */}
-                                        <img className="block w-full" src={"#"} alt="userImg" />
+                                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                                        <img className="block w-full" src={feed.feedWriterProfileUrl ? `${NEXT_PUBLIC_API_URL}` + feed.feedWriterProfileUrl : "/common/user/noProfile.png"} alt="userImg" />
                                     </div>
                                     <p>{feed.inPublic === "Y" ? feed.feedWriterId : "비공개"}</p>
                                     <p>{formatDate(feed.feedDate)}</p>
@@ -59,9 +59,8 @@ export default function SimilarFeedList({ data }) {
                                 </div>
                                 <div className={`${feed.dcomentExist ? "block" : "hidden"} border p-1 rounded-[20px] bg-customBrown2`}>
                                     <div className="flex items-center">
-                                        <div className="border w-10 h-10 rounded-full overflow-hidden">
-                                            {/* <img className="block w-full bg-white" src={process.NEXT_PUBLIC_API_URL + `${feed.docterImgUrl}`} alt="userImg" /> */}
-                                            <img className="block w-full bg-white" src={"#"} alt="userImg" />
+                                        <div className="w-10 h-10 rounded-full overflow-hidden">
+                                        <img className="block w-full" src={feed.docterImgUrl ? `${NEXT_PUBLIC_API_URL}` + feed.docterImgUrl : "/common/user/noProfile.png"} alt="userImg" />
                                         </div>
                                         <p>{feed.docterName}님의 전문답변</p>
                                     </div>

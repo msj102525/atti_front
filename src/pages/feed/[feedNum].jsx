@@ -52,10 +52,7 @@ export default function Feed() {
                         <FeedDetail user={user} data={data} />
                         <ReplyWriteForm user={user} data={data} fetchData={fetchData} />
                         <ReplyList user={user} data={data} fetchData={fetchData} />
-                        <SimilarFeedList
-                            data={data}
-                        />
-
+                        <SimilarFeedList user={user} data={data} />
                     </div>
                 </div>
             </div>
