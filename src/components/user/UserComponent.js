@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from "../axiosApi";
 import PropTypes from 'prop-types';
 
 const UserComponent = ({ userId }) => {
@@ -10,7 +10,7 @@ const UserComponent = ({ userId }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/users/${userId}`);
+                const response = await axios.get(`/users/${userId}`);
                 setUser(response.data);
             } catch (error) {
                 setError('사용자 정보를 가져오는 중 오류가 발생했습니다.');

@@ -1,14 +1,7 @@
 // useLogout.js
 import { useState } from "react";
-import axios from "axios";
+import instance from "../api/axiosApi";
 import { useRouter } from "next/router";
-
-const instance = axios.create({
-  baseURL: "http://localhost:8080",
-  headers: {
-    "Content-Type": "application/json;charset=UTF-8",
-  },
-});
 
 const useLogout = () => {
   const [showModal, setShowModal] = useState(false);
