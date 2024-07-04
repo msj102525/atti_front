@@ -115,16 +115,8 @@ export default function PhilosopherConsult({
       const answer = await cosultToPhilosopher(philosopher.model, concern);
 
       let answerData = answer.data;
-      let textData = answerData.text
-
-      console.log(answerData + '장세민');
-      console.log(answerData.text + '장세민');
-      console.log(answerData.audio + '장세민');
-
+      let textData = answerData.text;
       setAudioSrc(`data:audio/mp3;base64,${answerData.audio}`);
-
-      console.log(audioSrc + '장세민2');
-
       // 답변 온 걸 .으로 분리해서 리스트로 만듦
       let chunks = [];
       for (let i = 0; i < textData.length; i += 25) {
@@ -206,14 +198,17 @@ export default function PhilosopherConsult({
           )}
         </div>
         <div>
-        {audioSrc && (
-        <div>
-          <audio controls src={audioSrc} autoPlay style={{ display: 'none' }}></audio>
+          {audioSrc && (
+            <div>
+              <audio
+                controls
+                src={audioSrc}
+                autoPlay
+                style={{ display: "none" }}
+              ></audio>
+            </div>
+          )}
         </div>
-        )}
-        </div>
-
-
       </div>
     </div>
   );

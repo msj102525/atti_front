@@ -10,10 +10,6 @@ export const useAudioRecorder = () => {
 
   const startRecording = async () => {
     try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error("getUserMedia API가 지원되지 않습니다.");
-      }
-
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStreamRef.current = stream;
       mediaRecorderRef.current = new MediaRecorder(stream);
@@ -21,29 +17,19 @@ export const useAudioRecorder = () => {
       mediaRecorderRef.current.ondataavailable = (event) => {
         audioChunksRef.current.push(event.data);
       };
-
       mediaRecorderRef.current.onstop = () => {
         if (audioChunksRef.current.length > 0) {
           const newAudioBlob = new Blob(audioChunksRef.current, {
             type: "audio/webm",
           });
-          console.log("오디오 세팅됨 !");
-          console.log("newAudioBlob:", newAudioBlob);
           setAudioBlob(newAudioBlob);
           audioChunksRef.current = [];
         }
       };
-
       mediaRecorderRef.current.start();
       setRecording(true);
     } catch (error) {
-      if (error.message === "getUserMedia API가 지원되지 않습니다.") {
-        console.error("getUserMedia 실패:", error);
-        // getUserMedia가 지원되지 않는 경우 빈 문자열을 처리
-        setAudioBlob(new Blob([""], { type: "audio/webm" }));
-      } else {
-        console.error("Error starting recording:", error);
-      }
+      setAudioBlob(new Blob([""], { type: "audio/webm" }));
     }
   };
 
