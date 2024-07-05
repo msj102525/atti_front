@@ -190,7 +190,7 @@ const OnewordSJDeatilComponent = observer((data) => {
                 <div className="border p-4 rounded flex flex-col w-500 h-50 overflow-hidden" style={{ backgroundColor: '#F2EFE2' }}>
                     <div className="flex">
                         <p className="mt-2 ml-5 text-sm text-gray-600">{data.data.owsjWriter}</p>
-                        <p className="mt-2 ml-10 text-sm text-gray-600">{data.data.owsjNum}</p>
+                        {/* <p className="mt-2 ml-10 text-sm text-gray-600">{data.data.owsjNum}</p> */}
                     </div>
                     <h2 className="mt-2 ml-5 text-lg font-bold">{data.data.owsjSubject}</h2>
                 </div>
@@ -204,9 +204,9 @@ const OnewordSJDeatilComponent = observer((data) => {
                     {addingOwComment ? '취소' : '추가'}
                 </button>
 
-                <div>
+                <div style={{ marginLeft: '10px' }}>
                     {/* Go back button */}
-                    <button onClick={goBack} className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">이전화면</button>
+                    <button onClick={goBack} className="mt-4 bg-black hover:bg-gray-900 text-white py-2 px-4 rounded">이전화면</button>
                 </div>
 
             </div>

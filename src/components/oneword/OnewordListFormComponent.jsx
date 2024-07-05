@@ -15,14 +15,6 @@ const OnewordListFormComponent = observer(() => {
   const queryClient = useQueryClient();
   const [isAdmin, setIsAdmin] = React.useState(false);
 
-  // const { data, isLoading } = useQuery(['onewordSubjectList', { keyword, page, size }], () => getOnewordSubjectList({
-  //   keyword: keyword,
-  //   page: page,
-  //   size: size,
-  // }), {
-  //   keepPreviousData: true,
-  // });
-
   const { data, isLoading } = useQuery(['onewordSubjectListAll'], () => getOnewordSubjectListAll(), {
     keepPreviousData: true,
   });
@@ -30,9 +22,6 @@ const OnewordListFormComponent = observer(() => {
   useEffect(() => {
     setIsAdmin(localStorage.getItem("isAdmin") === "true");
   }, [])
-
-  // const openModal = () => setIsModalOpen(true);
-  // const closeModal = () => setIsModalOpen(false);
 
   if (isLoading) return <div>Loading...</div>;
   if (!data) return <div>No data</div>;
@@ -83,7 +72,7 @@ const OnewordListFormComponent = observer(() => {
             >
               <div className="flex">
                 <p className="mt-2 ml-5 text-sm text-gray-600">{onewordsubject.owsjWriter}</p>
-                <p className="mt-2 ml-10 text-sm text-gray-600">{onewordsubject.owsjNum}</p>
+                {/* <p className="mt-2 ml-10 text-sm text-gray-600">{onewordsubject.owsjNum}</p> */}
               </div>
               <h2 className="mt-2 ml-5 text-lg font-bold">{onewordsubject.owsjSubject}</h2>
               {/* 추가적인 카드 내용 */}
