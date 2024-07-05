@@ -62,19 +62,33 @@ const OnewordListFormComponent = observer(() => {
   //   </div>
   // );
 
+  // sytle
+  const roundedStyle = {
+    borderRadius: '20% 20% 20% 20% / 70% 70% 70% 70%', // (수직 / 수평) 각 모서리의 둥근 정도를 설정합니다.
+  };
+  
   return (
     <div className="p-10">
       <div className="flex justify-center">
         <div className="grid grid-cols-3 gap-4">
           {data.map((onewordsubject) => (
-            <Link key={onewordsubject.owsjNum} href={`/oneword/${onewordsubject.owsjNum}`} className="border p-4 rounded-full flex flex-col items-start w-100 h-50 overflow-hidden" 
-            style={{ backgroundColor: '#F2EFE2' }} // Inline style to set background color
+            <Link key={onewordsubject.owsjNum} href={`/oneword/${onewordsubject.owsjNum}`} className="border p-4 flex flex-col items-start w-100 h-50 overflow-hidden"
+              style={{ backgroundColor: '#F2EFE2', ...roundedStyle }} // Inline style to set background color
             >
               <div className="flex">
                 <p className="mt-2 ml-5 text-sm text-gray-600">{onewordsubject.owsjWriter}</p>
                 {/* <p className="mt-2 ml-10 text-sm text-gray-600">{onewordsubject.owsjNum}</p> */}
               </div>
-              <h2 className="mt-2 ml-5 text-lg font-bold">{onewordsubject.owsjSubject}</h2>
+              {onewordsubject && onewordsubject.owsjSubject && (
+                <h2 className="mt-2 ml-5 text-lg font-bold">
+                  {onewordsubject.owsjSubject.split('\n').map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </h2>
+              )}
               {/* 추가적인 카드 내용 */}
             </Link>
           ))}

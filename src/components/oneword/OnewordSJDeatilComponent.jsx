@@ -136,7 +136,6 @@ const OnewordSJDeatilComponent = observer((data) => {
         onError: handleAxiosError,
     });
 
-
     //// 삭제
     // Function to delete a comment
     const deleteComment = (owNum) => {
@@ -180,6 +179,10 @@ const OnewordSJDeatilComponent = observer((data) => {
         setKeyword(data.data.owsjNum.toString());
     }, [data.data.owsjNum]);
 
+    // sytle
+    const roundedStyle = {
+        borderRadius: '10% 10% 10% 10% / 90% 90% 90% 90%', // (수직 / 수평) 각 모서리의 둥근 정도를 설정합니다.
+    };
 
     return (
         <div className="max-w-screen-lg p-4 mx-auto">
@@ -193,7 +196,7 @@ const OnewordSJDeatilComponent = observer((data) => {
 
             <div>
                 {/* Display content */}
-                <div className="border p-4 rounded flex flex-col w-500 h-50 overflow-hidden" style={{ backgroundColor: '#F2EFE2' }}>
+                <div className="border p-4 mt-4 flex flex-col w-500 h-50 overflow-hidden" style={{ backgroundColor: '#F2EFE2', ...roundedStyle }}>
                     <div className="flex">
                         <p className="mt-2 ml-5 text-sm text-gray-600">{data.data.owsjWriter}</p>
                     </div>
@@ -229,20 +232,6 @@ const OnewordSJDeatilComponent = observer((data) => {
                 <h1 className="text-lg font-bold mb-2">오늘 한 줄</h1>
                 <hr className="mb-2" />
             </div>
-
-            {/* <div className="mt-4" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <hr />
-                <h1 className="text-lg font-bold mb-5">오늘 한 줄</h1>
-                <hr />
-            </div> */}
-
-            {/* <div className="mt-4" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <hr style={{ display: 'block', width: '50%' }} />
-                <h1 className="text-lg font-bold mb-5">오늘 한 줄</h1>
-                <hr style={{ display: 'block', width: '50%' }} />
-            </div> */}
-
-
 
             {/* New comment input */}
             {addingOwComment && (
