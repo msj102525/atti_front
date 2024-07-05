@@ -129,8 +129,8 @@ const OnewordSubjectComponent = observer(() => {
     if (isLoading) return <div>Loading...</div>;
     if (!data) return <div>No data</div>;
 
-    console.log("admin 유무 : " + isAdmin);
-    console.log("userId : " + userId);
+    // console.log("admin 유무 : " + isAdmin);
+    // console.log("userId : " + userId);
 
     const totalPages = Math.ceil(getCount / size); /// 전체 페이지 수
 
@@ -161,17 +161,11 @@ const OnewordSubjectComponent = observer(() => {
                                 <button onClick={executeSearch}>검색</button>
                             </div>
 
-                            {/* 좌측에 글쓰기 버튼 */}
+                            {/* 좌측에 등록 버튼 */}
                             {isAdmin && (
                                 <div>
-                                    <button className={styles.mkbutton} style={{ marginRight: "10px" }} onClick={openModal}>글쓰기</button>
+                                    <button className={styles.mkbutton} style={{ marginRight: "10px" }} onClick={openModal}>&nbsp;등&nbsp;록&nbsp;</button>
                                 </div>)
-                            }
-                            {/* {isAdmin && (
-                            <div>
-                                <button onClick={openModal}>글쓰기</button>
-                            </div>
-                            )} */
                             }
                         </div>
 
