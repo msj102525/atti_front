@@ -74,19 +74,23 @@ const OnewordListFormComponent = observer(() => {
   // );
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {data.map((onewordsubject) => (
-        <div key={onewordsubject.owsjNum} className="border p-4 rounded">
-          <Link href={`/oneword/${onewordsubject.owsjNum}`}>
-            <div className="cursor-pointer">
-              <h2 className="text-lg font-bold">{onewordsubject.owsjNum}</h2>
-              <h2 className="text-lg font-bold">{onewordsubject.owsjSubject}</h2>
-              <p className="mt-2 text-sm text-gray-600">{onewordsubject.owsjWriter}</p>
+    <div className="p-10">
+      <div className="flex justify-center">
+        <div className="grid grid-cols-3 gap-4">
+          {data.map((onewordsubject) => (
+            <Link key={onewordsubject.owsjNum} href={`/oneword/${onewordsubject.owsjNum}`} className="border p-4 rounded-full flex flex-col items-start w-100 h-50 overflow-hidden" 
+            style={{ backgroundColor: '#F2EFE2' }} // Inline style to set background color
+            >
+              <div className="flex">
+                <p className="mt-2 ml-5 text-sm text-gray-600">{onewordsubject.owsjWriter}</p>
+                <p className="mt-2 ml-10 text-sm text-gray-600">{onewordsubject.owsjNum}</p>
+              </div>
+              <h2 className="mt-2 ml-5 text-lg font-bold">{onewordsubject.owsjSubject}</h2>
               {/* 추가적인 카드 내용 */}
-            </div>
-          </Link>
+            </Link>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 

@@ -139,7 +139,7 @@ const OnewordSJDeatilComponent = observer((data) => {
             // User clicked OK, proceed with deletion
             const updatedComments = owComment.filter(comment => comment.owNum !== owNum);
             setOwComment(updatedComments);
-    
+
             //// 삭제 처리
             deleteOnewordMutation.mutate(owNum);
         } else {
@@ -175,7 +175,8 @@ const OnewordSJDeatilComponent = observer((data) => {
     }, [data.data.owsjNum]);
 
     return (
-        <div className="border max-w-screen-lg p-4 mx-auto">
+        // <div className="border max-w-screen-lg p-4 mx-auto">
+        <div className="max-w-screen-lg p-4 mx-auto">
             {/* Navigation */}
             <div className="after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[2px] after:left-0 after-bottom-0">
                 <div className="flex p-4 gap-x-2">
@@ -184,19 +185,31 @@ const OnewordSJDeatilComponent = observer((data) => {
                 </div>
             </div>
 
-            {/* Display content */}
-            <div className="border p-4 rounded">
-                <div className="cursor-pointer">
-                    <h2 className="text-lg font-bold">{data.data.owsjNum}</h2>
-                    <h2 className="text-lg font-bold">{data.data.owsjSubject}</h2>
-                    <p className="mt-2 text-sm text-gray-600">{data.data.owsjWriter}</p>
+            <div>
+                {/* Display content */}
+                <div className="border p-4 rounded flex flex-col w-500 h-50 overflow-hidden" style={{ backgroundColor: '#F2EFE2' }}>
+                    <div className="flex">
+                        <p className="mt-2 ml-5 text-sm text-gray-600">{data.data.owsjWriter}</p>
+                        <p className="mt-2 ml-10 text-sm text-gray-600">{data.data.owsjNum}</p>
+                    </div>
+                    <h2 className="mt-2 ml-5 text-lg font-bold">{data.data.owsjSubject}</h2>
                 </div>
+
             </div>
 
-            {/* Add comment button */}
-            <button onClick={toggleAddCommentMode} className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-                {addingOwComment ? '취소' : '추가'}
-            </button>
+            <div className="flex">
+
+                {/* Add comment button */}
+                <button onClick={toggleAddCommentMode} className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                    {addingOwComment ? '취소' : '추가'}
+                </button>
+
+                <div>
+                    {/* Go back button */}
+                    <button onClick={goBack} className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">이전화면</button>
+                </div>
+
+            </div>
 
             {/* New comment input */}
             {addingOwComment && (
@@ -252,8 +265,6 @@ const OnewordSJDeatilComponent = observer((data) => {
             )}
 
 
-            {/* Go back button */}
-            <button onClick={goBack}>돌아가기</button>
         </div>
     );
 

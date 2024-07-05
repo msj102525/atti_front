@@ -6,11 +6,11 @@ function Index() {
 
     return (
         <div>
-            <div className="sticky top-0">
+            <div className="sticky top-0 z-50">
                 <Header />
             </div>
             <div className="flex justify-center">
-                <div className="border-solid border flex justify-between  w-[1536px]">
+                <div className="w-[1536px]">
                     <OnewordListFormComponent />
                 </div>
             </div>
