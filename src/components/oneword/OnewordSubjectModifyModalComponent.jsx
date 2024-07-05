@@ -63,14 +63,14 @@ const DetailPostModal = ({ isOpen, onClose, post, onEdit, onDelete, isAdmin }) =
                 flexDirection: 'column',
                 // alignItems: 'center', // Center items horizontally
             }}>
-                {/* <p style={{ marginBottom: '10px' }}>오늘 한 줄 주제 수정</p> */}
+                <h1 style={{ fontSize: '1.2em', marginTop: '10px', marginBottom: '10px' }}>** 오늘 한 줄 주제 수정** </h1>
                 <p style={{ marginBottom: '10px' }}>번호 : {post.owsjNum}</p>
                 {/* <label htmlFor="owsjSubject" style={{ marginBottom: '10px' }}>오늘 한 줄 주제</label> */}
                 <textarea
                     id="owsjSubject"
                     rows="10"
                     cols="30"
-                    placeholder="주제를 입력하세요..."
+                    placeholder="오늘 한 줄 주제를 입력하세요..."
                     value={owsjSubject}
                     onChange={(e) => setOwsjSubject(e.target.value)}
                     style={{ borderColor: 'gray', borderWidth: '2px', borderStyle: 'solid' }}

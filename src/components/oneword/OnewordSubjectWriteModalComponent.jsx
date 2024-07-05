@@ -52,10 +52,11 @@ const OnewordSubjectWriteModalComponent = ({ isOpen, onClose, onSubmit }) => {
                 flexDirection: 'column',
                 alignItems: 'center', // Center items horizontally
             }}>
+                <h1 style={{ fontSize: '1.2em', marginTop: '10px', marginBottom: '10px' }}>** 오늘 한 줄 주제 등록** </h1>
                 <textarea
                     rows="10"
                     cols="30"
-                    placeholder="주제를 입력하세요..."
+                    placeholder="오늘 한 줄 주제를 입력하세요..."
                     value={owsjSubject}
                     onChange={(e) => setOwsjSubject(e.target.value)}
                     style={{ borderColor: 'gray', borderWidth: '2px', borderStyle: 'solid' }}
