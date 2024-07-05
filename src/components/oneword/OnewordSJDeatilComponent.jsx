@@ -180,6 +180,7 @@ const OnewordSJDeatilComponent = observer((data) => {
         setKeyword(data.data.owsjNum.toString());
     }, [data.data.owsjNum]);
 
+
     return (
         <div className="max-w-screen-lg p-4 mx-auto">
             {/* Navigation */}
@@ -196,7 +197,16 @@ const OnewordSJDeatilComponent = observer((data) => {
                     <div className="flex">
                         <p className="mt-2 ml-5 text-sm text-gray-600">{data.data.owsjWriter}</p>
                     </div>
-                    <h2 className="mt-2 ml-5 text-lg font-bold">{data.data.owsjSubject}</h2>
+                    <div>
+                        <h2 className="mt-2 ml-5 text-lg font-bold">
+                            {data.data.owsjSubject.split('\n').map((paragraph, index) => (
+                                <React.Fragment key={index}>
+                                    {paragraph}
+                                    <br /> {/* 각 단락 사이에 줄바꿈을 추가 */}
+                                </React.Fragment>
+                            ))}
+                        </h2>
+                    </div>
                 </div>
             </div>
 
@@ -214,11 +224,24 @@ const OnewordSJDeatilComponent = observer((data) => {
                 )}
             </div>
 
-            <div className="mt-4 flex flex-col items-center">
+            <div className="mt-4">
+                <hr className="mb-2" />
+                <h1 className="text-lg font-bold mb-2">오늘 한 줄</h1>
+                <hr className="mb-2" />
+            </div>
+
+            {/* <div className="mt-4" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <hr />
                 <h1 className="text-lg font-bold mb-5">오늘 한 줄</h1>
                 <hr />
-            </div>
+            </div> */}
+
+            {/* <div className="mt-4" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <hr style={{ display: 'block', width: '50%' }} />
+                <h1 className="text-lg font-bold mb-5">오늘 한 줄</h1>
+                <hr style={{ display: 'block', width: '50%' }} />
+            </div> */}
+
 
 
             {/* New comment input */}
@@ -274,18 +297,20 @@ const OnewordSJDeatilComponent = observer((data) => {
                                                     </React.Fragment>
                                                 ))}</p>
 
-                                                <div>
-                                                    {userId && editMode && (
-                                                        <button onClick={() => toggleEditMode(comment.owNum, comment.owContent)} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded mr-2">
-                                                            수정
-                                                        </button>
-                                                    )}
-                                                    {userId && deleteMode && (
-                                                        <button onClick={() => deleteComment(comment.owNum)} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
-                                                            삭제
-                                                        </button>
-                                                    )}
-                                                </div>
+                                                {userId && (editMode || deleteMode) && (
+                                                    <div className="mt-2">
+                                                        {editMode && (
+                                                            <button onClick={() => toggleEditMode(comment.owNum, comment.owContent)} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded mr-2">
+                                                                수정
+                                                            </button>
+                                                        )}
+                                                        {deleteMode && (
+                                                            <button onClick={() => deleteComment(comment.owNum)} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
+                                                                삭제
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </>
                                         )}
                                     </li>
