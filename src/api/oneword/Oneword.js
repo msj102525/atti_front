@@ -8,10 +8,11 @@ export const getOnewordList = ({ keyword, page, size }) => {
         size
     }).toString();
 
-    console.log("getOnewordList : ");
+    // console.log("getOnewordList : ");
 
     return axios.get(`/oneword/searchoneword?${params}`)
         .then(res => {
+            console.log("getOnewordList : " + JSON.stringify(res.data));
             return res.data;
         });
 }

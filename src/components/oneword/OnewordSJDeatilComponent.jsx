@@ -16,6 +16,8 @@ const OnewordSJDeatilComponent = observer((data) => {
     const [page, setPage] = React.useState(1);
     const [size, setSize] = React.useState(10);
 
+    const [userId, setUserId] = React.useState("");
+
     // State for owComment
     const [owComment, setOwComment] = useState([]);
 
@@ -34,6 +36,10 @@ const OnewordSJDeatilComponent = observer((data) => {
     }), {
         keepPreviousData: true,
     });
+
+    useEffect(() => {
+        setUserId(localStorage.getItem("userId"));
+    }, [])
 
     // Function to toggle add comment mode
     const toggleAddCommentMode = () => {
@@ -54,7 +60,7 @@ const OnewordSJDeatilComponent = observer((data) => {
     const addComment = (owsjNum) => {
         const newComment = {
             owsjNum: owsjNum,
-            owContent: newOwCommentContent.trim() !== '' ? newOwCommentContent : `새 댓글 ${new Date().toLocaleString()}`
+            owContent: newOwCommentContent.trim() !== '' ? newOwCommentContent : `새 오늘 한 줄 ${new Date().toLocaleString()}`
         };
 
         // Update state with new comment
@@ -175,7 +181,6 @@ const OnewordSJDeatilComponent = observer((data) => {
     }, [data.data.owsjNum]);
 
     return (
-        // <div className="border max-w-screen-lg p-4 mx-auto">
         <div className="max-w-screen-lg p-4 mx-auto">
             {/* Navigation */}
             <div className="after:content-[''] after:bg-gray-300 after:block after:w-full after:h-[2px] after:left-0 after-bottom-0">
@@ -190,26 +195,31 @@ const OnewordSJDeatilComponent = observer((data) => {
                 <div className="border p-4 rounded flex flex-col w-500 h-50 overflow-hidden" style={{ backgroundColor: '#F2EFE2' }}>
                     <div className="flex">
                         <p className="mt-2 ml-5 text-sm text-gray-600">{data.data.owsjWriter}</p>
-                        {/* <p className="mt-2 ml-10 text-sm text-gray-600">{data.data.owsjNum}</p> */}
                     </div>
                     <h2 className="mt-2 ml-5 text-lg font-bold">{data.data.owsjSubject}</h2>
                 </div>
-
             </div>
 
             <div className="flex">
-
-                {/* Add comment button */}
-                <button onClick={toggleAddCommentMode} className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-                    {addingOwComment ? '취소' : '추가'}
-                </button>
-
-                <div style={{ marginLeft: '10px' }}>
+                <div>
                     {/* Go back button */}
                     <button onClick={goBack} className="mt-4 bg-black hover:bg-gray-900 text-white py-2 px-4 rounded">이전화면</button>
                 </div>
 
+                {/* Add comment button */}
+                {userId && (
+                    <button onClick={toggleAddCommentMode} style={{ marginLeft: '10px' }} className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                        {addingOwComment ? '취소' : '추가'}
+                    </button>
+                )}
             </div>
+
+            <div className="mt-4 flex flex-col items-center">
+                <hr />
+                <h1 className="text-lg font-bold mb-5">오늘 한 줄</h1>
+                <hr />
+            </div>
+
 
             {/* New comment input */}
             {addingOwComment && (
@@ -217,7 +227,7 @@ const OnewordSJDeatilComponent = observer((data) => {
                     <textarea
                         value={newOwCommentContent}
                         onChange={handleNewCommentInputChange}
-                        placeholder="새 댓글을 입력하세요..."
+                        placeholder="오늘 한 줄을 입력하세요..."
                         className="border p-2 mb-2 w-full"
                     />
                     <button onClick={() => addComment(data.data.owsjNum)} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
@@ -226,45 +236,65 @@ const OnewordSJDeatilComponent = observer((data) => {
                 </div>
             )}
 
+
             {/* Comments list */}
             {owCommentData && (
                 <div className="mt-4">
-                    <h3 className="text-lg font-bold mb-2">댓글</h3>
                     {owCommentData.length === 0 ? (
-                        <p>댓글이 없습니다.</p>
+                        <p>오늘 할 줄을 입력해 보세요.</p>
                     ) : (
                         <ul>
-                            {owCommentData.map(comment => (
-                                <li key={comment.owNum} className="border p-2 mb-2">
-                                    {editCommentId === comment.owNum ? (
-                                        <>
-                                            <textarea value={editOwCommentContent} onChange={handleEditInputChange} className="border p-2 mb-2" />
-                                            <button onClick={() => editComment(comment.id)} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2">
-                                                저장
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <p>{comment.owContent}</p>
-                                            <p>{comment.owNum}</p>
-                                            <div>
-                                                <button onClick={() => toggleEditMode(comment.owNum, comment.owContent)} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded mr-2">
-                                                    수정
-                                                </button>
-                                                <button onClick={() => deleteComment(comment.owNum)} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
-                                                    삭제
-                                                </button>
-                                            </div>
-                                        </>
-                                    )}
-                                </li>
-                            ))}
+                            {owCommentData.map(comment => {
+                                // userId와 comment.owWriter가 동일한지 비교하여 editMode와 deleteMode 설정
+                                const editMode = userId === comment.owWriter;
+                                const deleteMode = userId === comment.owWriter;
+
+                                return (
+                                    <li key={comment.owNum} className="border p-2 mb-2">
+                                        {editCommentId === comment.owNum ? (
+                                            <>
+                                                <textarea
+                                                    value={editOwCommentContent}
+                                                    onChange={handleEditInputChange}
+                                                    className="border p-2 mb-2 resize-none h-20 w-full"
+                                                    rows="5"
+                                                />
+                                                {editMode && (
+                                                    <button onClick={() => editComment(comment.id)} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2">
+                                                        저장
+                                                    </button>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p>{comment.owContent.split('\n').map((line, index) => (
+                                                    <React.Fragment key={index}>
+                                                        {line}
+                                                        <br />
+                                                    </React.Fragment>
+                                                ))}</p>
+
+                                                <div>
+                                                    {userId && editMode && (
+                                                        <button onClick={() => toggleEditMode(comment.owNum, comment.owContent)} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded mr-2">
+                                                            수정
+                                                        </button>
+                                                    )}
+                                                    {userId && deleteMode && (
+                                                        <button onClick={() => deleteComment(comment.owNum)} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
+                                                            삭제
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </>
+                                        )}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     )}
                 </div>
             )}
-
-
         </div>
     );
 
