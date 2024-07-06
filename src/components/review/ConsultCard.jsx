@@ -106,7 +106,7 @@ export default function ConsultCard({
     <div className="flex flex-col p-4 my-2 border-2 border-gray-300 md:flex-row">
       <div className="flex flex-col w-full p-2 mx-auto md:w-1/5">
         <div className="m-1 text-sm text-center md:text-base">{doctor}</div>
-        <div className="flex justify-center">
+        <div className="flex justify-center my-4">
           <img
             className="w-auto h-24 md:h-20"
             src={profileUrl ? profileUrl : "/doctor.png"}

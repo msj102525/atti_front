@@ -12,7 +12,7 @@ export default function ConsultationHistory() {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
   const [orderByDateDesc, setOrderByDateDesc] = useState(true);
-
+  const serverImage = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const fetchData = async () => {
       let order;
@@ -30,7 +30,6 @@ export default function ConsultationHistory() {
         console.error(error);
       }
     };
-
     fetchData();
   }, [currentPage, orderByDateDesc]);
 
@@ -71,7 +70,7 @@ export default function ConsultationHistory() {
                 key={`${reviewInfo.id}-${currentPage}`}
                 doctorId={reviewInfo.doctorId}
                 doctor={reviewInfo.doctor}
-                profileUrl={reviewInfo.profileUrl}
+                profileUrl={serverImage + reviewInfo.profileUrl}
                 writeDate={reviewInfo.writeDate}
                 starPoint={reviewInfo.starPoint}
                 content={reviewInfo.content}
