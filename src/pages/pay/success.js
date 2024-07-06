@@ -42,12 +42,20 @@ const SuccessPage = () => {
       };
 
       try {
-        const response = await axios.post('/api/confirm', requestData);
+        const response = await fetch('/api/confirm', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
 
-        const json = response.data;
-        console.log(json);
+        const json = await response.json();
 
-        if (!response.status === 200 || json === 0) {
+        
+        console.log(json, '결제 성공 메소드!!!!!!!!!!!!!');
+
+        if (!response.ok || json === 0) {
           router.push(`/pay/fail?message=${json.message || '결제 실패'}&code=${json.code || 'ERROR'}`);
         } else {
           // 결제 성공 비즈니스 로직을 구현하세요.
