@@ -10,14 +10,13 @@ const BoardWrite = () => {
   const [boardTitle, setBoardTitle] = useState('');
   const [boardContent, setBoardContent] = useState('');
   const [importance, setImportance] = useState(1);
-  const [readCount, setReadCount] = useState(1);
   const [file, setFile] = useState(null); // 파일 상태 추가
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // 로컬 스토리지에서 userId 가져오기
@@ -34,20 +33,24 @@ const BoardWrite = () => {
       formData.append("file", file);
     }
 
-    // formData를 서버로 전송
-    axios.post(`/board`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-      .then(response => {
-        console.log(formData);
-        // 서버로 데이터 전송 후, 리스트 페이지로 리디렉션
-        router.push('/admin/noticeAdminVersion');
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
+    // FormData 내용 확인
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    try {
+      // formData를 서버로 전송
+      const response = await axios.post('/board', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
+      console.log('Response:', response);
+      // 서버로 데이터 전송 후, 리스트 페이지로 리디렉션
+      router.push('/admin/noticeAdminVersion');
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
   };
 
   const moveBack = () => {
@@ -77,9 +80,9 @@ const BoardWrite = () => {
             />
             <hr />
             <input
-             type='file'
-             onChange={handleFileChange}
-             />
+              type='file'
+              onChange={handleFileChange}
+            />
             <textarea
               className="contentbox w-full p-4 border border-gray-300 rounded mb-4"
               name="boardContent"

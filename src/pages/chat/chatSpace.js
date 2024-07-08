@@ -16,18 +16,13 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
   const [chatSession, setChatSession] = useState(null);
   const [isDisabled, setIsDisabled] = useState(status === false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [lt, setLt] = useState('');
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  console.log(chatId, senderId, receiverId, userType, limitTime, status);
-
   useEffect(() => {
-    // status 값에 따라 isDisabled 상태 설정
     setIsDisabled(status === false);
   }, [status]);
-
 
   useEffect(() => {
     const fetchChatSession = async () => {
@@ -60,8 +55,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
       const response = await axios.get('/chat/messages', {
         params: { chatId, senderId }
       });
-      console.log(response.data, 'chat messages123');
-      setMessages(response.data);
+      setMessages(response.data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)));
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
@@ -82,8 +76,20 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
       client.current.on('message', (topic, message) => {
         const receivedMessage = JSON.parse(message.toString());
         if (receivedMessage.clientId !== clientId.current) {
-          const newMessage = { messageContent: receivedMessage.messageContent, senderId: receivedMessage.senderId, timestamp: receivedMessage.timestamp };
-          setMessages((prevMessages) => [...prevMessages, newMessage]);
+          const newMessage = {
+            messageContent: receivedMessage.messageContent,
+            senderId: receivedMessage.senderId,
+            timestamp: receivedMessage.timestamp
+          };
+          setMessages((prevMessages) => {
+            // 중복 메시지 필터링
+            const messageExists = prevMessages.some((msg) => msg.timestamp === newMessage.timestamp);
+            if (!messageExists) {
+              const updatedMessages = [...prevMessages, newMessage];
+              return updatedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            }
+            return prevMessages;
+          });
         }
       });
 
@@ -100,7 +106,6 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
       try {
         const response = await axios.get(`/chat/time/${chatId}`);
         setChatSession(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Failed to fetch chat session:', error);
       }
@@ -126,10 +131,9 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
       const response = await axios.get(`/pay/recent`, {
         params: { userId: senderId }
       });
-      console.log(response.data);  // 요청 결과를 로그에 출력
   
       const filteredPayInfo = response.data
-        .filter(payment => payment.toDoctor !== null)  // toDoctor가 null이 아닌 항목만 필터링
+        .filter(payment => payment.toDoctor !== null)
         .reduce((acc, current) => {
           const existingPayment = acc.find(item => item.toDoctor === current.toDoctor);
           if (!existingPayment || new Date(current.payDate) > new Date(existingPayment.payDate)) {
@@ -140,7 +144,7 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
         }, []);
   
       setPayInfo(filteredPayInfo);
-      return filteredPayInfo;  // 결과를 반환
+      return filteredPayInfo;
     } catch (error) {
       console.error('Error fetching user pay time:', error);
       return null;
@@ -149,9 +153,6 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
 
   const handleSendMessage = async () => {
     const payTimeData = await fetchUserPayTime();
-    console.log(payTimeData); // Optional: fetched pay time data log for verification
-    console.log(payTimeData[0]); 
-    console.log(payTimeData[1]); 
     sendMessage();
   };
 
@@ -161,37 +162,28 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
 
   const sendMessage = async () => {
     if (!inputValue.trim()) {
-        setErrorMessage('메시지를 입력하세요');
-        return;
+      setErrorMessage('메시지를 입력하세요');
+      return;
     }
 
-    // Check if there are any existing messages
     if (messages.length === 0) {
-        // Save the first message without time check
-        console.log(messages.length, '메시지 길이');
-        await saveMessage();
+      await saveMessage();
     } else {
-        // For subsequent messages, check time limit
-        console.log(messages, 'zxc');
-        const firstMessageTime = new Date(earliestMessage.timestamp);
-        console.log(firstMessageTime, '첫시간');
-        const currentTime = new Date();
-        firstMessageTime.setMinutes(firstMessageTime.getMinutes() + limitTime);
+      const firstMessageTime = new Date(earliestMessage.timestamp);
+      const currentTime = new Date();
+      firstMessageTime.setMinutes(firstMessageTime.getMinutes() + limitTime);
 
-        console.log(currentTime.toString(), '지금시간');
-        console.log(firstMessageTime.toString(), '제한 시간');
-
-        if (currentTime > firstMessageTime) {
-            try {
-                await axios.post(`/chat/end/${chatId}`);
-                setIsDisabled(true);
-            } catch (error) {
-                console.error('Failed to update chat status:', error);
-            }
-            return;
+      if (currentTime > firstMessageTime) {
+        try {
+          await axios.post(`/chat/end/${chatId}`);
+          setIsDisabled(true);
+        } catch (error) {
+          console.error('Failed to update chat status:', error);
         }
+        return;
+      }
 
-        await saveMessage();
+      await saveMessage();
     }
   };
 
@@ -199,13 +191,14 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
     const timestamp = new Date().toISOString();
     const message = { messageContent: inputValue, senderId, timestamp, chatId };
     
-    console.log(message, '메시지 정보');
-
     client.current.publish(`chat/${receiverId}`, JSON.stringify(message));
 
     try {
       await axios.post('/chat/message', message);
-      setMessages((prevMessages) => [...prevMessages, message]);
+      setMessages((prevMessages) => {
+        const updatedMessages = [...prevMessages, message];
+        return updatedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      });
       setInputValue('');
     } catch (error) {
       console.error('Failed to save message:', error);
@@ -218,12 +211,8 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
 
   const handleConfirmEndChat = async () => {
     try {
-      // 서버에 종료 요청을 보냄
       await axios.post(`/chat/end/${chatId}`);
-      
-      // 로컬 스토리지 업데이트
       setIsDisabled(true);
-      
       setIsModalOpen(false);
     } catch (error) {
       console.error('Failed to end chat session:', error);
@@ -249,19 +238,9 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
   };
 
   const handleSubmit = async () => {
-    // 리뷰 제출 로직 추가
-    console.log('Rating:', rating);
-    console.log('Review:', review);
-  
     const date = new Date();
     const writeDate = date.toISOString().split('T')[0];
-  
-    console.log(writeDate);
-    console.log(typeof(writeDate));
-    console.log(senderId);
-    console.log(receiverId);
-  
-    // 서버로 보낼 데이터 객체 생성
+
     const reviewData = {
       rating,
       review,
@@ -271,29 +250,19 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
     };
   
     try {
-      // POST 요청으로 데이터 전송
-      // 먼저 GET 요청을 보내서 기존 리뷰를 확인합니다.
-    const checkResponse = await axios.get('/review/check', {
-      params: {
-        writeDate,
-        senderId,
-        receiverId
+      const checkResponse = await axios.get('/review/check', {
+        params: { writeDate, senderId, receiverId }
+      });
+
+      if (checkResponse.data.length > 0) {
+        alert('한 의사에 대해서 하루에 하나만 리뷰 작성이 가능합니다.');
+        return;
       }
-    });
-
-    if (checkResponse.data.length > 0) {
-      // 조건에 맞는 리뷰가 이미 있는 경우
-      console.log('You have already submitted a review for this session today.');
-      alert('한 의사에 대해서 하루에 하나만 리뷰 작성이 가능합니다.');
-      return; // 리뷰 작성 중단
-    }
-
 
       const response = await axios.post(`/review`, reviewData);
   
       if (response.status === 200) {
         console.log('Review submitted successfully:', response.data);
-        // 추가적으로 성공 시 수행할 로직이 있다면 여기에 추가
       } else {
         console.error('Failed to submit review:', response.status);
       }
@@ -301,8 +270,8 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
       console.error('Error submitting review:', error);
     }
   
-    setIsReviewModalOpen(false); // 모달 창 닫기
-    resetReviewState()
+    setIsReviewModalOpen(false);
+    resetReviewState();
   };
 
   return (
@@ -340,13 +309,13 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
               value={inputValue}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              disabled={isDisabled} // Disable textarea if chat is disabled
+              disabled={isDisabled}
             />
             <div className="absolute right-0 flex flex-col space-y-2 p-2">
               <button
                 onClick={handleSendMessage}
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 shadow-md"
-                disabled={isDisabled} // Disable button if chat is disabled
+                disabled={isDisabled}
               >
                 전송
               </button>
@@ -360,7 +329,6 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
           </div>
         </div>
       </div>
-      {/*모달 창 영역*/}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
@@ -420,8 +388,8 @@ const Chat = ({ chatId, senderId, receiverId, userType, limitTime, status }) => 
               </button>
               <button
                 onClick={() => {
-                  setIsReviewModalOpen(false)
-                  resetReviewState(); // 상태 초기화
+                  setIsReviewModalOpen(false);
+                  resetReviewState();
                 }}
                 className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400"
               >
