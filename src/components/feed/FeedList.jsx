@@ -95,8 +95,7 @@ export default function FeedList({ category, subCategory, user, searchData }) {
                                 <div className={`${feed.dcomentExist ? "block" : "hidden"} border p-1 rounded-[20px] bg-customBrown2`}>
                                     <div className="flex items-center">
                                         <div className="border w-10 h-10 rounded-full overflow-hidden">
-                                            {/* <img className="block w-full bg-white" src={process.NEXT_PUBLIC_API_URL + `${feed.docterImgUrl}`} alt="userImg" /> */}
-                                            <img className="block w-full bg-white" src={"#"} alt="userImg" />
+                                            <img className="block w-full" src={feed.docterImgUrl ? `${NEXT_PUBLIC_API_URL}` + feed.docterImgUrl : "/common/user/noProfile.png"} alt="userImg" />
                                         </div>
                                         <p>{feed.docterName}님의 전문답변</p>
                                     </div>
