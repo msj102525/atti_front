@@ -30,11 +30,11 @@ export default function FeedWrite() {
                 <Header />
             </div>
             <div className="flex justify-center">
-                <div className="border-solid border flex justify-between  w-[1536px] gap-x-10">
-                    <div className="border-solid border flex-2 p-2">
+                <div className="flex justify-between  w-[1536px] gap-x-10">
+                    <div className="flex-2 p-2">
                         <FeedSideBar />
                     </div>
-                    <div className="border-solid border flex-1 p-2">
+                    <div className="flex-1 p-2">
                         <div>
                             <FeedNav user={user} getData={getData} getSearchData={getSearchData} />
                         </div>

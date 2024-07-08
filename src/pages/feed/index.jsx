@@ -30,11 +30,11 @@ export default function Feed() {
                 <Header />
             </div>
             <div className="flex justify-center">
-                <div className="border-solid border flex justify-between  w-[1536px]">
-                    <div className="border-solid border flex-2 p-2">
+                <div className="flex justify-between  w-[1536px]">
+                    <div className="flex-2 p-2">
                         <FeedSideBar getSearchData={getSearchData} />
                     </div>
-                    <div className="border-solid border flex-1">
+                    <div className="flex-1">
                         <FeedNav user={user} getData={getData} getSearchData={getSearchData} />
                         <FeedList
                             user={user}
